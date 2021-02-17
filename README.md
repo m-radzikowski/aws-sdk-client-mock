@@ -146,7 +146,7 @@ const snsSendStub = snsMock.send;
 
 ## API Reference
 
-See the [full API Reference](#). TODO
+See the [full API Reference](https://m-radzikowski.github.io/aws-sdk-client-mock/).
 
 ## AWS Lambda example
 
