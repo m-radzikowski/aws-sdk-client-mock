@@ -1,0 +1,90 @@
+{
+  "name": "aws-sdk-client-mock",
+  "description": "Easy and powerful mocking of AWS SDK v3 Clients",
+  "version": "0.1.0",
+  "license": "MIT",
+  "author": {
+    "name": "Maciej Radzikowski",
+    "email": "maciej@radzikowski.com.pl",
+    "url": "https://radzikowski.com.pl"
+  },
+  "repository": "https://github.com/m-radzikowski/aws-sdk-client-mock.git",
+  "scripts": {
+    "ci": "yarn install --frozen-lockfile",
+    "pretest": "rimraf coverage/",
+    "test": "jest --coverage",
+    "test-types": "tsd",
+    "lint": "eslint .",
+    "typedoc": "typedoc",
+    "build:cjs": "tsc -p tsconfig.json",
+    "build:es": "tsc -p tsconfig.es.json",
+    "prebuild": "rimraf dist/",
+    "build": "yarn run build:cjs && yarn run build:es",
+    "size": "size-limit",
+    "size:analyze": "size-limit --why",
+    "release": "standard-version"
+  },
+  "main": "dist/cjs/index.js",
+  "types": "dist/types/index.d.ts",
+  "module": "dist/es/index.js",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "dependencies": {
+    "sinon": "^9.2.4"
+  },
+  "devDependencies": {
+    "@aws-sdk/client-dynamodb": "3.4.1",
+    "@aws-sdk/client-sns": "3.4.1",
+    "@aws-sdk/types": "3.4.1",
+    "@commitlint/cli": "11.0.0",
+    "@commitlint/config-conventional": "11.0.0",
+    "@size-limit/preset-small-lib": "4.9.2",
+    "@types/jest": "26.0.20",
+    "@types/sinon": "9.0.10",
+    "@typescript-eslint/eslint-plugin": "4.14.1",
+    "@typescript-eslint/parser": "4.14.1",
+    "eslint": "7.18.0",
+    "husky": "4.3.8",
+    "jest": "26.6.3",
+    "lint-staged": "10.5.4",
+    "rimraf": "3.0.2",
+    "size-limit": "4.9.2",
+    "standard-version": "9.1.0",
+    "ts-jest": "26.5.0",
+    "tsd": "0.14.0",
+    "tslib": "2.1.0",
+    "typedoc": "0.20.24",
+    "typescript": "4.1.3"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "resetMocks": true,
+    "testEnvironment": "node"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+      "pre-push": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.ts": "yarn lint"
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
+  "size-limit": [
+    {
+      "path": "dist/cjs/index.js",
+      "limit": "300 KB"
+    },
+    {
+      "path": "dist/es/index.js",
+      "limit": "300 KB"
+    }
+  ]
+}

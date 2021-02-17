@@ -1,0 +1,54 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test_and_build:
+    name: Test and build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+      - uses: actions/cache@v2
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - run: yarn run ci
+
+      - run: yarn run lint
+      - run: yarn run test
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: coverage
+          path: coverage
+
+      - run: yarn run build
+
+      - run: yarn run test-types
+      - run: yarn run size
+
+# TODO Upload coverage
+#  codecov:
+#    name: Codecov
+#    runs-on: ubuntu-latest
+#    needs: test_and_build
+#    steps:
+#      - uses: actions/checkout@v2
+#      - uses: actions/download-artifact@v1
+#        with:
+#          name: coverage
+#      - uses: codecov/codecov-action@v1

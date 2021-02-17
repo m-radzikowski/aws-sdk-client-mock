@@ -1,0 +1,37 @@
+{
+  "compilerOptions": {
+    "module": "CommonJS",
+    "target": "ES2018",
+    "lib": [
+      "ESNext"
+    ],
+    "moduleResolution": "node",
+    "strict": true,
+    "sourceMap": true,
+    "declaration": true,
+    "esModuleInterop": true,
+    "importHelpers": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "dist/cjs",
+    "declarationDir": "./dist/types"
+  },
+  "include": [
+    "src",
+    "dist"
+  ],
+  "typedocOptions": {
+    "entryPoints": [
+      "src/index.ts"
+    ],
+    "out": "docs",
+    "excludePrivate": true,
+    "excludeProtected": true,
+    "name": "AWS SDK v3 Client mock",
+    "includeVersion": true,
+    "listInvalidSymbolLinks": true,
+    "gitRevision": "main"
+  }
+}

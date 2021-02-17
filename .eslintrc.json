@@ -1,0 +1,34 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "./tsconfig.eslint.json"
+  },
+  "plugins": [
+    "@typescript-eslint"
+  ],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking"
+  ],
+  "rules": {
+    "quotes": [
+      "warn",
+      "single"
+    ],
+    "indent": [
+      "warn",
+      4
+    ],
+    "eol-last": "warn",
+    "no-console": "error",
+    "semi": "warn",
+    "comma-dangle": [
+      "warn",
+      "always-multiline"
+    ],
+    "@typescript-eslint/no-unsafe-member-access": "off",
+    "@typescript-eslint/member-delimiter-style": "warn"
+  }
+}
