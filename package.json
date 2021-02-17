@@ -9,6 +9,14 @@
     "url": "https://radzikowski.com.pl"
   },
   "repository": "https://github.com/m-radzikowski/aws-sdk-client-mock.git",
+  "keywords": [
+    "aws",
+    "aws-sdk",
+    "testing",
+    "mock",
+    "unit-testing",
+    "aws-lambda"
+  ],
   "scripts": {
     "ci": "yarn install --frozen-lockfile",
     "pretest": "rimraf coverage/",
