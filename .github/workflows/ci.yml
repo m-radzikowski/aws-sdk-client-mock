@@ -41,14 +41,13 @@ jobs:
       - run: yarn run test-types
       - run: yarn run size
 
-# TODO Upload coverage
-#  codecov:
-#    name: Codecov
-#    runs-on: ubuntu-latest
-#    needs: test_and_build
-#    steps:
-#      - uses: actions/checkout@v2
-#      - uses: actions/download-artifact@v1
-#        with:
-#          name: coverage
-#      - uses: codecov/codecov-action@v1
+  codecov:
+    name: Codecov
+    runs-on: ubuntu-latest
+    needs: test_and_build
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/download-artifact@v1
+        with:
+          name: coverage
+      - uses: codecov/codecov-action@v1
