@@ -1,4 +1,4 @@
-import {Client, Command} from '@aws-sdk/types';
+import {Client, Command, MetadataBearer} from '@aws-sdk/types';
 import {SinonStub, stub} from 'sinon';
 import {isSinonStub} from './sinon';
 import {AwsClientStub} from './awsClientStub';
@@ -9,9 +9,9 @@ import {AwsClientStub} from './awsClientStub';
  * @param client `Client` type or instance to replace the method
  * @return Stub allowing to configure Client's behavior
  */
-export const mockClient = <TClient extends AwsClient>(
-    client: TClient | Constructor<TClient>,
-): AwsClientStub<TClient> => {
+export const mockClient = <TInput extends object, TOutput extends MetadataBearer>(
+    client: InstanceOrClassType<Client<TInput, TOutput, any>>,
+): AwsClientStub<TInput, TOutput> => {
     const instance = isClientInstance(client) ? client : client.prototype;
 
     const send = instance.send;
@@ -20,21 +20,21 @@ export const mockClient = <TClient extends AwsClient>(
     }
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore // TODO Resolve - see: https://stackoverflow.com/questions/56505560/could-be-instantiated-with-a-different-subtype-of-constraint-object-ts2322
-    const sendStub: SinonStub<[Command<any, any, any, any, any>], unknown> = stub(instance, 'send');
+    // @ts-ignore // TODO Resolve
+    const sendStub: SinonStub<[Command<any, TInput, any, TOutput, any>], unknown> = stub(instance, 'send');
 
-    return new AwsClientStub<TClient>(sendStub);
+    return new AwsClientStub<TInput, TOutput>(sendStub);
 };
 
-type Constructor<T> = {
+type ClassType<T> = {
     new(...args: never[]): T;
     prototype: T;
 };
 
-type AwsClient = Client<any, any, any>;
+type InstanceOrClassType<T> = T | ClassType<T>;
 
 /**
  * Type guard to differentiate `Client` instance from a type.
  */
-const isClientInstance = <TClient extends AwsClient>(obj: TClient | Constructor<TClient>): obj is TClient =>
+const isClientInstance = <TClient extends Client<any, any, any>>(obj: InstanceOrClassType<TClient>): obj is TClient =>
     (obj as TClient).send !== undefined;
