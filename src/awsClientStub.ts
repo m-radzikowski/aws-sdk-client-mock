@@ -106,7 +106,7 @@ export class AwsStub<TInput extends object, TOutput extends MetadataBearer> {
         return input !== undefined ? match.has('input', input) : match.any;
     }
 
-    resolves(response: Partial<TOutput>): AwsStub<TInput, TOutput> {
+    resolves(response: CommandResponse<TOutput>): AwsStub<TInput, TOutput> {
         return this.anyCommandBehavior.resolves(response);
     }
 
@@ -135,7 +135,7 @@ export class CommandBehavior<TInput extends object, TOutput extends MetadataBear
      * the response will be returned only on receiving them as `Client#send()` argument.
      * @param response Content to be returned from `Client#send()` method
      */
-    resolves(response: Partial<TCommandOutput>): AwsStub<TInput, TOutput> {
+    resolves(response: CommandResponse<TCommandOutput>): AwsStub<TInput, TOutput> {
         this.send.resolves(response);
         return this.clientStub;
     }
@@ -176,6 +176,7 @@ export class CommandBehavior<TInput extends object, TOutput extends MetadataBear
 }
 
 type AwsCommand<TInput, TOutput> = Command<any, TInput, any, TOutput, any>;
+type CommandResponse<TOutput> = Partial<TOutput> | PromiseLike<Partial<TOutput>>;
 
 export interface AwsError extends Partial<Error>, Partial<MetadataBearer> {
     Type?: string;

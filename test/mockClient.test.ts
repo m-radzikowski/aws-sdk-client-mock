@@ -148,9 +148,7 @@ describe('mocking responses', () => {
         expect(publish2.MessageId).toBe(uuid1);
     });
 
-    // TODO Restore
-    it.skip('returns resolved async response', async () => {
-        // @ts-ignore
+    it('returns resolved async response', async () => {
         snsMock.resolves(resolveImmediately({
             MessageId: uuid1,
         }));
@@ -394,7 +392,7 @@ describe('supporting alternative send() calls', () => {
     });
 });
 
-const resolveImmediately = (x: unknown) => new Promise(resolve => {
+const resolveImmediately = <T>(x: T): Promise<T> => new Promise(resolve => {
     setTimeout(() => {
         resolve(x);
     }, 0);
