@@ -1,9 +1,9 @@
-import {mockClient} from '../src';
+import {AwsClientStub, mockClient} from '../src';
 import {ListTopicsCommand, PublishCommand, SNSClient} from '@aws-sdk/client-sns';
-import {expectError} from 'tsd';
+import {expectError, expectType} from 'tsd';
 import {ListTablesCommand} from '@aws-sdk/client-dynamodb';
 
-// expectType<AwsClientStub<SNSClient>>(mockClient(SNSClient)); // TODO Fix
+expectType<AwsClientStub<SNSClient>>(mockClient(SNSClient));
 
 // proper Command, input and output types
 mockClient(SNSClient).on(PublishCommand);

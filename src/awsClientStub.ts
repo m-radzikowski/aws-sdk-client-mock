@@ -1,25 +1,28 @@
 /* eslint-disable @typescript-eslint/ban-types,@typescript-eslint/no-explicit-any */
-import {Command, MetadataBearer} from '@aws-sdk/types';
+import {Client, Command, MetadataBearer} from '@aws-sdk/types';
 import {match, SinonSpyCall, SinonStub} from 'sinon';
 
 /**
  * Wrapper on the mocked `Client#send()` method,
- * allowing to configure it's behavior.
+ * allowing to configure its behavior.
  *
  * Without any configuration, `Client#send()` invocation returns `undefined`.
  */
-export class AwsClientStub<TInput extends object, TOutput extends MetadataBearer> {
+export type AwsClientStub<TClient extends Client<any, any, any>> = TClient extends Client<infer TInput, infer TOutput, any> ? AwsStub<TInput, TOutput> : never;
+
+/** See {@link AwsClientStub} description. */
+export class AwsStub<TInput extends object, TOutput extends MetadataBearer> {
 
     /**
      * Underlying `Client#send()` method Sinon stub.
      *
      * Install `@types/sinon` for TypeScript typings.
      */
-    public send: SinonStub<[Command<any, TInput, any, TOutput, any>], unknown>;
+    public send: SinonStub<[AwsCommand<TInput, TOutput>], unknown>;
 
     private readonly anyCommandBehavior: CommandBehavior<TInput, TOutput, TOutput>;
 
-    constructor(send: SinonStub<[Command<any, TInput, any, TOutput, any>], unknown>) {
+    constructor(send: SinonStub<[AwsCommand<TInput, TOutput>], unknown>) {
         this.send = send;
         this.anyCommandBehavior = new CommandBehavior(this, send);
     }
@@ -27,7 +30,7 @@ export class AwsClientStub<TInput extends object, TOutput extends MetadataBearer
     /**
      * Resets stub's history and behavior.
      */
-    reset(): AwsClientStub<TInput, TOutput> {
+    reset(): AwsStub<TInput, TOutput> {
         this.send.reset();
         return this;
     }
@@ -35,7 +38,7 @@ export class AwsClientStub<TInput extends object, TOutput extends MetadataBearer
     /**
      * Resets stub's behavior.
      */
-    resetBehavior(): AwsClientStub<TInput, TOutput> {
+    resetBehavior(): AwsStub<TInput, TOutput> {
         this.send.resetBehavior();
         return this;
     }
@@ -43,7 +46,7 @@ export class AwsClientStub<TInput extends object, TOutput extends MetadataBearer
     /**
      * Resets stub's calls history.
      */
-    resetHistory(): AwsClientStub<TInput, TOutput> {
+    resetHistory(): AwsStub<TInput, TOutput> {
         this.send.resetHistory();
         return this;
     }
@@ -60,7 +63,7 @@ export class AwsClientStub<TInput extends object, TOutput extends MetadataBearer
      * Clear history with {@link resetHistory} or {@link reset}.
      * @return Array of calls
      */
-    calls(): SinonSpyCall[] { // TODO Restore Sinon generics
+    calls(): SinonSpyCall<[AwsCommand<TInput, TOutput>], unknown>[] {
         return this.send.getCalls();
     }
 
@@ -68,7 +71,7 @@ export class AwsClientStub<TInput extends object, TOutput extends MetadataBearer
      * Returns n-th recorded call to the stub.
      * @return Call
      */
-    call(n: number): SinonSpyCall { // TODO Restore Sinon generics
+    call(n: number): SinonSpyCall<[AwsCommand<TInput, TOutput>], unknown> {
         return this.send.getCall(n);
     }
 
@@ -80,11 +83,9 @@ export class AwsClientStub<TInput extends object, TOutput extends MetadataBearer
      * @param command Command type to match
      * @param input Command payload to (strictly) match
      */
-    on<TCmdInput extends TInput, TCmdOutput extends TOutput>(command: new (input: TCmdInput) => Command<any, TCmdInput, any, TCmdOutput, any>, input?: TCmdInput) {
+    on<TCmdInput extends TInput, TCmdOutput extends TOutput>(command: new (input: TCmdInput) => AwsCommand<TCmdInput, TCmdOutput>, input?: TCmdInput): CommandBehavior<TInput, TOutput, TCmdOutput> {
         const matcher = match.instanceOf(command).and(this.createInputMatcher(input));
-
         const cmdStub = this.send.withArgs(matcher);
-
         return new CommandBehavior<TInput, TOutput, TCmdOutput>(this, cmdStub);
     }
 
@@ -96,36 +97,34 @@ export class AwsClientStub<TInput extends object, TOutput extends MetadataBearer
      * This is only for readability, as the result is the same as with not calling it at all.
      * @param input Command payload to (strictly) match
      */
-    onAnyCommand<TCmdInput extends TInput>(input?: TCmdInput) {
+    onAnyCommand<TCmdInput extends TInput>(input?: TCmdInput): CommandBehavior<TInput, TOutput, TOutput> {
         const cmdStub = this.send.withArgs(this.createInputMatcher(input));
-        return new CommandBehavior<TInput, TOutput, TOutput>(this, cmdStub);
+        return new CommandBehavior(this, cmdStub);
     }
 
     private createInputMatcher<TCmdInput extends TInput>(input?: TCmdInput) {
         return input !== undefined ? match.has('input', input) : match.any;
     }
 
-    resolves(response: Partial<TOutput>): AwsClientStub<TInput, TOutput> {
+    resolves(response: Partial<TOutput>): AwsStub<TInput, TOutput> {
         return this.anyCommandBehavior.resolves(response);
     }
 
-    rejects(error?: string | Error | AwsError): AwsClientStub<TInput, TOutput> {
+    rejects(error?: string | Error | AwsError): AwsStub<TInput, TOutput> {
         return this.anyCommandBehavior.rejects(error);
     }
 
-    callsFake(fn: (input: any) => any): AwsClientStub<TInput, TOutput> {
+    callsFake(fn: (input: any) => any): AwsStub<TInput, TOutput> {
         return this.anyCommandBehavior.callsFake(fn);
     }
 
 }
 
-type CommandOutputType<TCommand> = TCommand extends new (input: any) => Command<any, any, any, infer OutputType, any> ? OutputType : never
+export class CommandBehavior<TInput extends object, TOutput extends MetadataBearer, TCommandOutput extends TOutput> {
 
-abstract class Behavior<TInput extends object, TOutput extends MetadataBearer, TResponse extends TOutput> {
-
-    protected constructor(
-        private clientStub: AwsClientStub<TInput, TOutput>,
-        private send: SinonStub, // TODO Add generic types?
+    constructor(
+        private clientStub: AwsStub<TInput, TOutput>,
+        private send: SinonStub<[AwsCommand<TInput, TOutput>], unknown>,
     ) {
     }
 
@@ -136,7 +135,7 @@ abstract class Behavior<TInput extends object, TOutput extends MetadataBearer, T
      * the response will be returned only on receiving them as `Client#send()` argument.
      * @param response Content to be returned from `Client#send()` method
      */
-    resolves(response: Partial<TResponse>): AwsClientStub<TInput, TOutput> {
+    resolves(response: Partial<TCommandOutput>): AwsStub<TInput, TOutput> {
         this.send.resolves(response);
         return this.clientStub;
     }
@@ -148,7 +147,7 @@ abstract class Behavior<TInput extends object, TOutput extends MetadataBearer, T
      * The same Command and its input rules apply as in the {@link resolves}.
      * @param error Error text, Error instance or Error parameters to be returned from `Client#send()` method
      */
-    rejects(error?: string | Error | AwsError): AwsClientStub<TInput, TOutput> {
+    rejects(error?: string | Error | AwsError): AwsStub<TInput, TOutput> {
         if (typeof error === 'string') {
             error = new Error(error);
         }
@@ -167,7 +166,7 @@ abstract class Behavior<TInput extends object, TOutput extends MetadataBearer, T
      * The same Command and its input rules apply as in the {@link resolves}.
      * @param fn Function taking Command input and returning result
      */
-    callsFake(fn: (input: any) => any): AwsClientStub<TInput, TOutput> {
+    callsFake(fn: (input: any) => any): AwsStub<TInput, TOutput> {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         this.send.callsFake(cmd => fn(cmd.input));
 
@@ -176,16 +175,7 @@ abstract class Behavior<TInput extends object, TOutput extends MetadataBearer, T
 
 }
 
-export class CommandBehavior<TInput extends object, TOutput extends MetadataBearer, TCommandOutput extends TOutput>
-    extends Behavior<TInput, TOutput, TCommandOutput> {
-
-    constructor(
-        clientStub: AwsClientStub<TInput, TOutput>,
-        send: SinonStub, // TODO Add generic types?
-    ) {
-        super(clientStub, send);
-    }
-}
+type AwsCommand<TInput, TOutput> = Command<any, TInput, any, TOutput, any>;
 
 export interface AwsError extends Partial<Error>, Partial<MetadataBearer> {
     Type?: string;

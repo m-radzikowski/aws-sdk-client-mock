@@ -1,7 +1,7 @@
 import {Client, Command, MetadataBearer} from '@aws-sdk/types';
 import {SinonStub, stub} from 'sinon';
 import {isSinonStub} from './sinon';
-import {AwsClientStub} from './awsClientStub';
+import {AwsClientStub, AwsStub} from './awsClientStub';
 
 /**
  * Creates and attaches a stub of the `Client#send()` method. Only this single method is mocked.
@@ -11,7 +11,7 @@ import {AwsClientStub} from './awsClientStub';
  */
 export const mockClient = <TInput extends object, TOutput extends MetadataBearer>(
     client: InstanceOrClassType<Client<TInput, TOutput, any>>,
-): AwsClientStub<TInput, TOutput> => {
+): AwsClientStub<Client<TInput, TOutput, any>> => {
     const instance = isClientInstance(client) ? client : client.prototype;
 
     const send = instance.send;
@@ -23,7 +23,7 @@ export const mockClient = <TInput extends object, TOutput extends MetadataBearer
     // @ts-ignore // TODO Resolve
     const sendStub: SinonStub<[Command<any, TInput, any, TOutput, any>], unknown> = stub(instance, 'send');
 
-    return new AwsClientStub<TInput, TOutput>(sendStub);
+    return new AwsStub<TInput, TOutput>(sendStub);
 };
 
 type ClassType<T> = {
