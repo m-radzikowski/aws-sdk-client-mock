@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-types,@typescript-eslint/no-explicit-any */
 import {Client, Command, MetadataBearer} from '@aws-sdk/types';
 import {match, SinonSpyCall, SinonStub} from 'sinon';
 
@@ -192,9 +191,7 @@ export class CommandBehavior<TInput extends object, TOutput extends MetadataBear
      * @param fn Function taking Command input and returning result
      */
     callsFake(fn: (input: any) => any): AwsStub<TInput, TOutput> {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         this.send.callsFake(cmd => fn(cmd.input));
-
         return this.clientStub;
     }
 
