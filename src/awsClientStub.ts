@@ -200,7 +200,7 @@ export class CommandBehavior<TInput extends object, TOutput extends MetadataBear
 
 }
 
-type AwsCommand<TInput, TOutput> = Command<any, TInput, any, TOutput, any>;
+type AwsCommand<Input extends ClientInput, Output extends ClientOutput, ClientInput extends object = any, ClientOutput extends MetadataBearer = any> = Command<ClientInput, Input, ClientOutput, Output, any>;
 type CommandResponse<TOutput> = Partial<TOutput> | PromiseLike<Partial<TOutput>>;
 
 export interface AwsError extends Partial<Error>, Partial<MetadataBearer> {

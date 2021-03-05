@@ -19,9 +19,7 @@ export const mockClient = <TInput extends object, TOutput extends MetadataBearer
         send.restore();
     }
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore // TODO Resolve
-    const sendStub: SinonStub<[Command<any, TInput, any, TOutput, any>], unknown> = stub(instance, 'send');
+    const sendStub: SinonStub<[Command<TInput, any, TOutput, any, any>], unknown> = stub(instance, 'send');
 
     return new AwsStub<TInput, TOutput>(sendStub);
 };
