@@ -2,6 +2,9 @@
 import {Client, Command, MetadataBearer} from '@aws-sdk/types';
 import {match, SinonSpyCall, SinonStub} from 'sinon';
 
+export type AwsClientBehavior<TClient extends Client<any, any, any>> =
+    TClient extends Client<infer TInput, infer TOutput, any> ? Behavior<TInput, TOutput, TOutput> : never;
+
 interface Behavior<TInput extends object, TOutput extends MetadataBearer, TCommandOutput extends TOutput> {
 
     resolves(response: CommandResponse<TCommandOutput>): AwsStub<TInput, TOutput>;
