@@ -18,6 +18,10 @@ Features:
 - 🖋️&nbsp; **fully typed** - same type control for declaring mock's behavior as when writing regular code
 - ✅&nbsp; **fully tested** - reliable mocks help instead of impeding
 
+In action:
+
+![aws-client-mock-example](./.github/aws-client-mock-example.gif)
+
 ### Table of Contents
 
 - [About AWS SDK v3](#about-aws-sdk-v3)
