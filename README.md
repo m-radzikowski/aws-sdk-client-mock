@@ -20,7 +20,7 @@ Features:
 
 In action:
 
-![aws-client-mock-example](./.github/aws-client-mock-example.gif)
+![aws-client-mock-example](https://github.com/m-radzikowski/aws-sdk-client-mock/raw/main/.github/aws-client-mock-example.gif)
 
 ### Table of Contents
 

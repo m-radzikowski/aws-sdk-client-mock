@@ -3,8 +3,8 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>AWS SDK v3 Client mock - v0.1.0</title>
-	<meta name="description" content="Documentation for AWS SDK v3 Client mock - v0.1.0">
+	<title>AWS SDK v3 Client mock - v0.2.0</title>
+	<meta name="description" content="Documentation for AWS SDK v3 Client mock - v0.2.0">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="assets/css/main.css">
 	<script async src="assets/js/search.js" id="search-script"></script>
@@ -23,7 +23,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="index.html" class="title">AWS SDK v3 Client mock - v0.1.0</a>
+					<a href="index.html" class="title">AWS SDK v3 Client mock - v0.2.0</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -50,7 +50,7 @@
 	</div>
 	<div class="tsd-page-title">
 		<div class="container">
-			<h1>AWS SDK v3 Client mock - v0.1.0</h1>
+			<h1>AWS SDK v3 Client mock - v0.2.0</h1>
 		</div>
 	</div>
 </header>
@@ -64,7 +64,8 @@
 						<section class="tsd-index-section ">
 							<h3>Classes</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-class tsd-has-type-parameter"><a href="classes/awsclientstub.html" class="tsd-kind-icon">Aws<wbr>Client<wbr>Stub</a></li>
+								<li class="tsd-kind-class tsd-has-type-parameter"><a href="classes/awsstub.html" class="tsd-kind-icon">Aws<wbr>Stub</a></li>
+								<li class="tsd-kind-class tsd-has-type-parameter"><a href="classes/commandbehavior.html" class="tsd-kind-icon">Command<wbr>Behavior</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
@@ -76,8 +77,8 @@
 						<section class="tsd-index-section ">
 							<h3>Type aliases</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-type-alias tsd-has-type-parameter"><a href="modules.html#awscommand" class="tsd-kind-icon">Aws<wbr>Command</a></li>
-								<li class="tsd-kind-type-alias tsd-has-type-parameter"><a href="modules.html#awscommandtype" class="tsd-kind-icon">Aws<wbr>Command<wbr>Type</a></li>
+								<li class="tsd-kind-type-alias tsd-has-type-parameter"><a href="modules.html#awsclientbehavior" class="tsd-kind-icon">Aws<wbr>Client<wbr>Behavior</a></li>
+								<li class="tsd-kind-type-alias tsd-has-type-parameter"><a href="modules.html#awsclientstub" class="tsd-kind-icon">Aws<wbr>Client<wbr>Stub</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
@@ -92,19 +93,14 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Type aliases</h2>
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-has-type-parameter">
-					<a name="awscommand" class="tsd-anchor"></a>
-					<h3>Aws<wbr>Command</h3>
-					<div class="tsd-signature tsd-kind-icon">Aws<wbr>Command&lt;TClient&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Parameters</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TClient</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">&quot;send&quot;</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">0</span><span class="tsd-signature-symbol">]</span></div>
+					<a name="awsclientbehavior" class="tsd-anchor"></a>
+					<h3>Aws<wbr>Client<wbr>Behavior</h3>
+					<div class="tsd-signature tsd-kind-icon">Aws<wbr>Client<wbr>Behavior&lt;TClient&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">TClient</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">Client</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">infer </span> TInput<span class="tsd-signature-symbol">, </span><span class="tsd-signature-symbol">infer </span> TOutput<span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">Behavior</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TInput</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TOutput</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TOutput</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">never</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/m-radzikowski/aws-sdk-client-mock/blob/main/src/awsClientStub.ts#L179">src/awsClientStub.ts:179</a></li>
+							<li>Defined in <a href="https://github.com/m-radzikowski/aws-sdk-client-mock/blob/main/src/awsClientStub.ts#L4">src/awsClientStub.ts:4</a></li>
 						</ul>
 					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Type matching the Command instances accepted by the Client.</p>
-						</div>
-					</div>
 					<h4 class="tsd-type-parameters-title">Type parameters</h4>
 					<ul class="tsd-type-parameters">
 						<li>
@@ -113,49 +109,30 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-has-type-parameter">
-					<a name="awscommandtype" class="tsd-anchor"></a>
-					<h3>Aws<wbr>Command<wbr>Type</h3>
-					<div class="tsd-signature tsd-kind-icon">Aws<wbr>Command<wbr>Type&lt;TClient, TInput&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>input<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TInput</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">MatchArguments</span><span class="tsd-signature-symbol">&lt;</span><a href="modules.html#awscommand" class="tsd-signature-type" data-tsd-kind="Type alias">AwsCommand</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TClient</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<a name="awsclientstub" class="tsd-anchor"></a>
+					<h3>Aws<wbr>Client<wbr>Stub</h3>
+					<div class="tsd-signature tsd-kind-icon">Aws<wbr>Client<wbr>Stub&lt;TClient&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">TClient</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">Client</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">infer </span> TInput<span class="tsd-signature-symbol">, </span><span class="tsd-signature-symbol">infer </span> TOutput<span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> ? </span><a href="classes/awsstub.html" class="tsd-signature-type" data-tsd-kind="Class">AwsStub</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TInput</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TOutput</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">never</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/m-radzikowski/aws-sdk-client-mock/blob/main/src/awsClientStub.ts#L184">src/awsClientStub.ts:184</a></li>
+							<li>Defined in <a href="https://github.com/m-radzikowski/aws-sdk-client-mock/blob/main/src/awsClientStub.ts#L27">src/awsClientStub.ts:27</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Type matching the Command type (class) accepted by the Client.</p>
+							<p>Type for <a href="classes/awsstub.html">AwsStub</a> class,
+							but with the AWS Client class type as an only generic parameter.</p>
 						</div>
+						<p>Usage:</p>
+						<pre><code class="language-typescript"><span style="color: #0000FF">let</span><span style="color: #000000"> </span><span style="color: #001080">snsMock</span><span style="color: #000000">: </span><span style="color: #267F99">AwsClientStub</span><span style="color: #000000">&lt;</span><span style="color: #267F99">SNSClient</span><span style="color: #000000">&gt;;</span>
+<span style="color: #001080">snsMock</span><span style="color: #000000"> = </span><span style="color: #795E26">mockClient</span><span style="color: #000000">(</span><span style="color: #001080">SNSClient</span><span style="color: #000000">);</span>
+</code></pre>
 					</div>
 					<h4 class="tsd-type-parameters-title">Type parameters</h4>
 					<ul class="tsd-type-parameters">
 						<li>
 							<h4>TClient<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Client</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
-						<li>
-							<h4>TInput</h4>
-						</li>
 					</ul>
-					<div class="tsd-type-declaration">
-						<h4>Type declaration</h4>
-						<ul class="tsd-parameters">
-							<li class="tsd-parameter-signature">
-								<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-type-alias">
-									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>input<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TInput</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">MatchArguments</span><span class="tsd-signature-symbol">&lt;</span><a href="modules.html#awscommand" class="tsd-signature-type" data-tsd-kind="Type alias">AwsCommand</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TClient</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
-								</ul>
-								<ul class="tsd-descriptions">
-									<li class="tsd-description">
-										<h4 class="tsd-parameters-title">Parameters</h4>
-										<ul class="tsd-parameters">
-											<li>
-												<h5>input: <span class="tsd-signature-type">TInput</span></h5>
-											</li>
-										</ul>
-										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">MatchArguments</span><span class="tsd-signature-symbol">&lt;</span><a href="modules.html#awscommand" class="tsd-signature-type" data-tsd-kind="Type alias">AwsCommand</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TClient</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
-									</li>
-								</ul>
-							</li>
-						</ul>
-					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
@@ -164,7 +141,7 @@
 					<a name="mockclient" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> mock<wbr>Client</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-has-type-parameter">
-						<li class="tsd-signature tsd-kind-icon">mock<wbr>Client&lt;TClient&gt;<span class="tsd-signature-symbol">(</span>client<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TClient</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Constructor</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TClient</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="classes/awsclientstub.html" class="tsd-signature-type" data-tsd-kind="Class">AwsClientStub</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TClient</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">mock<wbr>Client&lt;TInput, TOutput&gt;<span class="tsd-signature-symbol">(</span>client<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">InstanceOrClassType</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Client</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TInput</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TOutput</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="classes/awsstub.html" class="tsd-signature-type" data-tsd-kind="Class">AwsStub</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TInput</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TOutput</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -182,19 +159,22 @@
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
 								<li>
-									<h4>TClient<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Client</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TClient</span><span class="tsd-signature-symbol">&gt;</span></h4>
+									<h4>TInput<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span></h4>
+								</li>
+								<li>
+									<h4>TOutput<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">MetadataBearer</span></h4>
 								</li>
 							</ul>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>client: <span class="tsd-signature-type">TClient</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Constructor</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TClient</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>client: <span class="tsd-signature-type">InstanceOrClassType</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Client</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TInput</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TOutput</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p><code>Client</code> type or instance to replace the method</p>
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="classes/awsclientstub.html" class="tsd-signature-type" data-tsd-kind="Class">AwsClientStub</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TClient</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="classes/awsstub.html" class="tsd-signature-type" data-tsd-kind="Class">AwsStub</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TInput</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TOutput</span><span class="tsd-signature-symbol">&gt;</span></h4>
 							<p>Stub allowing to configure Client&#39;s behavior</p>
 						</li>
 					</ul>
@@ -212,16 +192,19 @@
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-class tsd-has-type-parameter">
-						<a href="classes/awsclientstub.html" class="tsd-kind-icon">Aws<wbr>Client<wbr>Stub</a>
+						<a href="classes/awsstub.html" class="tsd-kind-icon">Aws<wbr>Stub</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="classes/commandbehavior.html" class="tsd-kind-icon">Command<wbr>Behavior</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/awserror.html" class="tsd-kind-icon">Aws<wbr>Error</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
-						<a href="modules.html#awscommand" class="tsd-kind-icon">Aws<wbr>Command</a>
+						<a href="modules.html#awsclientbehavior" class="tsd-kind-icon">Aws<wbr>Client<wbr>Behavior</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
-						<a href="modules.html#awscommandtype" class="tsd-kind-icon">Aws<wbr>Command<wbr>Type</a>
+						<a href="modules.html#awsclientstub" class="tsd-kind-icon">Aws<wbr>Client<wbr>Stub</a>
 					</li>
 					<li class=" tsd-kind-function tsd-has-type-parameter">
 						<a href="modules.html#mockclient" class="tsd-kind-icon">mock<wbr>Client</a>
