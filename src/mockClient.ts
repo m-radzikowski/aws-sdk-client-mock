@@ -1,7 +1,7 @@
-import {Client, Command} from '@aws-sdk/types';
+import {Client, Command, MetadataBearer} from '@aws-sdk/types';
 import {SinonStub, stub} from 'sinon';
 import {isSinonStub} from './sinon';
-import {AwsClientStub} from './awsClientStub';
+import {AwsClientStub, AwsStub} from './awsClientStub';
 
 /**
  * Creates and attaches a stub of the `Client#send()` method. Only this single method is mocked.
@@ -9,9 +9,9 @@ import {AwsClientStub} from './awsClientStub';
  * @param client `Client` type or instance to replace the method
  * @return Stub allowing to configure Client's behavior
  */
-export const mockClient = <TClient extends AwsClient>(
-    client: TClient | Constructor<TClient>,
-): AwsClientStub<TClient> => {
+export const mockClient = <TInput extends object, TOutput extends MetadataBearer>(
+    client: InstanceOrClassType<Client<TInput, TOutput, any>>,
+): AwsClientStub<Client<TInput, TOutput, any>> => {
     const instance = isClientInstance(client) ? client : client.prototype;
 
     const send = instance.send;
@@ -19,22 +19,20 @@ export const mockClient = <TClient extends AwsClient>(
         send.restore();
     }
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore // TODO Resolve - see: https://stackoverflow.com/questions/56505560/could-be-instantiated-with-a-different-subtype-of-constraint-object-ts2322
-    const sendStub: SinonStub<[Command<any, any, any, any, any>], unknown> = stub(instance, 'send');
+    const sendStub: SinonStub<[Command<TInput, any, TOutput, any, any>], unknown> = stub(instance, 'send');
 
-    return new AwsClientStub<TClient>(sendStub);
+    return new AwsStub<TInput, TOutput>(sendStub);
 };
 
-type Constructor<T> = {
+type ClassType<T> = {
     new(...args: never[]): T;
     prototype: T;
 };
 
-type AwsClient = Client<any, any, any>;
+type InstanceOrClassType<T> = T | ClassType<T>;
 
 /**
  * Type guard to differentiate `Client` instance from a type.
  */
-const isClientInstance = <TClient extends AwsClient>(obj: TClient | Constructor<TClient>): obj is TClient =>
+const isClientInstance = <TClient extends Client<any, any, any>>(obj: InstanceOrClassType<TClient>): obj is TClient =>
     (obj as TClient).send !== undefined;

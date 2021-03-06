@@ -18,6 +18,10 @@ Features:
 - 🖋️&nbsp; **fully typed** - same type control for declaring mock's behavior as when writing regular code
 - ✅&nbsp; **fully tested** - reliable mocks help instead of impeding
 
+In action:
+
+![aws-client-mock-example](./.github/aws-client-mock-example.gif)
+
 ### Table of Contents
 
 - [About AWS SDK v3](#about-aws-sdk-v3)
@@ -135,8 +139,59 @@ snsMock
     });
 ```
 
+Specify mock behavior on receiving given payload only:
+
+```typescript
+snsMock
+    .onAnyCommand({
+        TopicArn: 'arn:aws:sns:us-east-1:111111111111:MyTopic',
+        Message: 'My message',
+    })
+    .resolves({
+        MessageId: '12345678-4444-5555-6666-111122223333',
+    });
+```
+
 Multiple behaviors (for different commands and payloads) may be specified
-for a single mock.
+for a single mock:
+
+```typescript
+snsMock
+    .resolves({ // default for any command
+        MessageId: '12345678-1111-2222-3333-111122223333'
+    })
+    .on(PublishCommand)
+    .resolves({ // default for PublishCommand
+        MessageId: '12345678-4444-5555-6666-111122223333'
+    })
+    .on(PublishCommand, {
+        TopicArn: 'arn:aws:sns:us-east-1:111111111111:MyTopic',
+        Message: 'My message',
+    })
+    .resolves({ // for PublishCommand with given input
+        MessageId: '12345678-7777-8888-9999-111122223333',
+    });
+```
+
+Specify mock throwing an error:
+
+```typescript
+snsMock
+    .rejects('mocked rejection');
+```
+
+Specify custom mock function:
+
+```typescript
+snsMock
+    .callsFake(input => {
+        if (input.Message === 'My message') {
+            return {MessageId: '12345678-1111-2222-3333-111122223333'};
+        } else {
+            return {MessageId: '12345678-4444-5555-6666-111122223333'};
+        }
+    });
+```
 
 Inspect received calls:
 
@@ -205,7 +260,7 @@ beforeEach(() => {
 });
 
 it('message IDs are returned', async () => {
-  snsMock.on(PublishCommand, {
+  snsMock.on(PublishCommand).resolves({
     MessageId: '12345678-1111-2222-3333-111122223333',
   });
 
@@ -218,7 +273,7 @@ it('message IDs are returned', async () => {
 });
 
 it('SNS Client is called', async () => {
-  snsMock.on(PublishCommand, {
+  snsMock.on(PublishCommand).resolves({
     MessageId: '111-222-333',
   });
 
