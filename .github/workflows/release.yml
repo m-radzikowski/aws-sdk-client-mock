@@ -34,7 +34,7 @@ jobs:
       - run: yarn run release
       - run: npm publish
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - run: yarn run typedoc
       - name: commit docs website
