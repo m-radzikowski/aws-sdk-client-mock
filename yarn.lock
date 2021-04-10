@@ -360,6 +360,17 @@
   dependencies:
     tslib "^1.8.0"
 
+"@aws-sdk/lib-dynamodb@3.12.0":
+  version "3.12.0"
+  resolved "https://registry.yarnpkg.com/@aws-sdk/lib-dynamodb/-/lib-dynamodb-3.12.0.tgz#89ecdaf72b5967d91ab34ba560670281131003f3"
+  integrity sha512-6JDoBLl1+MCXmDvniyBFBqFO1ZeiG4WN/ksHco8JANxn++v7mz8t5bdWnoWxVXRx/lEv0hEOlGB5nbAQ35ZA8Q==
+  dependencies:
+    "@aws-sdk/client-dynamodb" "3.12.0"
+    "@aws-sdk/smithy-client" "3.12.0"
+    "@aws-sdk/types" "3.12.0"
+    "@aws-sdk/util-dynamodb" "3.12.0"
+    tslib "^1.8.0"
+
 "@aws-sdk/md5-js@3.12.0":
   version "3.12.0"
   resolved "https://registry.yarnpkg.com/@aws-sdk/md5-js/-/md5-js-3.12.0.tgz#e0e5e4c529e3c8736adace556ca4510ecc9bee9d"
@@ -612,6 +623,13 @@
   integrity sha512-76OMnTTrgH06PaMyzHgPLLn/fPtJAewtV1zB/0nVCY3DEH5roJVNZ3TOxqmwPgUt06zCDUQeRGDwTW0tp/vCGw==
   dependencies:
     "@aws-sdk/is-array-buffer" "3.12.0"
+    tslib "^1.8.0"
+
+"@aws-sdk/util-dynamodb@3.12.0":
+  version "3.12.0"
+  resolved "https://registry.yarnpkg.com/@aws-sdk/util-dynamodb/-/util-dynamodb-3.12.0.tgz#1bbca8bab1fe5ac47274e45fd2a49d4746b9913f"
+  integrity sha512-14kZfqwFjjkNc3bxHadOYJPlp0FVzfbU1EOF34eoW+pYAM4VfoGmfl7dFJb6YpXU5zertlu0AVJejaXj8n6lCA==
+  dependencies:
     tslib "^1.8.0"
 
 "@aws-sdk/util-hex-encoding@3.12.0":

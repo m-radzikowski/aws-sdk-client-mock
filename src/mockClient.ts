@@ -25,7 +25,6 @@ export const mockClient = <TInput extends object, TOutput extends MetadataBearer
 };
 
 type ClassType<T> = {
-    new(...args: never[]): T;
     prototype: T;
 };
 
