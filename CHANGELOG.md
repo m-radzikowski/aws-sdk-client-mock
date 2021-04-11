@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.0](https://github.com/m-radzikowski/aws-sdk-client-mock/compare/v0.2.0...v0.3.0) (2021-04-11)
+
+
+### Features
+
+* DynamoDB DocumentClient mocking ([#11](https://github.com/m-radzikowski/aws-sdk-client-mock/issues/11)) ([a1de5fe](https://github.com/m-radzikowski/aws-sdk-client-mock/commit/a1de5fefaae2d5bfe0a8dadb5a7468f0c4d56790))
+
 ## 0.2.0 (2021-03-06)
 
 
