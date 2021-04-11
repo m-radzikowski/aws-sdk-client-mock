@@ -3,8 +3,8 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>AWS SDK v3 Client mock - v0.2.0</title>
-	<meta name="description" content="Documentation for AWS SDK v3 Client mock - v0.2.0">
+	<title>AWS SDK v3 Client mock - v0.3.0</title>
+	<meta name="description" content="Documentation for AWS SDK v3 Client mock - v0.3.0">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="assets/css/main.css">
 	<script async src="assets/js/search.js" id="search-script"></script>
@@ -23,7 +23,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="index.html" class="title">AWS SDK v3 Client mock - v0.2.0</a>
+					<a href="index.html" class="title">AWS SDK v3 Client mock - v0.3.0</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -50,7 +50,7 @@
 	</div>
 	<div class="tsd-page-title">
 		<div class="container">
-			<h1>AWS SDK v3 Client mock - v0.2.0</h1>
+			<h1>AWS SDK v3 Client mock - v0.3.0</h1>
 		</div>
 	</div>
 </header>
@@ -85,7 +85,11 @@
 					<li><a href="#usage">Usage</a><ul>
 							<li><a href="#install">Install</a></li>
 							<li><a href="#import">Import</a></li>
-							<li><a href="#mock">Mock</a></li>
+							<li><a href="#mock">Mock</a><ul>
+									<li><a href="#dynamodb-documentclient">DynamoDB DocumentClient</a></li>
+									<li><a href="#paginated-operations">Paginated operations</a></li>
+								</ul>
+							</li>
 						</ul>
 					</li>
 					<li><a href="#api-reference">API Reference</a></li>
@@ -223,6 +227,41 @@
 				<p>Under the hood, the library uses <a href="https://sinonjs.org/">Sinon.js</a> <code>stub</code>.
 				You can get the stub instance to configure and use it directly:</p>
 				<pre><code class="language-typescript"><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">snsSendStub</span><span style="color: #000000"> = </span><span style="color: #001080">snsMock</span><span style="color: #000000">.</span><span style="color: #001080">send</span><span style="color: #000000">;</span>
+</code></pre>
+				<a href="#dynamodb-documentclient" id="dynamodb-documentclient" style="color: inherit; text-decoration: none;">
+					<h4>DynamoDB DocumentClient</h4>
+				</a>
+				<p>You can mock the <code>DynamoDBDocumentClient</code> just like any other Client:</p>
+				<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> {</span><span style="color: #001080">DynamoDBDocumentClient</span><span style="color: #000000">, </span><span style="color: #001080">QueryCommand</span><span style="color: #000000">} </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;@aws-sdk/lib-dynamodb&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">ddbMock</span><span style="color: #000000"> = </span><span style="color: #795E26">mockClient</span><span style="color: #000000">(</span><span style="color: #001080">DynamoDBDocumentClient</span><span style="color: #000000">);</span>
+<span style="color: #001080">ddbMock</span><span style="color: #000000">.</span><span style="color: #795E26">on</span><span style="color: #000000">(</span><span style="color: #001080">QueryCommand</span><span style="color: #000000">).</span><span style="color: #795E26">resolves</span><span style="color: #000000">({</span>
+<span style="color: #000000">    </span><span style="color: #001080">Items:</span><span style="color: #000000"> [{</span><span style="color: #001080">pk:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;a&#039;</span><span style="color: #000000">, </span><span style="color: #001080">sk:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;b&#039;</span><span style="color: #000000">}],</span>
+<span style="color: #000000">});</span>
+</code></pre>
+				<a href="#paginated-operations" id="paginated-operations" style="color: inherit; text-decoration: none;">
+					<h4>Paginated operations</h4>
+				</a>
+				<p>To mock a <a href="https://aws.amazon.com/blogs/developer/pagination-using-async-iterators-in-modular-aws-sdk-for-javascript/">paginated operation</a>
+				results, simply mock the corresponding Command:</p>
+				<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> {</span><span style="color: #001080">DynamoDBClient</span><span style="color: #000000">, </span><span style="color: #001080">paginateQuery</span><span style="color: #000000">, </span><span style="color: #001080">QueryCommand</span><span style="color: #000000">} </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;@aws-sdk/client-dynamodb&#039;</span><span style="color: #000000">;</span>
+<span style="color: #AF00DB">import</span><span style="color: #000000"> {</span><span style="color: #001080">marshall</span><span style="color: #000000">} </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;@aws-sdk/util-dynamodb&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">dynamodbMock</span><span style="color: #000000"> = </span><span style="color: #795E26">mockClient</span><span style="color: #000000">(</span><span style="color: #001080">DynamoDBClient</span><span style="color: #000000">);</span>
+<span style="color: #001080">dynamodbMock</span><span style="color: #000000">.</span><span style="color: #795E26">on</span><span style="color: #000000">(</span><span style="color: #001080">QueryCommand</span><span style="color: #000000">).</span><span style="color: #795E26">resolves</span><span style="color: #000000">({</span>
+<span style="color: #000000">    </span><span style="color: #001080">Items:</span><span style="color: #000000"> [</span>
+<span style="color: #000000">        </span><span style="color: #795E26">marshall</span><span style="color: #000000">({</span><span style="color: #001080">pk:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;a&#039;</span><span style="color: #000000">, </span><span style="color: #001080">sk:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;b&#039;</span><span style="color: #000000">}),</span>
+<span style="color: #000000">        </span><span style="color: #795E26">marshall</span><span style="color: #000000">({</span><span style="color: #001080">pk:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;c&#039;</span><span style="color: #000000">, </span><span style="color: #001080">sk:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;d&#039;</span><span style="color: #000000">}),</span>
+<span style="color: #000000">    ],</span>
+<span style="color: #000000">});</span>
+
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">dynamodb</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">DynamoDBClient</span><span style="color: #000000">({});</span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">paginator</span><span style="color: #000000"> = </span><span style="color: #795E26">paginateQuery</span><span style="color: #000000">({</span><span style="color: #001080">client:</span><span style="color: #000000"> </span><span style="color: #001080">dynamodb</span><span style="color: #000000">}, {</span><span style="color: #001080">TableName:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;mock&#039;</span><span style="color: #000000">});</span>
+
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">items</span><span style="color: #000000"> = [];</span>
+<span style="color: #AF00DB">for</span><span style="color: #000000"> </span><span style="color: #AF00DB">await</span><span style="color: #000000"> (</span><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">page</span><span style="color: #000000"> </span><span style="color: #0000FF">of</span><span style="color: #000000"> </span><span style="color: #001080">paginator</span><span style="color: #000000">) {</span>
+<span style="color: #000000">    </span><span style="color: #001080">items</span><span style="color: #000000">.</span><span style="color: #795E26">push</span><span style="color: #000000">(...</span><span style="color: #001080">page</span><span style="color: #000000">.</span><span style="color: #001080">Items</span><span style="color: #000000"> || []);</span>
+<span style="color: #000000">}</span>
 </code></pre>
 				<a href="#api-reference" id="api-reference" style="color: inherit; text-decoration: none;">
 					<h2>API Reference</h2>
