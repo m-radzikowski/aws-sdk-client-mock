@@ -29,6 +29,8 @@ In action:
   - [Install](#install)
   - [Import](#import)
   - [Mock](#mock)
+    - [DynamoDB DocumentClient](#dynamodb-documentclient)
+    - [Paginated operations](#paginated-operations)
 - [API Reference](#api-reference)
 - [AWS Lambda example](#aws-lambda-example)
 - [Caveats](#caveats)
@@ -205,6 +207,45 @@ You can get the stub instance to configure and use it directly:
 
 ```typescript
 const snsSendStub = snsMock.send;
+```
+
+#### DynamoDB DocumentClient
+
+You can mock the `DynamoDBDocumentClient` just like any other Client:
+
+```typescript
+import {DynamoDBDocumentClient, QueryCommand} from '@aws-sdk/lib-dynamodb';
+
+const ddbMock = mockClient(DynamoDBDocumentClient);
+ddbMock.on(QueryCommand).resolves({
+    Items: [{pk: 'a', sk: 'b'}],
+});
+```
+
+#### Paginated operations
+
+To mock a [paginated operation](https://aws.amazon.com/blogs/developer/pagination-using-async-iterators-in-modular-aws-sdk-for-javascript/)
+results, simply mock the corresponding Command:
+
+```typescript
+import {DynamoDBClient, paginateQuery, QueryCommand} from '@aws-sdk/client-dynamodb';
+import {marshall} from '@aws-sdk/util-dynamodb';
+
+const dynamodbMock = mockClient(DynamoDBClient);
+dynamodbMock.on(QueryCommand).resolves({
+    Items: [
+        marshall({pk: 'a', sk: 'b'}),
+        marshall({pk: 'c', sk: 'd'}),
+    ],
+});
+
+const dynamodb = new DynamoDBClient({});
+const paginator = paginateQuery({client: dynamodb}, {TableName: 'mock'});
+
+const items = [];
+for await (const page of paginator) {
+    items.push(...page.Items || []);
+}
 ```
 
 ## API Reference
