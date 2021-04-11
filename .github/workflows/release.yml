@@ -31,16 +31,16 @@ jobs:
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
 
-      - run: yarn run release
-      - run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
       - run: yarn run typedoc
       - name: commit docs website
         run: |
           git add docs
           git commit -m 'docs: update docs website'
+
+      - run: yarn run release
+      - run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - uses: ad-m/github-push-action@master
         with:
