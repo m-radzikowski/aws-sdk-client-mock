@@ -35,7 +35,7 @@ jobs:
       - name: commit docs website
         run: |
           git add docs
-          git commit -m 'docs: update docs website'
+          git diff-index --quiet HEAD || git commit -m 'docs: update docs website'
 
       - run: yarn run release
       - run: npm publish
