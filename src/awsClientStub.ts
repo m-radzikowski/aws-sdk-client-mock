@@ -94,12 +94,13 @@ export class AwsStub<TInput extends object, TOutput extends MetadataBearer> impl
      *
      * If the input is not specified, it will match any Command of that type.
      * @param command Command type to match
-     * @param input Command payload to (strictly) match
+     * @param input Command payload to match
+     * @param strict Should the payload match strictly (default false, will match if all defined payload properties match)
      */
     on<TCmdInput extends TInput, TCmdOutput extends TOutput>(
-        command: new (input: TCmdInput) => AwsCommand<TCmdInput, TCmdOutput>, input?: TCmdInput,
+        command: new (input: TCmdInput) => AwsCommand<TCmdInput, TCmdOutput>, input?: Partial<TCmdInput>, strict = false,
     ): CommandBehavior<TInput, TOutput, TCmdOutput> {
-        const matcher = match.instanceOf(command).and(this.createInputMatcher(input));
+        const matcher = match.instanceOf(command).and(this.createInputMatcher(input, strict));
         const cmdStub = this.send.withArgs(matcher);
         return new CommandBehavior<TInput, TOutput, TCmdOutput>(this, cmdStub);
     }
@@ -110,15 +111,18 @@ export class AwsStub<TInput extends object, TOutput extends MetadataBearer> impl
      * If the input is not specified, the given behavior will be used for any Command with any input.
      * This is no different from using {@link resolves}, {@link rejects}, etc. directly,
      * but can be used for readability.
-     * @param input Command payload to (strictly) match
+     * @param input Command payload to match
+     * @param strict Should the payload match strictly (default false, will match if all defined payload properties match)
      */
-    onAnyCommand<TCmdInput extends TInput>(input?: TCmdInput): CommandBehavior<TInput, TOutput, TOutput> {
-        const cmdStub = this.send.withArgs(this.createInputMatcher(input));
+    onAnyCommand<TCmdInput extends TInput>(input?: Partial<TCmdInput>, strict = false): CommandBehavior<TInput, TOutput, TOutput> {
+        const cmdStub = this.send.withArgs(this.createInputMatcher(input, strict));
         return new CommandBehavior(this, cmdStub);
     }
 
-    private createInputMatcher<TCmdInput extends TInput>(input?: TCmdInput) {
-        return input !== undefined ? match.has('input', input) : match.any;
+    private createInputMatcher<TCmdInput extends TInput>(input?: Partial<TCmdInput>, strict = false) {
+        return input !== undefined ?
+            match.has('input', strict ? input : match(input))
+            : match.any;
     }
 
     /**

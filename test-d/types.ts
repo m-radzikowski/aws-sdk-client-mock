@@ -8,6 +8,7 @@ expectType<AwsClientStub<SNSClient>>(mockClient(SNSClient));
 // proper Command, input and output types
 mockClient(SNSClient).on(PublishCommand);
 mockClient(SNSClient).on(PublishCommand, {TopicArn: '', Message: ''});
+mockClient(SNSClient).on(PublishCommand, {Message: ''});
 mockClient(SNSClient).on(PublishCommand).resolves({});
 mockClient(SNSClient).on(PublishCommand).resolves({MessageId: ''});
 
@@ -20,7 +21,6 @@ expectError(mockClient(SNSClient).on({}));
 expectError(mockClient(SNSClient).on(ListTablesCommand));
 
 // invalid input types
-expectError(mockClient(SNSClient).on(PublishCommand, {}));
 expectError(mockClient(SNSClient).on(ListTopicsCommand, {TopicArn: '', Message: ''}));
 
 // invalid output types
