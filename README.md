@@ -299,7 +299,7 @@ interface Event {
 Then the tests could look like this:
 
 ```typescript
-import {mockClient} from '@m-radzikowski/aws-sdk-client-mock';
+import {mockClient} from 'aws-sdk-client-mock';
 import {PublishCommand, SNSClient} from '@aws-sdk/client-sns';
 import {handler} from '../src';
 
