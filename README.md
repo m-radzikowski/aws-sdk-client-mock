@@ -328,6 +328,10 @@ it('SNS Client is called', async () => {
 
 For more examples, see the [unit tests](./test/mockClient.test.ts).
 
+## Compatibility
+
+See [compatibility table](compatibility.md) for AWS SDK v3 Clients.
+
 ## Caveats
 
 ### Order of mock behaviors
