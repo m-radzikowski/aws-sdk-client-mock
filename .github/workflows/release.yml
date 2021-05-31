@@ -38,6 +38,13 @@ jobs:
           git diff-index --quiet HEAD || git commit -m 'docs: update docs website'
 
       - run: yarn run release
+
+      - run: yarn run generate-compatibility
+      - name: commit compatibility table
+        run: |
+          git add compatibility.md
+          git diff-index --quiet HEAD || git commit -m 'docs: update compatibility table'
+
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
