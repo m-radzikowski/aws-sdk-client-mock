@@ -41,7 +41,8 @@
     "src"
   ],
   "dependencies": {
-    "sinon": "^9.2.4"
+    "@types/sinon": "10.0.1",
+    "sinon": "^11.1.1"
   },
   "devDependencies": {
     "@aws-sdk/client-dynamodb": "3.17.0",
@@ -54,7 +55,6 @@
     "@size-limit/preset-small-lib": "4.10.2",
     "@types/jest": "26.0.20",
     "@types/node": "14.17.1",
-    "@types/sinon": "9.0.10",
     "@typescript-eslint/eslint-plugin": "4.21.0",
     "@typescript-eslint/parser": "4.21.0",
     "eslint": "7.24.0",
