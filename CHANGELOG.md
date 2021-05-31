@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.5.0](https://github.com/m-radzikowski/aws-sdk-client-mock/compare/v0.4.0...v0.5.0) (2021-05-31)
+
+
+### ⚠ BREAKING CHANGES
+
+* bump Sinon to v11 (#27)
+
+### Bug Fixes
+
+* make compatibility test project dir ([2aef307](https://github.com/m-radzikowski/aws-sdk-client-mock/commit/2aef3077089ab39d6185cfdec6a13ecf139bdd11))
+
+
+* bump Sinon to v11 ([#27](https://github.com/m-radzikowski/aws-sdk-client-mock/issues/27)) ([2edad51](https://github.com/m-radzikowski/aws-sdk-client-mock/commit/2edad513c4788ab137e1348c13e53ae0b891a68f)), closes [#24](https://github.com/m-radzikowski/aws-sdk-client-mock/issues/24) [#22](https://github.com/m-radzikowski/aws-sdk-client-mock/issues/22)
+
 ## [0.4.0](https://github.com/m-radzikowski/aws-sdk-client-mock/compare/v0.3.0...v0.4.0) (2021-05-06)
 
 
