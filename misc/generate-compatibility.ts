@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 /*
  * Checks if all AWS SDK v3 clients can be mocked properly based on their types.
  */
@@ -105,7 +107,7 @@ const toClientName = (packageName: string): string => {
 };
 
 const installClients = (clients: Client[]): void => {
-    child_process.execSync(`yarn init -y`, {cwd: dir, stdio: 'inherit'});
+    child_process.execSync('yarn init -y', {cwd: dir, stdio: 'inherit'});
 
     const packages = clients.map(c => `${c.packageName}@${c.packageVersion}`);
     child_process.execSync(`yarn add ${packages.join(' ')}`, {cwd: dir, stdio: 'inherit'});
@@ -174,7 +176,7 @@ interface NpmPackage {
     package: {
         name: string;
         version: string;
-    }
+    };
 }
 
 interface Client {
