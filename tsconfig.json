@@ -15,6 +15,7 @@
     "noImplicitReturns": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
     "outDir": "dist/cjs",
     "declarationDir": "./dist/types"
   },
