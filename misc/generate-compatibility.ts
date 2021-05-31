@@ -19,6 +19,7 @@ const main = async () => {
     console.log(clients.map(c => `${c.packageName}@${c.packageVersion}`).join('\n'));
     console.log();
 
+    setupProject();
     installClients(clients);
     console.log();
 
@@ -104,6 +105,23 @@ const toClientName = (packageName: string): string => {
     });
 
     return client + 'Client';
+};
+
+const setupProject = () => {
+    const tsconfig = JSON.stringify({
+        'compilerOptions': {
+            'module': 'CommonJS',
+            'target': 'ES2018',
+            'lib': [
+                'ESNext',
+                'DOM',
+            ],
+            'moduleResolution': 'node',
+            'strict': true,
+            'skipLibCheck': true,
+        },
+    });
+    fs.writeFileSync(`${dir}tsconfig.json`, tsconfig);
 };
 
 const installClients = (clients: Client[]): void => {
