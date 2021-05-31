@@ -3,8 +3,8 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>AWS SDK v3 Client mock - v0.3.0</title>
-	<meta name="description" content="Documentation for AWS SDK v3 Client mock - v0.3.0">
+	<title>AWS SDK v3 Client mock - v0.3.1</title>
+	<meta name="description" content="Documentation for AWS SDK v3 Client mock - v0.3.1">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="assets/css/main.css">
 	<script async src="assets/js/search.js" id="search-script"></script>
@@ -23,7 +23,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="index.html" class="title">AWS SDK v3 Client mock - v0.3.0</a>
+					<a href="index.html" class="title">AWS SDK v3 Client mock - v0.3.1</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -50,7 +50,7 @@
 	</div>
 	<div class="tsd-page-title">
 		<div class="container">
-			<h1>AWS SDK v3 Client mock - v0.3.0</h1>
+			<h1>AWS SDK v3 Client mock - v0.3.1</h1>
 		</div>
 	</div>
 </header>
@@ -178,6 +178,16 @@
 <span style="color: #000000">        </span><span style="color: #001080">MessageId:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;12345678-4444-5555-6666-111122223333&#039;</span><span style="color: #000000">,</span>
 <span style="color: #000000">    });</span>
 </code></pre>
+				<p>Not all payload parameters must be defined to match
+				(you can force strict matching by passing third param <code>strict: true</code>):</p>
+				<pre><code class="language-typescript"><span style="color: #001080">snsMock</span>
+<span style="color: #000000">    .</span><span style="color: #795E26">on</span><span style="color: #000000">(</span><span style="color: #001080">PublishCommand</span><span style="color: #000000">, {</span>
+<span style="color: #000000">        </span><span style="color: #001080">Message:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;My message&#039;</span><span style="color: #000000">,</span>
+<span style="color: #000000">    })</span>
+<span style="color: #000000">    .</span><span style="color: #795E26">resolves</span><span style="color: #000000">({</span>
+<span style="color: #000000">        </span><span style="color: #001080">MessageId:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;12345678-4444-5555-6666-111122223333&#039;</span><span style="color: #000000">,</span>
+<span style="color: #000000">    });</span>
+</code></pre>
 				<p>Specify mock behavior on receiving given payload only:</p>
 				<pre><code class="language-typescript"><span style="color: #001080">snsMock</span>
 <span style="color: #000000">    .</span><span style="color: #795E26">onAnyCommand</span><span style="color: #000000">({</span>
@@ -296,7 +306,7 @@
 <span style="color: #000000">}</span>
 </code></pre>
 				<p>Then the tests could look like this:</p>
-				<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> {</span><span style="color: #001080">mockClient</span><span style="color: #000000">} </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;@m-radzikowski/aws-sdk-client-mock&#039;</span><span style="color: #000000">;</span>
+				<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> {</span><span style="color: #001080">mockClient</span><span style="color: #000000">} </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;aws-sdk-client-mock&#039;</span><span style="color: #000000">;</span>
 <span style="color: #AF00DB">import</span><span style="color: #000000"> {</span><span style="color: #001080">PublishCommand</span><span style="color: #000000">, </span><span style="color: #001080">SNSClient</span><span style="color: #000000">} </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;@aws-sdk/client-sns&#039;</span><span style="color: #000000">;</span>
 <span style="color: #AF00DB">import</span><span style="color: #000000"> {</span><span style="color: #001080">handler</span><span style="color: #000000">} </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;../src&#039;</span><span style="color: #000000">;</span>
 

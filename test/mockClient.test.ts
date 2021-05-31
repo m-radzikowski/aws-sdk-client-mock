@@ -343,10 +343,10 @@ describe('behavior matching', () => {
         expect(listTopics.Topics).toHaveLength(1);
     });
 
-    it('selects matching command with parameters', async () => {
+    it('selects matching command with partial parameters', async () => {
         snsMock
-            .on(PublishCommand, {...publishCmd1.input}).resolves({MessageId: uuid1})
-            .on(PublishCommand, {...publishCmd2.input}).resolves({MessageId: uuid2});
+            .on(PublishCommand, {Message: publishCmd1.input.Message}).resolves({MessageId: uuid1})
+            .on(PublishCommand, {Message: publishCmd2.input.Message}).resolves({MessageId: uuid2});
 
         const sns = new SNSClient({});
         const publish1 = await sns.send(publishCmd1);
@@ -354,6 +354,29 @@ describe('behavior matching', () => {
 
         expect(publish1.MessageId).toBe(uuid1);
         expect(publish2.MessageId).toBe(uuid2);
+    });
+
+    it('selects matching command with exact parameters', async () => {
+        snsMock
+            .on(PublishCommand, {...publishCmd1.input}, true).resolves({MessageId: uuid1})
+            .on(PublishCommand, {...publishCmd2.input}, true).resolves({MessageId: uuid2});
+
+        const sns = new SNSClient({});
+        const publish1 = await sns.send(publishCmd1);
+        const publish2 = await sns.send(publishCmd2);
+
+        expect(publish1.MessageId).toBe(uuid1);
+        expect(publish2.MessageId).toBe(uuid2);
+    });
+
+    it('does not select command if it does not strictly match', async () => {
+        snsMock
+            .on(PublishCommand, {Message: publishCmd1.input.Message}, true).resolves({MessageId: uuid1});
+
+        const sns = new SNSClient({});
+        const publish = await sns.send(publishCmd1);
+
+        expect(publish).toBe(undefined);
     });
 
     it('selects default command response if parameters do not match', async () => {
@@ -382,10 +405,10 @@ describe('behavior matching', () => {
         expect(publish2.MessageId).toBe(uuid2);
     });
 
-    it('selects client responses for given parameters', async () => {
+    it('selects client responses for given partial parameters', async () => {
         snsMock
-            .onAnyCommand({...publishCmd1.input}).resolves({MessageId: uuid1})
-            .onAnyCommand({...publishCmd2.input}).resolves({MessageId: uuid2});
+            .onAnyCommand({Message: publishCmd1.input.Message}).resolves({MessageId: uuid1})
+            .onAnyCommand({Message: publishCmd2.input.Message}).resolves({MessageId: uuid2});
 
         const sns = new SNSClient({});
         const publish1 = await sns.send(publishCmd1);
@@ -393,6 +416,29 @@ describe('behavior matching', () => {
 
         expect(publish1.MessageId).toBe(uuid1);
         expect(publish2.MessageId).toBe(uuid2);
+    });
+
+    it('selects client responses with exact parameters', async () => {
+        snsMock
+            .onAnyCommand({...publishCmd1.input}, true).resolves({MessageId: uuid1})
+            .onAnyCommand({...publishCmd2.input}, true).resolves({MessageId: uuid2});
+
+        const sns = new SNSClient({});
+        const publish1 = await sns.send(publishCmd1);
+        const publish2 = await sns.send(publishCmd2);
+
+        expect(publish1.MessageId).toBe(uuid1);
+        expect(publish2.MessageId).toBe(uuid2);
+    });
+
+    it('does not select client response if it does not strictly match', async () => {
+        snsMock
+            .onAnyCommand({Message: publishCmd1.input.Message}, true).resolves({MessageId: uuid1});
+
+        const sns = new SNSClient({});
+        const publish = await sns.send(publishCmd1);
+
+        expect(publish).toBe(undefined);
     });
 });
 

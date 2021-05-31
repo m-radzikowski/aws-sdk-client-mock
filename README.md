@@ -141,6 +141,19 @@ snsMock
     });
 ```
 
+Not all payload parameters must be defined to match
+(you can force strict matching by passing third param `strict: true`):
+
+```typescript
+snsMock
+    .on(PublishCommand, {
+        Message: 'My message',
+    })
+    .resolves({
+        MessageId: '12345678-4444-5555-6666-111122223333',
+    });
+```
+
 Specify mock behavior on receiving given payload only:
 
 ```typescript
@@ -286,7 +299,7 @@ interface Event {
 Then the tests could look like this:
 
 ```typescript
-import {mockClient} from '@m-radzikowski/aws-sdk-client-mock';
+import {mockClient} from 'aws-sdk-client-mock';
 import {PublishCommand, SNSClient} from '@aws-sdk/client-sns';
 import {handler} from '../src';
 

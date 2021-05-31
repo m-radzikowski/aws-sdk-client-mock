@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.4.0](https://github.com/m-radzikowski/aws-sdk-client-mock/compare/v0.3.0...v0.4.0) (2021-05-06)
+
+
+### ⚠ BREAKING CHANGES
+
+* partial payload matching by default (#16)
+
+### Features
+
+* partial payload matching by default ([#16](https://github.com/m-radzikowski/aws-sdk-client-mock/issues/16)) ([3bdc6bb](https://github.com/m-radzikowski/aws-sdk-client-mock/commit/3bdc6bb3be4a3b2e95be7c7093c8cd5a5625d656))
+
 ### [0.3.1](https://github.com/m-radzikowski/aws-sdk-client-mock/compare/v0.3.0...v0.3.1) (2021-05-01)
 
 ### [0.3.0](https://github.com/m-radzikowski/aws-sdk-client-mock/compare/v0.2.0...v0.3.0) (2021-04-11)
