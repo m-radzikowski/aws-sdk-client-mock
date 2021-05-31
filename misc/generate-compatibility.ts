@@ -108,6 +108,8 @@ const toClientName = (packageName: string): string => {
 };
 
 const setupProject = () => {
+    fs.mkdirSync(dir, {recursive: true});
+
     const tsconfig = JSON.stringify({
         'compilerOptions': {
             'module': 'CommonJS',
