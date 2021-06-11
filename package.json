@@ -42,7 +42,8 @@
   ],
   "dependencies": {
     "@types/sinon": "10.0.1",
-    "sinon": "^11.1.1"
+    "sinon": "^11.1.1",
+    "tslib": "2.1.0"
   },
   "devDependencies": {
     "@aws-sdk/client-dynamodb": "3.17.0",
@@ -68,7 +69,6 @@
     "ts-jest": "26.5.0",
     "ts-node": "10.0.0",
     "tsd": "0.16.0",
-    "tslib": "2.1.0",
     "typedoc": "0.20.35",
     "typescript": "4.2.4"
   },
