@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.5.1](https://github.com/m-radzikowski/aws-sdk-client-mock/compare/v0.5.0...v0.5.1) (2021-06-13)
+
+
+### Bug Fixes
+
+* move tslib to dependencies ([#31](https://github.com/m-radzikowski/aws-sdk-client-mock/issues/31)) ([df8bd27](https://github.com/m-radzikowski/aws-sdk-client-mock/commit/df8bd2743e4da1ad97935fede5c930d0db59bcc9))
+
 ## [0.5.0](https://github.com/m-radzikowski/aws-sdk-client-mock/compare/v0.4.0...v0.5.0) (2021-05-31)
 
 
