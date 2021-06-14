@@ -1,7 +1,6 @@
 import {AwsClientStub, mockClient} from '../src';
 import {ListTopicsCommand, PublishCommand, SNSClient} from '@aws-sdk/client-sns';
 import {expectError, expectType} from 'tsd';
-import {ListTablesCommand} from '@aws-sdk/client-dynamodb';
 
 expectType<AwsClientStub<SNSClient>>(mockClient(SNSClient));
 
@@ -18,7 +17,8 @@ expectError(mockClient(PublishCommand));
 
 // invalid Command types
 expectError(mockClient(SNSClient).on({}));
-expectError(mockClient(SNSClient).on(ListTablesCommand));
+// Clients in AWS SDK v3.18.0 accept any wrong types of commands
+// expectError(mockClient(SNSClient).on(ListTablesCommand));
 
 // invalid input types
 expectError(mockClient(SNSClient).on(ListTopicsCommand, {TopicArn: '', Message: ''}));
