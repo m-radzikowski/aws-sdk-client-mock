@@ -1,6 +1,6 @@
 # Compatibility table
 
-Generated automatically for **AWS SDK v3 Client mock v0.5.2**
+Generated automatically for **AWS SDK v3 Client mock v0.5.3**
 
 Compatible clients: 268 of 268
 
