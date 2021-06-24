@@ -45,12 +45,15 @@
     "sinon": "^11.1.1",
     "tslib": "^2.1.0"
   },
+  "peerDependencies": {
+    "@aws-sdk/types": "^3.0.0"
+  },
   "devDependencies": {
-    "@aws-sdk/client-dynamodb": "3.18.0",
-    "@aws-sdk/client-sns": "3.18.0",
-    "@aws-sdk/client-sqs": "3.18.0",
-    "@aws-sdk/lib-dynamodb": "3.18.0",
-    "@aws-sdk/types": "3.18.0",
+    "@aws-sdk/types": "^3.18.0",
+    "@aws-sdk/client-dynamodb": "^3.18.0",
+    "@aws-sdk/client-sns": "^3.18.0",
+    "@aws-sdk/client-sqs": "^3.18.0",
+    "@aws-sdk/lib-dynamodb": "^3.18.0",
     "@commitlint/cli": "11.0.0",
     "@commitlint/config-conventional": "11.0.0",
     "@size-limit/preset-small-lib": "4.10.2",
