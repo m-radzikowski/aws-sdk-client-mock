@@ -20,7 +20,7 @@ Features:
 
 In action:
 
-![aws-client-mock-example](https://github.com/m-radzikowski/aws-sdk-client-mock/raw/main/.github/aws-client-mock-example.gif)
+![aws-client-mock-example](.github/aws-client-mock-example.gif)
 
 ### Table of Contents
 
@@ -33,7 +33,9 @@ In action:
     - [Paginated operations](#paginated-operations)
 - [API Reference](#api-reference)
 - [AWS Lambda example](#aws-lambda-example)
+- [Compatibility](#compatibility)
 - [Caveats](#caveats)
+  - [Mixed @aws-sdk/types versions](#mixed-aws-sdktypes-versions)
   - [Order of mock behaviors](#order-of-mock-behaviors)
   - [Order of type and instance mocks](#order-of-type-and-instance-mocks)
 
@@ -346,6 +348,57 @@ For more examples, see the [unit tests](./test/mockClient.test.ts).
 See [compatibility table](compatibility.md) for AWS SDK v3 Clients.
 
 ## Caveats
+
+### Mixed @aws-sdk/types versions
+
+If you have multiple `@aws-sdk` packages in dependencies in different versions,
+or one of your dependencies depends on the `@aws-sdk` package(s)
+in a different version than the one you use,
+you may end up with different `@aws-sdk/types` dependency versions required.
+
+If the one installed on the top level in `node_modules`
+is in a different version than required by the Client you try to mock,
+the types will be incompatible. This is because the mocking library
+will use the `@aws-sdk/types` version from the top level of `node_modules`,
+while your Client may be using a different one.
+
+This often results in a long error stack trace looking similar to this:
+
+```
+Argument of type 'typeof SomeCommand' is not assignable to parameter of type 'new (input: SomeCommandInput) => AwsCommand<SomeCommandInput, MetadataBearer, any, any>'
+  Types of construct signatures are incompatible.
+    Type 'new (input: SomeCommandInput) => SomeCommand' is not assignable to type 'new (input: SomeCommandInput) => AwsCommand<SomeCommandInput, MetadataBearer, any, any>'.
+      Construct signature return types 'SomeCommand' and 'AwsCommand<SomeCommandInput, MetadataBearer, any, any>' are incompatible.
+        The types of 'middlewareStack.concat' are incompatible between these types.
+          Type '<InputType extends SomeCommandInput, OutputType extends SomeCommandOutput>(from: MiddlewareStack<InputType, OutputType>) => MiddlewareStack<...>' is not assignable to type '<InputType extends SomeCommandInput, OutputType extends MetadataBearer>(from: MiddlewareStack<InputType, OutputType>) => MiddlewareStack<...>'.
+            Types of parameters 'from' and 'from' are incompatible.
+              Type 'MiddlewareStack<InputType, OutputType>' is not assignable to type 'MiddlewareStack<InputType, SomeCommandOutput>'.
+                Types of property 'addRelativeTo' are incompatible.
+                  Type '(middleware: MiddlewareType<InputType, OutputType>, options: RelativeMiddlewareOptions) => void' is not assignable to type '(middleware: MiddlewareType<InputType, SomeCommandOutput>, options: RelativeMiddlewareOptions) => void'.
+                    Types of parameters 'middleware' and 'middleware' are incompatible.
+                      Type 'MiddlewareType<InputType, SomeCommandOutput>' is not assignable to type 'MiddlewareType<InputType, OutputType>'.
+                        Type 'InitializeMiddleware<InputType, SomeCommandOutput>' is not assignable to type 'MiddlewareType<InputType, OutputType>'.
+                          Type 'InitializeMiddleware<InputType, SomeCommandOutput>' is not assignable to type 'InitializeMiddleware<InputType, OutputType>'.
+                            Call signature return types 'InitializeHandler<InputType, SomeCommandOutput>' and 'InitializeHandler<InputType, OutputType>' are incompatible.
+                              Type 'Promise<InitializeHandlerOutput<SomeCommandOutput>>' is not assignable to type 'Promise<InitializeHandlerOutput<OutputType>>'.
+                                Type 'InitializeHandlerOutput<SomeCommandOutput>' is not assignable to type 'InitializeHandlerOutput<OutputType>'.
+                                  Types of property 'output' are incompatible.
+                                    Type 'SomeCommandOutput' is not assignable to type 'OutputType'.
+                                      'SomeCommandOutput' is assignable to the constraint of type 'OutputType', but 'OutputType' could be instantiated with a different subtype of constraint 'MetadataBearer'.
+```
+
+This is a common problem when using the Amplify library.
+
+The solution for this is to force the version of the `@aws-sdk/types`
+matching your Clients to be installed on the top-level of `node_modules`.
+
+The easiest way to do this is to add the `@aws-sdk/types`
+in the selected version to `package.json` explicitly.
+
+However, depending on your project structure, you may need to force it differently.
+For example, when using `yarn`, you can add the `@aws-sdk/types` in selected version
+to the [resolutions](https://classic.yarnpkg.com/en/docs/selective-version-resolutions/)
+section in `package.json`.
 
 ### Order of mock behaviors
 
