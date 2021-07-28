@@ -10,6 +10,8 @@ Easy and powerful mocking of AWS SDK v3 Clients.
 
 </div>
 
+Library recommended by the AWS SDK for JavaScript team - see the [introductory post on the AWS blog](https://aws.amazon.com/blogs/developer/mocking-modular-aws-sdk-for-javascript-v3-in-unit-tests/).
+
 Features:
 
 - 🌊&nbsp; **fluent interface** - declaring behavior is short and readable
