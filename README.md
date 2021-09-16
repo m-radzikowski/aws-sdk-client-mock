@@ -32,6 +32,7 @@ In action:
   - [Import](#import)
   - [Mock](#mock)
     - [DynamoDB DocumentClient](#dynamodb-documentclient)
+    - [Lib Storage Upload](#lib-storage-upload)
     - [Paginated operations](#paginated-operations)
 - [API Reference](#api-reference)
 - [AWS Lambda example](#aws-lambda-example)
@@ -238,6 +239,39 @@ ddbMock.on(QueryCommand).resolves({
     Items: [{pk: 'a', sk: 'b'}],
 });
 ```
+
+#### Lib Storage Upload
+
+To mock `@aws-sdk/lib-storage` `Upload` you need to call
+a helper function `mockLibStorageUpload()`
+that will configure required S3Client command mocks:
+
+```typescript
+import {mockLibStorageUpload} from 'aws-sdk-client-mock';
+import {Upload} from '@aws-sdk/lib-storage';
+import {S3Client} from '@aws-sdk/client-s3';
+
+const s3Mock = mockClient(S3Client);
+mockLibStorageUpload(s3Mock);
+
+const s3Upload = new Upload({
+    client: new S3Client({}),
+    params: {
+        Bucket: 'mock',
+        Key: 'test',
+        Body: 'x'.repeat(6 * 1024 * 1024), // 6 MB
+    },
+});
+
+s3Upload.on('httpUploadProgress', (progress) => {
+    console.log(progress);
+});
+
+await s3Upload.done();
+```
+
+You can call `mockLibStorageUpload()` without providing an S3Client mock.
+In that case, the client mock will be created and returned from the function.
 
 #### Paginated operations
 
