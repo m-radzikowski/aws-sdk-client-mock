@@ -73,7 +73,7 @@
     "standard-version": "9.1.0",
     "ts-jest": "26.5.0",
     "ts-node": "10.0.0",
-    "tsd": "0.16.0",
+    "tsd": "0.17.0",
     "typedoc": "0.20.35",
     "typescript": "4.2.4"
   },
