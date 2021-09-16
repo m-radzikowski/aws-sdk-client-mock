@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.5.4](https://github.com/m-radzikowski/aws-sdk-client-mock/compare/v0.5.3...v0.5.4) (2021-09-16)
+
+
+### Features
+
+* helper to mock @aws-sdk/lib-storage Upload ([#47](https://github.com/m-radzikowski/aws-sdk-client-mock/issues/47)) ([10780e8](https://github.com/m-radzikowski/aws-sdk-client-mock/commit/10780e821be9d6ef497579beb02f96ba222f6e62))
+
 ### [0.5.3](https://github.com/m-radzikowski/aws-sdk-client-mock/compare/v0.5.2...v0.5.3) (2021-06-24)
 
 
