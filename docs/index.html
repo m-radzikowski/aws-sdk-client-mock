@@ -1,454 +1,239 @@
-<!doctype html>
-<html class="default no-js">
-<head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>AWS SDK v3 Client mock - v0.5.2</title>
-	<meta name="description" content="Documentation for AWS SDK v3 Client mock - v0.5.2">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="assets/css/main.css">
-	<script async src="assets/js/search.js" id="search-script"></script>
-</head>
-<body>
-<header>
-	<div class="tsd-page-toolbar">
-		<div class="container">
-			<div class="table-wrap">
-				<div class="table-cell" id="tsd-search" data-index="assets/js/search.json" data-base=".">
-					<div class="field">
-						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
-						<input id="tsd-search-field" type="text" />
-					</div>
-					<ul class="results">
-						<li class="state loading">Preparing search index...</li>
-						<li class="state failure">The search index is not available</li>
-					</ul>
-					<a href="index.html" class="title">AWS SDK v3 Client mock - v0.5.2</a>
-				</div>
-				<div class="table-cell" id="tsd-widgets">
-					<div id="tsd-filter">
-						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
-						<div class="tsd-filter-group">
-							<div class="tsd-select" id="tsd-filter-visibility">
-								<span class="tsd-select-label">All</span>
-								<ul class="tsd-select-list">
-									<li data-value="public">Public</li>
-									<li data-value="protected">Public/Protected</li>
-									<li data-value="private" class="selected">All</li>
-								</ul>
-							</div>
-							<input type="checkbox" id="tsd-filter-inherited" checked />
-							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
-							<input type="checkbox" id="tsd-filter-externals" checked />
-							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
-						</div>
-					</div>
-					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="tsd-page-title">
-		<div class="container">
-			<h1>AWS SDK v3 Client mock - v0.5.2</h1>
-		</div>
-	</div>
-</header>
-<div class="container container-main">
-	<div class="row">
-		<div class="col-8 col-content">
-			<div class="tsd-panel tsd-typography">
-				<div align="center">
-					<a href="#aws-sdk-v3-client-mock" id="aws-sdk-v3-client-mock" style="color: inherit; text-decoration: none;">
-						<h1>AWS SDK v3 Client mock</h1>
-					</a>
-					<p>Easy and powerful mocking of AWS SDK v3 Clients.</p>
-					<p><a href="https://www.npmjs.com/package/aws-sdk-client-mock"><img src="https://img.shields.io/npm/v/aws-sdk-client-mock?color=brightgreen&style=flat-square" alt="npm"></a>
-						<a href="https://github.com/m-radzikowski/aws-sdk-client-mock/actions?query=workflow%3ACI"><img src="https://img.shields.io/github/workflow/status/m-radzikowski/aws-sdk-client-mock/CI?style=flat-square" alt="build"></a>
-					<a href="https://app.codecov.io/gh/m-radzikowski/aws-sdk-client-mock/"><img src="https://img.shields.io/codecov/c/github/m-radzikowski/aws-sdk-client-mock?style=flat-square" alt="coverage"></a></p>
-				</div>
-				<p>Features:</p>
-				<ul>
-					<li>🌊&nbsp; <strong>fluent interface</strong> - declaring behavior is short and readable</li>
-					<li>🔍&nbsp; <strong>matching options</strong> - defining mock behavior by Command type and/or its input payload</li>
-					<li>🕵️&nbsp; <strong>spying</strong> - checking if Commands were actually send</li>
-					<li>🖋️&nbsp; <strong>fully typed</strong> - same type control for declaring mock&#39;s behavior as when writing regular code</li>
-					<li>✅&nbsp; <strong>fully tested</strong> - reliable mocks help instead of impeding</li>
-				</ul>
-				<p>In action:</p>
-				<p><img src="https://github.com/m-radzikowski/aws-sdk-client-mock/raw/main/.github/aws-client-mock-example.gif" alt="aws-client-mock-example"></p>
-				<a href="#table-of-contents" id="table-of-contents" style="color: inherit; text-decoration: none;">
-					<h3>Table of Contents</h3>
-				</a>
-				<ul>
-					<li><a href="#about-aws-sdk-v3">About AWS SDK v3</a></li>
-					<li><a href="#usage">Usage</a><ul>
-							<li><a href="#install">Install</a></li>
-							<li><a href="#import">Import</a></li>
-							<li><a href="#mock">Mock</a><ul>
-									<li><a href="#dynamodb-documentclient">DynamoDB DocumentClient</a></li>
-									<li><a href="#paginated-operations">Paginated operations</a></li>
-								</ul>
-							</li>
-						</ul>
-					</li>
-					<li><a href="#api-reference">API Reference</a></li>
-					<li><a href="#aws-lambda-example">AWS Lambda example</a></li>
-					<li><a href="#caveats">Caveats</a><ul>
-							<li><a href="#order-of-mock-behaviors">Order of mock behaviors</a></li>
-							<li><a href="#order-of-type-and-instance-mocks">Order of type and instance mocks</a></li>
-						</ul>
-					</li>
-				</ul>
-				<a href="#about-aws-sdk-v3" id="about-aws-sdk-v3" style="color: inherit; text-decoration: none;">
-					<h2>About AWS SDK v3</h2>
-				</a>
-				<p>The <a href="https://docs.aws.amazon.com/sdk-for-javascript/v3/developer-guide/welcome.html">AWS SDK for JavaScript version 3</a>,
-					is the new version of SDK to use in Node.js and browser.
-					It comes with modular architecture and improved typing,
-				thanks to being written in TypeScript.</p>
-				<p>The recommended way of using it is to create a <code>Client</code>
-				and use it to send <code>Commands</code>.</p>
-				<p>For example, using SNS Client to publish a message to a topic looks like that:</p>
-				<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> {</span><span style="color: #001080">PublishCommand</span><span style="color: #000000">, </span><span style="color: #001080">SNSClient</span><span style="color: #000000">} </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;@aws-sdk/client-sns&#039;</span><span style="color: #000000">;</span>
+<!DOCTYPE html><html class="default no-js"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>AWS SDK v3 Client mock - v0.5.3</title><meta name="description" content="Documentation for AWS SDK v3 Client mock - v0.5.3"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="assets/style.css"/><link rel="stylesheet" href="assets/highlight.css"/><script async src="assets/search.js" id="search-script"></script></head><body><header><div class="tsd-page-toolbar"><div class="container"><div class="table-wrap"><div class="table-cell" id="tsd-search" data-base="."><div class="field"><label for="tsd-search-field" class="tsd-widget search no-caption">Search</label><input type="text" id="tsd-search-field"/></div><ul class="results"><li class="state loading">Preparing search index...</li><li class="state failure">The search index is not available</li></ul><a href="index.html" class="title">AWS SDK v3 Client mock - v0.5.3</a></div><div class="table-cell" id="tsd-widgets"><div id="tsd-filter"><a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a><div class="tsd-filter-group"><div class="tsd-select" id="tsd-filter-visibility"><span class="tsd-select-label">All</span><ul class="tsd-select-list"><li data-value="public">Public</li><li data-value="protected">Public/Protected</li><li data-value="private" class="selected">All</li></ul></div> <input type="checkbox" id="tsd-filter-inherited" checked/><label class="tsd-widget" for="tsd-filter-inherited">Inherited</label><input type="checkbox" id="tsd-filter-externals" checked/><label class="tsd-widget" for="tsd-filter-externals">Externals</label></div></div><a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a></div></div></div></div><div class="tsd-page-title"><div class="container"><h1>AWS SDK v3 Client mock - v0.5.3</h1></div></div></header><div class="container container-main"><div class="row"><div class="col-8 col-content"><div class="tsd-panel tsd-typography"><div align="center">
 
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">sns</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">SNSClient</span><span style="color: #000000">({});</span>
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">result</span><span style="color: #000000"> = </span><span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #001080">sns</span><span style="color: #000000">.</span><span style="color: #795E26">send</span><span style="color: #000000">(</span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">PublishCommand</span><span style="color: #000000">({</span>
-<span style="color: #000000">  </span><span style="color: #001080">TopicArn:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;arn:aws:sns:us-east-1:111111111111:MyTopic&#039;</span><span style="color: #000000">,</span>
-<span style="color: #000000">  </span><span style="color: #001080">Message:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;My message&#039;</span><span style="color: #000000">,</span>
-<span style="color: #000000">}));</span>
 
-<span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #A31515">`Message published, id: </span><span style="color: #0000FF">${</span><span style="color: #001080">result</span><span style="color: #000000FF">.</span><span style="color: #001080">MessageId</span><span style="color: #0000FF">}</span><span style="color: #A31515">`</span><span style="color: #000000">);</span>
-</code></pre>
-				<p>This library provides an easy way to mock sending <code>Commands</code>
-				and define returned results depending on the <code>Command</code> type and payload.</p>
-				<a href="#usage" id="usage" style="color: inherit; text-decoration: none;">
-					<h2>Usage</h2>
-				</a>
-				<a href="#install" id="install" style="color: inherit; text-decoration: none;">
-					<h3>Install</h3>
-				</a>
-				<pre><code class="language-bash"><span style="color: #000000">npm install -D aws-sdk-client-mock</span>
-</code></pre>
-				<p>or</p>
-				<pre><code class="language-bash"><span style="color: #000000">yarn add -D aws-sdk-client-mock</span>
-</code></pre>
-				<a href="#import" id="import" style="color: inherit; text-decoration: none;">
-					<h3>Import</h3>
-				</a>
-				<p>CommonJS:</p>
-				<pre><code class="language-javascript"><span style="color: #0000FF">const</span><span style="color: #000000"> {</span><span style="color: #0070C1">mockClient</span><span style="color: #000000">} = </span><span style="color: #795E26">require</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;aws-sdk-client-mock&#039;</span><span style="color: #000000">);</span>
-</code></pre>
-				<p>TypeScript / ES6:</p>
-				<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> {</span><span style="color: #001080">mockClient</span><span style="color: #000000">} </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;aws-sdk-client-mock&#039;</span><span style="color: #000000">;</span>
-</code></pre>
-				<a href="#mock" id="mock" style="color: inherit; text-decoration: none;">
-					<h3>Mock</h3>
-				</a>
-				<p>Create mock for all instances or for given instance of the AWS SDK Client:</p>
-				<pre><code class="language-typescript"><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">snsMock</span><span style="color: #000000"> = </span><span style="color: #795E26">mockClient</span><span style="color: #000000">(</span><span style="color: #001080">SNSClient</span><span style="color: #000000">);</span>
-
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">dynamoDB</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">DynamoDBClient</span><span style="color: #000000">({});</span>
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">dynamoDBMock</span><span style="color: #000000"> = </span><span style="color: #795E26">mockClient</span><span style="color: #000000">(</span><span style="color: #001080">dynamoDB</span><span style="color: #000000">);</span>
-</code></pre>
-				<p>By default, mocked <code>Client#send()</code> method returns <code>undefined</code>.</p>
-				<p>Using the obtained mock instance, you can specify the mock behavior
-				on receiving various commands to send.</p>
-				<p>Specify default mock behavior:</p>
-				<pre><code class="language-typescript"><span style="color: #001080">snsMock</span><span style="color: #000000">.</span><span style="color: #795E26">onAnyCommand</span><span style="color: #000000">().</span><span style="color: #795E26">resolves</span><span style="color: #000000">({});</span>
-
-<span style="color: #008000">// same as:</span>
-
-<span style="color: #001080">snsMock</span><span style="color: #000000">.</span><span style="color: #795E26">resolves</span><span style="color: #000000">({});</span>
-</code></pre>
-				<p>Specify mock behavior on receiving given command only:</p>
-				<pre><code class="language-typescript"><span style="color: #001080">snsMock</span>
-<span style="color: #000000">    .</span><span style="color: #795E26">on</span><span style="color: #000000">(</span><span style="color: #001080">PublishCommand</span><span style="color: #000000">)</span>
-<span style="color: #000000">    .</span><span style="color: #795E26">resolves</span><span style="color: #000000">({</span>
-<span style="color: #000000">        </span><span style="color: #001080">MessageId:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;12345678-1111-2222-3333-111122223333&#039;</span><span style="color: #000000">,</span>
-<span style="color: #000000">    });</span>
-</code></pre>
-				<p>Specify mock behavior on receiving given command with given payload only:</p>
-				<pre><code class="language-typescript"><span style="color: #001080">snsMock</span>
-<span style="color: #000000">    .</span><span style="color: #795E26">on</span><span style="color: #000000">(</span><span style="color: #001080">PublishCommand</span><span style="color: #000000">, {</span>
-<span style="color: #000000">        </span><span style="color: #001080">TopicArn:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;arn:aws:sns:us-east-1:111111111111:MyTopic&#039;</span><span style="color: #000000">,</span>
-<span style="color: #000000">        </span><span style="color: #001080">Message:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;My message&#039;</span><span style="color: #000000">,</span>
-<span style="color: #000000">    })</span>
-<span style="color: #000000">    .</span><span style="color: #795E26">resolves</span><span style="color: #000000">({</span>
-<span style="color: #000000">        </span><span style="color: #001080">MessageId:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;12345678-4444-5555-6666-111122223333&#039;</span><span style="color: #000000">,</span>
-<span style="color: #000000">    });</span>
-</code></pre>
-				<p>Not all payload parameters must be defined to match
-				(you can force strict matching by passing third param <code>strict: true</code>):</p>
-				<pre><code class="language-typescript"><span style="color: #001080">snsMock</span>
-<span style="color: #000000">    .</span><span style="color: #795E26">on</span><span style="color: #000000">(</span><span style="color: #001080">PublishCommand</span><span style="color: #000000">, {</span>
-<span style="color: #000000">        </span><span style="color: #001080">Message:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;My message&#039;</span><span style="color: #000000">,</span>
-<span style="color: #000000">    })</span>
-<span style="color: #000000">    .</span><span style="color: #795E26">resolves</span><span style="color: #000000">({</span>
-<span style="color: #000000">        </span><span style="color: #001080">MessageId:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;12345678-4444-5555-6666-111122223333&#039;</span><span style="color: #000000">,</span>
-<span style="color: #000000">    });</span>
-</code></pre>
-				<p>Specify mock behavior on receiving given payload only:</p>
-				<pre><code class="language-typescript"><span style="color: #001080">snsMock</span>
-<span style="color: #000000">    .</span><span style="color: #795E26">onAnyCommand</span><span style="color: #000000">({</span>
-<span style="color: #000000">        </span><span style="color: #001080">TopicArn:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;arn:aws:sns:us-east-1:111111111111:MyTopic&#039;</span><span style="color: #000000">,</span>
-<span style="color: #000000">        </span><span style="color: #001080">Message:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;My message&#039;</span><span style="color: #000000">,</span>
-<span style="color: #000000">    })</span>
-<span style="color: #000000">    .</span><span style="color: #795E26">resolves</span><span style="color: #000000">({</span>
-<span style="color: #000000">        </span><span style="color: #001080">MessageId:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;12345678-4444-5555-6666-111122223333&#039;</span><span style="color: #000000">,</span>
-<span style="color: #000000">    });</span>
-</code></pre>
-				<p>Multiple behaviors (for different commands and payloads) may be specified
-				for a single mock:</p>
-				<pre><code class="language-typescript"><span style="color: #001080">snsMock</span>
-<span style="color: #000000">    .</span><span style="color: #795E26">resolves</span><span style="color: #000000">({ </span><span style="color: #008000">// default for any command</span>
-<span style="color: #000000">        </span><span style="color: #001080">MessageId:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;12345678-1111-2222-3333-111122223333&#039;</span>
-<span style="color: #000000">    })</span>
-<span style="color: #000000">    .</span><span style="color: #795E26">on</span><span style="color: #000000">(</span><span style="color: #001080">PublishCommand</span><span style="color: #000000">)</span>
-<span style="color: #000000">    .</span><span style="color: #795E26">resolves</span><span style="color: #000000">({ </span><span style="color: #008000">// default for PublishCommand</span>
-<span style="color: #000000">        </span><span style="color: #001080">MessageId:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;12345678-4444-5555-6666-111122223333&#039;</span>
-<span style="color: #000000">    })</span>
-<span style="color: #000000">    .</span><span style="color: #795E26">on</span><span style="color: #000000">(</span><span style="color: #001080">PublishCommand</span><span style="color: #000000">, {</span>
-<span style="color: #000000">        </span><span style="color: #001080">TopicArn:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;arn:aws:sns:us-east-1:111111111111:MyTopic&#039;</span><span style="color: #000000">,</span>
-<span style="color: #000000">        </span><span style="color: #001080">Message:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;My message&#039;</span><span style="color: #000000">,</span>
-<span style="color: #000000">    })</span>
-<span style="color: #000000">    .</span><span style="color: #795E26">resolves</span><span style="color: #000000">({ </span><span style="color: #008000">// for PublishCommand with given input</span>
-<span style="color: #000000">        </span><span style="color: #001080">MessageId:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;12345678-7777-8888-9999-111122223333&#039;</span><span style="color: #000000">,</span>
-<span style="color: #000000">    });</span>
-</code></pre>
-				<p>Specify mock throwing an error:</p>
-				<pre><code class="language-typescript"><span style="color: #001080">snsMock</span>
-<span style="color: #000000">    .</span><span style="color: #795E26">rejects</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;mocked rejection&#039;</span><span style="color: #000000">);</span>
-</code></pre>
-				<p>Specify custom mock function:</p>
-				<pre><code class="language-typescript"><span style="color: #001080">snsMock</span>
-<span style="color: #000000">    .</span><span style="color: #795E26">callsFake</span><span style="color: #000000">(</span><span style="color: #001080">input</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
-<span style="color: #000000">        </span><span style="color: #AF00DB">if</span><span style="color: #000000"> (</span><span style="color: #001080">input</span><span style="color: #000000">.</span><span style="color: #001080">Message</span><span style="color: #000000"> === </span><span style="color: #A31515">&#039;My message&#039;</span><span style="color: #000000">) {</span>
-<span style="color: #000000">            </span><span style="color: #AF00DB">return</span><span style="color: #000000"> {</span><span style="color: #001080">MessageId:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;12345678-1111-2222-3333-111122223333&#039;</span><span style="color: #000000">};</span>
-<span style="color: #000000">        } </span><span style="color: #AF00DB">else</span><span style="color: #000000"> {</span>
-<span style="color: #000000">            </span><span style="color: #AF00DB">return</span><span style="color: #000000"> {</span><span style="color: #001080">MessageId:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;12345678-4444-5555-6666-111122223333&#039;</span><span style="color: #000000">};</span>
-<span style="color: #000000">        }</span>
-<span style="color: #000000">    });</span>
-</code></pre>
-				<p>Inspect received calls:</p>
-				<pre><code class="language-typescript"><span style="color: #001080">snsMock</span><span style="color: #000000">.</span><span style="color: #795E26">calls</span><span style="color: #000000">(); </span><span style="color: #008000">// all received calls</span>
-<span style="color: #001080">snsMock</span><span style="color: #000000">.</span><span style="color: #795E26">call</span><span style="color: #000000">(</span><span style="color: #098658">0</span><span style="color: #000000">); </span><span style="color: #008000">// first received call</span>
-</code></pre>
-				<p>Under the hood, the library uses <a href="https://sinonjs.org/">Sinon.js</a> <code>stub</code>.
-				You can get the stub instance to configure and use it directly:</p>
-				<pre><code class="language-typescript"><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">snsSendStub</span><span style="color: #000000"> = </span><span style="color: #001080">snsMock</span><span style="color: #000000">.</span><span style="color: #001080">send</span><span style="color: #000000">;</span>
-</code></pre>
-				<a href="#dynamodb-documentclient" id="dynamodb-documentclient" style="color: inherit; text-decoration: none;">
-					<h4>DynamoDB DocumentClient</h4>
-				</a>
-				<p>You can mock the <code>DynamoDBDocumentClient</code> just like any other Client:</p>
-				<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> {</span><span style="color: #001080">DynamoDBDocumentClient</span><span style="color: #000000">, </span><span style="color: #001080">QueryCommand</span><span style="color: #000000">} </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;@aws-sdk/lib-dynamodb&#039;</span><span style="color: #000000">;</span>
-
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">ddbMock</span><span style="color: #000000"> = </span><span style="color: #795E26">mockClient</span><span style="color: #000000">(</span><span style="color: #001080">DynamoDBDocumentClient</span><span style="color: #000000">);</span>
-<span style="color: #001080">ddbMock</span><span style="color: #000000">.</span><span style="color: #795E26">on</span><span style="color: #000000">(</span><span style="color: #001080">QueryCommand</span><span style="color: #000000">).</span><span style="color: #795E26">resolves</span><span style="color: #000000">({</span>
-<span style="color: #000000">    </span><span style="color: #001080">Items:</span><span style="color: #000000"> [{</span><span style="color: #001080">pk:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;a&#039;</span><span style="color: #000000">, </span><span style="color: #001080">sk:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;b&#039;</span><span style="color: #000000">}],</span>
-<span style="color: #000000">});</span>
-</code></pre>
-				<a href="#paginated-operations" id="paginated-operations" style="color: inherit; text-decoration: none;">
-					<h4>Paginated operations</h4>
-				</a>
-				<p>To mock a <a href="https://aws.amazon.com/blogs/developer/pagination-using-async-iterators-in-modular-aws-sdk-for-javascript/">paginated operation</a>
-				results, simply mock the corresponding Command:</p>
-				<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> {</span><span style="color: #001080">DynamoDBClient</span><span style="color: #000000">, </span><span style="color: #001080">paginateQuery</span><span style="color: #000000">, </span><span style="color: #001080">QueryCommand</span><span style="color: #000000">} </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;@aws-sdk/client-dynamodb&#039;</span><span style="color: #000000">;</span>
-<span style="color: #AF00DB">import</span><span style="color: #000000"> {</span><span style="color: #001080">marshall</span><span style="color: #000000">} </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;@aws-sdk/util-dynamodb&#039;</span><span style="color: #000000">;</span>
-
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">dynamodbMock</span><span style="color: #000000"> = </span><span style="color: #795E26">mockClient</span><span style="color: #000000">(</span><span style="color: #001080">DynamoDBClient</span><span style="color: #000000">);</span>
-<span style="color: #001080">dynamodbMock</span><span style="color: #000000">.</span><span style="color: #795E26">on</span><span style="color: #000000">(</span><span style="color: #001080">QueryCommand</span><span style="color: #000000">).</span><span style="color: #795E26">resolves</span><span style="color: #000000">({</span>
-<span style="color: #000000">    </span><span style="color: #001080">Items:</span><span style="color: #000000"> [</span>
-<span style="color: #000000">        </span><span style="color: #795E26">marshall</span><span style="color: #000000">({</span><span style="color: #001080">pk:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;a&#039;</span><span style="color: #000000">, </span><span style="color: #001080">sk:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;b&#039;</span><span style="color: #000000">}),</span>
-<span style="color: #000000">        </span><span style="color: #795E26">marshall</span><span style="color: #000000">({</span><span style="color: #001080">pk:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;c&#039;</span><span style="color: #000000">, </span><span style="color: #001080">sk:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;d&#039;</span><span style="color: #000000">}),</span>
-<span style="color: #000000">    ],</span>
-<span style="color: #000000">});</span>
-
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">dynamodb</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">DynamoDBClient</span><span style="color: #000000">({});</span>
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">paginator</span><span style="color: #000000"> = </span><span style="color: #795E26">paginateQuery</span><span style="color: #000000">({</span><span style="color: #001080">client:</span><span style="color: #000000"> </span><span style="color: #001080">dynamodb</span><span style="color: #000000">}, {</span><span style="color: #001080">TableName:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;mock&#039;</span><span style="color: #000000">});</span>
-
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">items</span><span style="color: #000000"> = [];</span>
-<span style="color: #AF00DB">for</span><span style="color: #000000"> </span><span style="color: #AF00DB">await</span><span style="color: #000000"> (</span><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">page</span><span style="color: #000000"> </span><span style="color: #0000FF">of</span><span style="color: #000000"> </span><span style="color: #001080">paginator</span><span style="color: #000000">) {</span>
-<span style="color: #000000">    </span><span style="color: #001080">items</span><span style="color: #000000">.</span><span style="color: #795E26">push</span><span style="color: #000000">(...</span><span style="color: #001080">page</span><span style="color: #000000">.</span><span style="color: #001080">Items</span><span style="color: #000000"> || []);</span>
-<span style="color: #000000">}</span>
-</code></pre>
-				<a href="#api-reference" id="api-reference" style="color: inherit; text-decoration: none;">
-					<h2>API Reference</h2>
-				</a>
-				<p>See the <a href="https://m-radzikowski.github.io/aws-sdk-client-mock/">full API Reference</a>.</p>
-				<a href="#aws-lambda-example" id="aws-lambda-example" style="color: inherit; text-decoration: none;">
-					<h2>AWS Lambda example</h2>
-				</a>
-				<p>Example below uses Jest as a test framework, but mocks will work with any testing library.</p>
-				<p>Let&#39;s take a simple Lambda function that takes a list of messages,
-				sends them to SNS topic and returns message IDs:</p>
-				<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> {</span><span style="color: #001080">PublishCommand</span><span style="color: #000000">, </span><span style="color: #001080">SNSClient</span><span style="color: #000000">} </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;@aws-sdk/client-sns&#039;</span><span style="color: #000000">;</span>
-
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">snsTopicArn</span><span style="color: #000000"> = </span><span style="color: #001080">process</span><span style="color: #000000">.</span><span style="color: #001080">env</span><span style="color: #000000">.</span><span style="color: #0070C1">SNS_TOPIC_ARN</span><span style="color: #000000"> || </span><span style="color: #A31515">&#039;&#039;</span><span style="color: #000000">;</span>
-
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">sns</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">SNSClient</span><span style="color: #000000">({});</span>
-
-<span style="color: #AF00DB">export</span><span style="color: #000000"> </span><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #795E26">handler</span><span style="color: #000000"> = </span><span style="color: #0000FF">async</span><span style="color: #000000"> (</span><span style="color: #001080">event</span><span style="color: #000000">: </span><span style="color: #267F99">Event</span><span style="color: #000000">): </span><span style="color: #267F99">Promise</span><span style="color: #000000">&lt;</span><span style="color: #267F99">string</span><span style="color: #000000">[]&gt; </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
-<span style="color: #000000">  </span><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">promises</span><span style="color: #000000"> = </span><span style="color: #001080">event</span><span style="color: #000000">.</span><span style="color: #001080">messages</span><span style="color: #000000">.</span><span style="color: #795E26">map</span><span style="color: #000000">(</span><span style="color: #0000FF">async</span><span style="color: #000000"> (</span><span style="color: #001080">msg</span><span style="color: #000000">, </span><span style="color: #001080">idx</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
-<span style="color: #000000">    </span><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">publish</span><span style="color: #000000"> = </span><span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #001080">sns</span><span style="color: #000000">.</span><span style="color: #795E26">send</span><span style="color: #000000">(</span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">PublishCommand</span><span style="color: #000000">({</span>
-<span style="color: #000000">      </span><span style="color: #001080">TopicArn:</span><span style="color: #000000"> </span><span style="color: #001080">snsTopicArn</span><span style="color: #000000">,</span>
-<span style="color: #000000">      </span><span style="color: #001080">Message:</span><span style="color: #000000"> </span><span style="color: #001080">msg</span><span style="color: #000000">,</span>
-<span style="color: #000000">    }));</span>
-<span style="color: #000000">    </span><span style="color: #AF00DB">return</span><span style="color: #000000"> </span><span style="color: #001080">publish</span><span style="color: #000000">.</span><span style="color: #001080">MessageId</span><span style="color: #000000">!;</span>
-<span style="color: #000000">  });</span>
-
-<span style="color: #000000">  </span><span style="color: #AF00DB">return</span><span style="color: #000000"> </span><span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #267F99">Promise</span><span style="color: #000000">.</span><span style="color: #795E26">all</span><span style="color: #000000">(</span><span style="color: #001080">promises</span><span style="color: #000000">);</span>
-<span style="color: #000000">};</span>
-
-<span style="color: #0000FF">interface</span><span style="color: #000000"> </span><span style="color: #267F99">Event</span><span style="color: #000000"> {</span>
-<span style="color: #000000">  </span><span style="color: #001080">messages</span><span style="color: #000000">: </span><span style="color: #267F99">string</span><span style="color: #000000">[];</span>
-<span style="color: #000000">}</span>
-</code></pre>
-				<p>Then the tests could look like this:</p>
-				<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> {</span><span style="color: #001080">mockClient</span><span style="color: #000000">} </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;aws-sdk-client-mock&#039;</span><span style="color: #000000">;</span>
-<span style="color: #AF00DB">import</span><span style="color: #000000"> {</span><span style="color: #001080">PublishCommand</span><span style="color: #000000">, </span><span style="color: #001080">SNSClient</span><span style="color: #000000">} </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;@aws-sdk/client-sns&#039;</span><span style="color: #000000">;</span>
-<span style="color: #AF00DB">import</span><span style="color: #000000"> {</span><span style="color: #001080">handler</span><span style="color: #000000">} </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;../src&#039;</span><span style="color: #000000">;</span>
-
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">snsMock</span><span style="color: #000000"> = </span><span style="color: #795E26">mockClient</span><span style="color: #000000">(</span><span style="color: #001080">SNSClient</span><span style="color: #000000">);</span>
-
-<span style="color: #008000">/**</span>
-<span style="color: #008000"> * To be sure that unit tests are independent from each other,</span>
-<span style="color: #008000"> * reset mock behavior between the tests.</span>
-<span style="color: #008000"> */</span>
-<span style="color: #795E26">beforeEach</span><span style="color: #000000">(() </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
-<span style="color: #000000">  </span><span style="color: #001080">snsMock</span><span style="color: #000000">.</span><span style="color: #795E26">reset</span><span style="color: #000000">();</span>
-<span style="color: #000000">});</span>
-
-<span style="color: #795E26">it</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;message IDs are returned&#039;</span><span style="color: #000000">, </span><span style="color: #0000FF">async</span><span style="color: #000000"> () </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
-<span style="color: #000000">  </span><span style="color: #001080">snsMock</span><span style="color: #000000">.</span><span style="color: #795E26">on</span><span style="color: #000000">(</span><span style="color: #001080">PublishCommand</span><span style="color: #000000">).</span><span style="color: #795E26">resolves</span><span style="color: #000000">({</span>
-<span style="color: #000000">    </span><span style="color: #001080">MessageId:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;12345678-1111-2222-3333-111122223333&#039;</span><span style="color: #000000">,</span>
-<span style="color: #000000">  });</span>
-
-<span style="color: #000000">  </span><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">result</span><span style="color: #000000"> = </span><span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #795E26">handler</span><span style="color: #000000">({</span>
-<span style="color: #000000">    </span><span style="color: #001080">messages:</span><span style="color: #000000"> [</span><span style="color: #A31515">&#039;one&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;two&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;three&#039;</span><span style="color: #000000">]</span>
-<span style="color: #000000">  });</span>
-
-<span style="color: #000000">  </span><span style="color: #795E26">expect</span><span style="color: #000000">(</span><span style="color: #001080">result</span><span style="color: #000000">).</span><span style="color: #795E26">toHaveLength</span><span style="color: #000000">(</span><span style="color: #098658">3</span><span style="color: #000000">);</span>
-<span style="color: #000000">  </span><span style="color: #795E26">expect</span><span style="color: #000000">(</span><span style="color: #001080">result</span><span style="color: #000000">[</span><span style="color: #098658">0</span><span style="color: #000000">]).</span><span style="color: #795E26">toBe</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;12345678-1111-2222-3333-111122223333&#039;</span><span style="color: #000000">);</span>
-<span style="color: #000000">});</span>
-
-<span style="color: #795E26">it</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;SNS Client is called&#039;</span><span style="color: #000000">, </span><span style="color: #0000FF">async</span><span style="color: #000000"> () </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
-<span style="color: #000000">  </span><span style="color: #001080">snsMock</span><span style="color: #000000">.</span><span style="color: #795E26">on</span><span style="color: #000000">(</span><span style="color: #001080">PublishCommand</span><span style="color: #000000">).</span><span style="color: #795E26">resolves</span><span style="color: #000000">({</span>
-<span style="color: #000000">    </span><span style="color: #001080">MessageId:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;111-222-333&#039;</span><span style="color: #000000">,</span>
-<span style="color: #000000">  });</span>
-
-<span style="color: #000000">  </span><span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #795E26">handler</span><span style="color: #000000">({</span>
-<span style="color: #000000">    </span><span style="color: #001080">messages:</span><span style="color: #000000"> [</span><span style="color: #A31515">&#039;qq&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;xx&#039;</span><span style="color: #000000">]</span>
-<span style="color: #000000">  });</span>
-
-<span style="color: #000000">  </span><span style="color: #795E26">expect</span><span style="color: #000000">(</span><span style="color: #001080">snsMock</span><span style="color: #000000">.</span><span style="color: #795E26">calls</span><span style="color: #000000">()).</span><span style="color: #795E26">toHaveLength</span><span style="color: #000000">(</span><span style="color: #098658">2</span><span style="color: #000000">);</span>
-<span style="color: #000000">});</span>
-</code></pre>
-				<p>For more examples, see the <a href="./test/mockClient.test.ts">unit tests</a>.</p>
-				<a href="#compatibility" id="compatibility" style="color: inherit; text-decoration: none;">
-					<h2>Compatibility</h2>
-				</a>
-				<p>See <a href="compatibility.md">compatibility table</a> for AWS SDK v3 Clients.</p>
-				<a href="#caveats" id="caveats" style="color: inherit; text-decoration: none;">
-					<h2>Caveats</h2>
-				</a>
-				<a href="#order-of-mock-behaviors" id="order-of-mock-behaviors" style="color: inherit; text-decoration: none;">
-					<h3>Order of mock behaviors</h3>
-				</a>
-				<p>Wider Command matchers must be declared first,
-				otherwise, they will take precedence over previous ones.</p>
-				<p>In this case, all <code>PublishCommand</code> sends will return message ID <code>222</code>:</p>
-				<pre><code class="language-typescript"><span style="color: #001080">snsMock</span>
-<span style="color: #000000">  .</span><span style="color: #795E26">on</span><span style="color: #000000">(</span><span style="color: #001080">PublishCommand</span><span style="color: #000000">, </span><span style="color: #001080">myInput</span><span style="color: #000000">).</span><span style="color: #795E26">resolves</span><span style="color: #000000">({</span><span style="color: #001080">MessageId:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;111&#039;</span><span style="color: #000000">})</span>
-<span style="color: #000000">  .</span><span style="color: #795E26">on</span><span style="color: #000000">(</span><span style="color: #001080">PublishCommand</span><span style="color: #000000">).</span><span style="color: #795E26">resolves</span><span style="color: #000000">({</span><span style="color: #001080">MessageId:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;222&#039;</span><span style="color: #000000">});</span>
-</code></pre>
-				<p>If the order of the declarations is switched, sends with input matching <code>myInput</code>
-				will return ID <code>111</code> and all others <code>222</code>.</p>
-				<p>It works similarly with <code>onAnyCommand()</code>.</p>
-				<a href="#order-of-type-and-instance-mocks" id="order-of-type-and-instance-mocks" style="color: inherit; text-decoration: none;">
-					<h3>Order of type and instance mocks</h3>
-				</a>
-				<p>When you create both a Client type mock
-					and a specific Client instance mock(s),
-					you need to declare type mock last.
-				Otherwise, the other instances will not be mocked.</p>
-				<p>Right now if you create a mock for the Client type,
-					and then mock a specific instance of this Client,
-				with the order of mocking as here:</p>
-				<pre><code class="language-typescript"><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">sns1</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">SNSClient</span><span style="color: #000000">({}); </span><span style="color: #008000">// not mocked</span>
-
-<span style="color: #795E26">mockClient</span><span style="color: #000000">(</span><span style="color: #001080">SNSClient</span><span style="color: #000000">).</span><span style="color: #795E26">resolves</span><span style="color: #000000">({</span><span style="color: #001080">MessageId:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;123&#039;</span><span style="color: #000000">});</span>
-
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">sns2</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">SNSClient</span><span style="color: #000000">({}); </span><span style="color: #008000">// mocked</span>
-<span style="color: #795E26">mockClient</span><span style="color: #000000">(</span><span style="color: #001080">sns2</span><span style="color: #000000">).</span><span style="color: #795E26">resolves</span><span style="color: #000000">({</span><span style="color: #001080">MessageId:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;456&#039;</span><span style="color: #000000">});</span>
-
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">sns3</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">SNSClient</span><span style="color: #000000">({}); </span><span style="color: #008000">// not mocked</span>
-</code></pre>
-				<p>Declaring mocks in this order will fix it:</p>
-				<pre><code class="language-typescript"><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">sns1</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">SNSClient</span><span style="color: #000000">({}); </span><span style="color: #008000">// mocked - default</span>
-
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">sns2</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">SNSClient</span><span style="color: #000000">({}); </span><span style="color: #008000">// mocked</span>
-<span style="color: #795E26">mockClient</span><span style="color: #000000">(</span><span style="color: #001080">sns2</span><span style="color: #000000">).</span><span style="color: #795E26">resolves</span><span style="color: #000000">({</span><span style="color: #001080">MessageId:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;456&#039;</span><span style="color: #000000">});</span>
-
-<span style="color: #795E26">mockClient</span><span style="color: #000000">(</span><span style="color: #001080">SNSClient</span><span style="color: #000000">).</span><span style="color: #795E26">resolves</span><span style="color: #000000">({</span><span style="color: #001080">MessageId:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;123&#039;</span><span style="color: #000000">});</span>
-
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">sns3</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">SNSClient</span><span style="color: #000000">({}); </span><span style="color: #008000">// mocked - default</span>
-</code></pre>
-				<p>PRs to fix this are welcome.</p>
-			</div>
-		</div>
-		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
-			<nav class="tsd-navigation primary">
-				<ul>
-					<li class=" ">
-						<a href="modules.html">Exports</a>
-					</li>
-				</ul>
-			</nav>
-			<nav class="tsd-navigation secondary menu-sticky">
-				<ul class="before-current">
-					<li class=" tsd-kind-class tsd-has-type-parameter">
-						<a href="classes/awsstub.html" class="tsd-kind-icon">Aws<wbr>Stub</a>
-					</li>
-					<li class=" tsd-kind-class tsd-has-type-parameter">
-						<a href="classes/commandbehavior.html" class="tsd-kind-icon">Command<wbr>Behavior</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/awserror.html" class="tsd-kind-icon">Aws<wbr>Error</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
-						<a href="modules.html#awsclientbehavior" class="tsd-kind-icon">Aws<wbr>Client<wbr>Behavior</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
-						<a href="modules.html#awsclientstub" class="tsd-kind-icon">Aws<wbr>Client<wbr>Stub</a>
-					</li>
-					<li class=" tsd-kind-function tsd-has-type-parameter">
-						<a href="modules.html#mockclient" class="tsd-kind-icon">mock<wbr>Client</a>
-					</li>
-				</ul>
-			</nav>
-		</div>
-	</div>
+<a href="#aws-sdk-v3-client-mock" id="aws-sdk-v3-client-mock" style="color: inherit; text-decoration: none;">
+  <h1>AWS SDK v3 Client mock</h1>
+</a>
+<p>Easy and powerful mocking of AWS SDK v3 Clients.</p>
+<p><a href="https://www.npmjs.com/package/aws-sdk-client-mock"><img src="https://img.shields.io/npm/v/aws-sdk-client-mock?color=brightgreen&style=flat-square" alt="npm"></a>
+<a href="https://github.com/m-radzikowski/aws-sdk-client-mock/actions?query=workflow%3ACI"><img src="https://img.shields.io/github/workflow/status/m-radzikowski/aws-sdk-client-mock/CI?style=flat-square" alt="build"></a>
+<a href="https://app.codecov.io/gh/m-radzikowski/aws-sdk-client-mock/"><img src="https://img.shields.io/codecov/c/github/m-radzikowski/aws-sdk-client-mock?style=flat-square" alt="coverage"></a></p>
 </div>
-<footer class="with-border-bottom">
-	<div class="container">
-		<h2>Legend</h2>
-		<div class="tsd-legend-group">
-			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
-			</ul>
-		</div>
-	</div>
-</footer>
-<div class="container tsd-generator">
-	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
-</div>
-<div class="overlay"></div>
-<script src="assets/js/main.js"></script>
-</body>
-</html>
+
+<p>Library recommended by the AWS SDK for JavaScript team - see the <a href="https://aws.amazon.com/blogs/developer/mocking-modular-aws-sdk-for-javascript-v3-in-unit-tests/">introductory post on the AWS blog</a>.</p>
+<p>Features:</p>
+<ul>
+<li>🌊&nbsp; <strong>fluent interface</strong> - declaring behavior is short and readable</li>
+<li>🔍&nbsp; <strong>matching options</strong> - defining mock behavior by Command type and/or its input payload</li>
+<li>🕵️&nbsp; <strong>spying</strong> - checking if Commands were actually send</li>
+<li>🖋️&nbsp; <strong>fully typed</strong> - same type control for declaring mock&#39;s behavior as when writing regular code</li>
+<li>✅&nbsp; <strong>fully tested</strong> - reliable mocks help instead of impeding</li>
+</ul>
+<p>In action:</p>
+<p><img src=".github/aws-client-mock-example.gif" alt="aws-client-mock-example"></p>
+
+<a href="#table-of-contents" id="table-of-contents" style="color: inherit; text-decoration: none;">
+  <h3>Table of Contents</h3>
+</a>
+<ul>
+<li><a href="#about-aws-sdk-v3">About AWS SDK v3</a></li>
+<li><a href="#usage">Usage</a><ul>
+<li><a href="#install">Install</a></li>
+<li><a href="#import">Import</a></li>
+<li><a href="#mock">Mock</a><ul>
+<li><a href="#dynamodb-documentclient">DynamoDB DocumentClient</a></li>
+<li><a href="#lib-storage-upload">Lib Storage Upload</a></li>
+<li><a href="#paginated-operations">Paginated operations</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#api-reference">API Reference</a></li>
+<li><a href="#aws-lambda-example">AWS Lambda example</a></li>
+<li><a href="#compatibility">Compatibility</a></li>
+<li><a href="#caveats">Caveats</a><ul>
+<li><a href="#mixed-aws-sdktypes-versions">Mixed @aws-sdk/types versions</a></li>
+<li><a href="#order-of-mock-behaviors">Order of mock behaviors</a></li>
+<li><a href="#order-of-type-and-instance-mocks">Order of type and instance mocks</a></li>
+</ul>
+</li>
+</ul>
+
+<a href="#about-aws-sdk-v3" id="about-aws-sdk-v3" style="color: inherit; text-decoration: none;">
+  <h2>About AWS SDK v3</h2>
+</a>
+<p>The <a href="https://docs.aws.amazon.com/sdk-for-javascript/v3/developer-guide/welcome.html">AWS SDK for JavaScript version 3</a>,
+is the new version of SDK to use in Node.js and browser.
+It comes with modular architecture and improved typing,
+thanks to being written in TypeScript.</p>
+<p>The recommended way of using it is to create a <code>Client</code>
+and use it to send <code>Commands</code>.</p>
+<p>For example, using SNS Client to publish a message to a topic looks like that:</p>
+<pre><code class="language-typescript"><span class="hl-5">import</span><span class="hl-1"> {</span><span class="hl-2">PublishCommand</span><span class="hl-1">, </span><span class="hl-2">SNSClient</span><span class="hl-1">} </span><span class="hl-5">from</span><span class="hl-1"> </span><span class="hl-6">&#39;@aws-sdk/client-sns&#39;</span><span class="hl-1">;</span><br/><br/><span class="hl-0">const</span><span class="hl-1"> </span><span class="hl-7">sns</span><span class="hl-1"> = </span><span class="hl-0">new</span><span class="hl-1"> </span><span class="hl-4">SNSClient</span><span class="hl-1">({});</span><br/><span class="hl-0">const</span><span class="hl-1"> </span><span class="hl-7">result</span><span class="hl-1"> = </span><span class="hl-5">await</span><span class="hl-1"> </span><span class="hl-2">sns</span><span class="hl-1">.</span><span class="hl-4">send</span><span class="hl-1">(</span><span class="hl-0">new</span><span class="hl-1"> </span><span class="hl-4">PublishCommand</span><span class="hl-1">({</span><br/><span class="hl-1">  </span><span class="hl-2">TopicArn:</span><span class="hl-1"> </span><span class="hl-6">&#39;arn:aws:sns:us-east-1:111111111111:MyTopic&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">  </span><span class="hl-2">Message:</span><span class="hl-1"> </span><span class="hl-6">&#39;My message&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">}));</span><br/><br/><span class="hl-2">console</span><span class="hl-1">.</span><span class="hl-4">log</span><span class="hl-1">(</span><span class="hl-6">`Message published, id: </span><span class="hl-0">${</span><span class="hl-2">result</span><span class="hl-8">.</span><span class="hl-2">MessageId</span><span class="hl-0">}</span><span class="hl-6">`</span><span class="hl-1">);</span>
+</code></pre>
+<p>This library provides an easy way to mock sending <code>Commands</code>
+and define returned results depending on the <code>Command</code> type and payload.</p>
+
+<a href="#usage" id="usage" style="color: inherit; text-decoration: none;">
+  <h2>Usage</h2>
+</a>
+
+<a href="#install" id="install" style="color: inherit; text-decoration: none;">
+  <h3>Install</h3>
+</a>
+<pre><code class="language-bash"><span class="hl-1">npm install -D aws-sdk-client-mock</span>
+</code></pre>
+<p>or</p>
+<pre><code class="language-bash"><span class="hl-1">yarn add -D aws-sdk-client-mock</span>
+</code></pre>
+
+<a href="#import" id="import" style="color: inherit; text-decoration: none;">
+  <h3>Import</h3>
+</a>
+<p>CommonJS:</p>
+<pre><code class="language-javascript"><span class="hl-0">const</span><span class="hl-1"> {</span><span class="hl-7">mockClient</span><span class="hl-1">} = </span><span class="hl-4">require</span><span class="hl-1">(</span><span class="hl-6">&#39;aws-sdk-client-mock&#39;</span><span class="hl-1">);</span>
+</code></pre>
+<p>TypeScript / ES6:</p>
+<pre><code class="language-typescript"><span class="hl-5">import</span><span class="hl-1"> {</span><span class="hl-2">mockClient</span><span class="hl-1">} </span><span class="hl-5">from</span><span class="hl-1"> </span><span class="hl-6">&#39;aws-sdk-client-mock&#39;</span><span class="hl-1">;</span>
+</code></pre>
+
+<a href="#mock" id="mock" style="color: inherit; text-decoration: none;">
+  <h3>Mock</h3>
+</a>
+<p>Create mock for all instances or for given instance of the AWS SDK Client:</p>
+<pre><code class="language-typescript"><span class="hl-0">const</span><span class="hl-1"> </span><span class="hl-7">snsMock</span><span class="hl-1"> = </span><span class="hl-4">mockClient</span><span class="hl-1">(</span><span class="hl-2">SNSClient</span><span class="hl-1">);</span><br/><br/><span class="hl-0">const</span><span class="hl-1"> </span><span class="hl-7">dynamoDB</span><span class="hl-1"> = </span><span class="hl-0">new</span><span class="hl-1"> </span><span class="hl-4">DynamoDBClient</span><span class="hl-1">({});</span><br/><span class="hl-0">const</span><span class="hl-1"> </span><span class="hl-7">dynamoDBMock</span><span class="hl-1"> = </span><span class="hl-4">mockClient</span><span class="hl-1">(</span><span class="hl-2">dynamoDB</span><span class="hl-1">);</span>
+</code></pre>
+<p>By default, mocked <code>Client#send()</code> method returns <code>undefined</code>.</p>
+<p>Using the obtained mock instance, you can specify the mock behavior
+on receiving various commands to send.</p>
+<p>Specify default mock behavior:</p>
+<pre><code class="language-typescript"><span class="hl-2">snsMock</span><span class="hl-1">.</span><span class="hl-4">onAnyCommand</span><span class="hl-1">().</span><span class="hl-4">resolves</span><span class="hl-1">({});</span><br/><br/><span class="hl-9">// same as:</span><br/><br/><span class="hl-2">snsMock</span><span class="hl-1">.</span><span class="hl-4">resolves</span><span class="hl-1">({});</span>
+</code></pre>
+<p>Specify mock behavior on receiving given command only:</p>
+<pre><code class="language-typescript"><span class="hl-2">snsMock</span><br/><span class="hl-1">    .</span><span class="hl-4">on</span><span class="hl-1">(</span><span class="hl-2">PublishCommand</span><span class="hl-1">)</span><br/><span class="hl-1">    .</span><span class="hl-4">resolves</span><span class="hl-1">({</span><br/><span class="hl-1">        </span><span class="hl-2">MessageId:</span><span class="hl-1"> </span><span class="hl-6">&#39;12345678-1111-2222-3333-111122223333&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">    });</span>
+</code></pre>
+<p>Specify mock behavior on receiving given command with given payload only:</p>
+<pre><code class="language-typescript"><span class="hl-2">snsMock</span><br/><span class="hl-1">    .</span><span class="hl-4">on</span><span class="hl-1">(</span><span class="hl-2">PublishCommand</span><span class="hl-1">, {</span><br/><span class="hl-1">        </span><span class="hl-2">TopicArn:</span><span class="hl-1"> </span><span class="hl-6">&#39;arn:aws:sns:us-east-1:111111111111:MyTopic&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">        </span><span class="hl-2">Message:</span><span class="hl-1"> </span><span class="hl-6">&#39;My message&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">    })</span><br/><span class="hl-1">    .</span><span class="hl-4">resolves</span><span class="hl-1">({</span><br/><span class="hl-1">        </span><span class="hl-2">MessageId:</span><span class="hl-1"> </span><span class="hl-6">&#39;12345678-4444-5555-6666-111122223333&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">    });</span>
+</code></pre>
+<p>Not all payload parameters must be defined to match
+(you can force strict matching by passing third param <code>strict: true</code>):</p>
+<pre><code class="language-typescript"><span class="hl-2">snsMock</span><br/><span class="hl-1">    .</span><span class="hl-4">on</span><span class="hl-1">(</span><span class="hl-2">PublishCommand</span><span class="hl-1">, {</span><br/><span class="hl-1">        </span><span class="hl-2">Message:</span><span class="hl-1"> </span><span class="hl-6">&#39;My message&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">    })</span><br/><span class="hl-1">    .</span><span class="hl-4">resolves</span><span class="hl-1">({</span><br/><span class="hl-1">        </span><span class="hl-2">MessageId:</span><span class="hl-1"> </span><span class="hl-6">&#39;12345678-4444-5555-6666-111122223333&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">    });</span>
+</code></pre>
+<p>Specify mock behavior on receiving given payload only:</p>
+<pre><code class="language-typescript"><span class="hl-2">snsMock</span><br/><span class="hl-1">    .</span><span class="hl-4">onAnyCommand</span><span class="hl-1">({</span><br/><span class="hl-1">        </span><span class="hl-2">TopicArn:</span><span class="hl-1"> </span><span class="hl-6">&#39;arn:aws:sns:us-east-1:111111111111:MyTopic&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">        </span><span class="hl-2">Message:</span><span class="hl-1"> </span><span class="hl-6">&#39;My message&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">    })</span><br/><span class="hl-1">    .</span><span class="hl-4">resolves</span><span class="hl-1">({</span><br/><span class="hl-1">        </span><span class="hl-2">MessageId:</span><span class="hl-1"> </span><span class="hl-6">&#39;12345678-4444-5555-6666-111122223333&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">    });</span>
+</code></pre>
+<p>Multiple behaviors (for different commands and payloads) may be specified
+for a single mock:</p>
+<pre><code class="language-typescript"><span class="hl-2">snsMock</span><br/><span class="hl-1">    .</span><span class="hl-4">resolves</span><span class="hl-1">({ </span><span class="hl-9">// default for any command</span><br/><span class="hl-1">        </span><span class="hl-2">MessageId:</span><span class="hl-1"> </span><span class="hl-6">&#39;12345678-1111-2222-3333-111122223333&#39;</span><br/><span class="hl-1">    })</span><br/><span class="hl-1">    .</span><span class="hl-4">on</span><span class="hl-1">(</span><span class="hl-2">PublishCommand</span><span class="hl-1">)</span><br/><span class="hl-1">    .</span><span class="hl-4">resolves</span><span class="hl-1">({ </span><span class="hl-9">// default for PublishCommand</span><br/><span class="hl-1">        </span><span class="hl-2">MessageId:</span><span class="hl-1"> </span><span class="hl-6">&#39;12345678-4444-5555-6666-111122223333&#39;</span><br/><span class="hl-1">    })</span><br/><span class="hl-1">    .</span><span class="hl-4">on</span><span class="hl-1">(</span><span class="hl-2">PublishCommand</span><span class="hl-1">, {</span><br/><span class="hl-1">        </span><span class="hl-2">TopicArn:</span><span class="hl-1"> </span><span class="hl-6">&#39;arn:aws:sns:us-east-1:111111111111:MyTopic&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">        </span><span class="hl-2">Message:</span><span class="hl-1"> </span><span class="hl-6">&#39;My message&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">    })</span><br/><span class="hl-1">    .</span><span class="hl-4">resolves</span><span class="hl-1">({ </span><span class="hl-9">// for PublishCommand with given input</span><br/><span class="hl-1">        </span><span class="hl-2">MessageId:</span><span class="hl-1"> </span><span class="hl-6">&#39;12345678-7777-8888-9999-111122223333&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">    });</span>
+</code></pre>
+<p>Specify mock throwing an error:</p>
+<pre><code class="language-typescript"><span class="hl-2">snsMock</span><br/><span class="hl-1">    .</span><span class="hl-4">rejects</span><span class="hl-1">(</span><span class="hl-6">&#39;mocked rejection&#39;</span><span class="hl-1">);</span>
+</code></pre>
+<p>Specify custom mock function:</p>
+<pre><code class="language-typescript"><span class="hl-2">snsMock</span><br/><span class="hl-1">    .</span><span class="hl-4">callsFake</span><span class="hl-1">(</span><span class="hl-2">input</span><span class="hl-1"> </span><span class="hl-0">=&gt;</span><span class="hl-1"> {</span><br/><span class="hl-1">        </span><span class="hl-5">if</span><span class="hl-1"> (</span><span class="hl-2">input</span><span class="hl-1">.</span><span class="hl-2">Message</span><span class="hl-1"> === </span><span class="hl-6">&#39;My message&#39;</span><span class="hl-1">) {</span><br/><span class="hl-1">            </span><span class="hl-5">return</span><span class="hl-1"> {</span><span class="hl-2">MessageId:</span><span class="hl-1"> </span><span class="hl-6">&#39;12345678-1111-2222-3333-111122223333&#39;</span><span class="hl-1">};</span><br/><span class="hl-1">        } </span><span class="hl-5">else</span><span class="hl-1"> {</span><br/><span class="hl-1">            </span><span class="hl-5">return</span><span class="hl-1"> {</span><span class="hl-2">MessageId:</span><span class="hl-1"> </span><span class="hl-6">&#39;12345678-4444-5555-6666-111122223333&#39;</span><span class="hl-1">};</span><br/><span class="hl-1">        }</span><br/><span class="hl-1">    });</span>
+</code></pre>
+<p>Inspect received calls:</p>
+<pre><code class="language-typescript"><span class="hl-2">snsMock</span><span class="hl-1">.</span><span class="hl-4">calls</span><span class="hl-1">(); </span><span class="hl-9">// all received calls</span><br/><span class="hl-2">snsMock</span><span class="hl-1">.</span><span class="hl-4">call</span><span class="hl-1">(</span><span class="hl-10">0</span><span class="hl-1">); </span><span class="hl-9">// first received call</span>
+</code></pre>
+<p>Under the hood, the library uses <a href="https://sinonjs.org/">Sinon.js</a> <code>stub</code>.
+You can get the stub instance to configure and use it directly:</p>
+<pre><code class="language-typescript"><span class="hl-0">const</span><span class="hl-1"> </span><span class="hl-7">snsSendStub</span><span class="hl-1"> = </span><span class="hl-2">snsMock</span><span class="hl-1">.</span><span class="hl-2">send</span><span class="hl-1">;</span>
+</code></pre>
+
+<a href="#dynamodb-documentclient" id="dynamodb-documentclient" style="color: inherit; text-decoration: none;">
+  <h4>DynamoDB DocumentClient</h4>
+</a>
+<p>You can mock the <code>DynamoDBDocumentClient</code> just like any other Client:</p>
+<pre><code class="language-typescript"><span class="hl-5">import</span><span class="hl-1"> {</span><span class="hl-2">DynamoDBDocumentClient</span><span class="hl-1">, </span><span class="hl-2">QueryCommand</span><span class="hl-1">} </span><span class="hl-5">from</span><span class="hl-1"> </span><span class="hl-6">&#39;@aws-sdk/lib-dynamodb&#39;</span><span class="hl-1">;</span><br/><br/><span class="hl-0">const</span><span class="hl-1"> </span><span class="hl-7">ddbMock</span><span class="hl-1"> = </span><span class="hl-4">mockClient</span><span class="hl-1">(</span><span class="hl-2">DynamoDBDocumentClient</span><span class="hl-1">);</span><br/><span class="hl-2">ddbMock</span><span class="hl-1">.</span><span class="hl-4">on</span><span class="hl-1">(</span><span class="hl-2">QueryCommand</span><span class="hl-1">).</span><span class="hl-4">resolves</span><span class="hl-1">({</span><br/><span class="hl-1">    </span><span class="hl-2">Items:</span><span class="hl-1"> [{</span><span class="hl-2">pk:</span><span class="hl-1"> </span><span class="hl-6">&#39;a&#39;</span><span class="hl-1">, </span><span class="hl-2">sk:</span><span class="hl-1"> </span><span class="hl-6">&#39;b&#39;</span><span class="hl-1">}],</span><br/><span class="hl-1">});</span>
+</code></pre>
+
+<a href="#lib-storage-upload" id="lib-storage-upload" style="color: inherit; text-decoration: none;">
+  <h4>Lib Storage Upload</h4>
+</a>
+<p>To mock <code>@aws-sdk/lib-storage</code> <code>Upload</code> you need to call
+a helper function <code>mockLibStorageUpload()</code>
+that will configure required S3Client command mocks:</p>
+<pre><code class="language-typescript"><span class="hl-5">import</span><span class="hl-1"> {</span><span class="hl-2">mockLibStorageUpload</span><span class="hl-1">} </span><span class="hl-5">from</span><span class="hl-1"> </span><span class="hl-6">&#39;aws-sdk-client-mock&#39;</span><span class="hl-1">;</span><br/><span class="hl-5">import</span><span class="hl-1"> {</span><span class="hl-2">Upload</span><span class="hl-1">} </span><span class="hl-5">from</span><span class="hl-1"> </span><span class="hl-6">&#39;@aws-sdk/lib-storage&#39;</span><span class="hl-1">;</span><br/><span class="hl-5">import</span><span class="hl-1"> {</span><span class="hl-2">S3Client</span><span class="hl-1">} </span><span class="hl-5">from</span><span class="hl-1"> </span><span class="hl-6">&#39;@aws-sdk/client-s3&#39;</span><span class="hl-1">;</span><br/><br/><span class="hl-0">const</span><span class="hl-1"> </span><span class="hl-7">s3Mock</span><span class="hl-1"> = </span><span class="hl-4">mockClient</span><span class="hl-1">(</span><span class="hl-2">S3Client</span><span class="hl-1">);</span><br/><span class="hl-4">mockLibStorageUpload</span><span class="hl-1">(</span><span class="hl-2">s3Mock</span><span class="hl-1">);</span><br/><br/><span class="hl-0">const</span><span class="hl-1"> </span><span class="hl-7">s3Upload</span><span class="hl-1"> = </span><span class="hl-0">new</span><span class="hl-1"> </span><span class="hl-4">Upload</span><span class="hl-1">({</span><br/><span class="hl-1">    </span><span class="hl-2">client:</span><span class="hl-1"> </span><span class="hl-0">new</span><span class="hl-1"> </span><span class="hl-4">S3Client</span><span class="hl-1">({}),</span><br/><span class="hl-1">    </span><span class="hl-2">params:</span><span class="hl-1"> {</span><br/><span class="hl-1">        </span><span class="hl-2">Bucket:</span><span class="hl-1"> </span><span class="hl-6">&#39;mock&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">        </span><span class="hl-2">Key:</span><span class="hl-1"> </span><span class="hl-6">&#39;test&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">        </span><span class="hl-2">Body:</span><span class="hl-1"> </span><span class="hl-6">&#39;x&#39;</span><span class="hl-1">.</span><span class="hl-4">repeat</span><span class="hl-1">(</span><span class="hl-10">6</span><span class="hl-1"> * </span><span class="hl-10">1024</span><span class="hl-1"> * </span><span class="hl-10">1024</span><span class="hl-1">), </span><span class="hl-9">// 6 MB</span><br/><span class="hl-1">    },</span><br/><span class="hl-1">});</span><br/><br/><span class="hl-2">s3Upload</span><span class="hl-1">.</span><span class="hl-4">on</span><span class="hl-1">(</span><span class="hl-6">&#39;httpUploadProgress&#39;</span><span class="hl-1">, (</span><span class="hl-2">progress</span><span class="hl-1">) </span><span class="hl-0">=&gt;</span><span class="hl-1"> {</span><br/><span class="hl-1">    </span><span class="hl-2">console</span><span class="hl-1">.</span><span class="hl-4">log</span><span class="hl-1">(</span><span class="hl-2">progress</span><span class="hl-1">);</span><br/><span class="hl-1">});</span><br/><br/><span class="hl-5">await</span><span class="hl-1"> </span><span class="hl-2">s3Upload</span><span class="hl-1">.</span><span class="hl-4">done</span><span class="hl-1">();</span>
+</code></pre>
+<p>You can call <code>mockLibStorageUpload()</code> without providing an S3Client mock.
+In that case, the client mock will be created and returned from the function.</p>
+
+<a href="#paginated-operations" id="paginated-operations" style="color: inherit; text-decoration: none;">
+  <h4>Paginated operations</h4>
+</a>
+<p>To mock a <a href="https://aws.amazon.com/blogs/developer/pagination-using-async-iterators-in-modular-aws-sdk-for-javascript/">paginated operation</a>
+results, simply mock the corresponding Command:</p>
+<pre><code class="language-typescript"><span class="hl-5">import</span><span class="hl-1"> {</span><span class="hl-2">DynamoDBClient</span><span class="hl-1">, </span><span class="hl-2">paginateQuery</span><span class="hl-1">, </span><span class="hl-2">QueryCommand</span><span class="hl-1">} </span><span class="hl-5">from</span><span class="hl-1"> </span><span class="hl-6">&#39;@aws-sdk/client-dynamodb&#39;</span><span class="hl-1">;</span><br/><span class="hl-5">import</span><span class="hl-1"> {</span><span class="hl-2">marshall</span><span class="hl-1">} </span><span class="hl-5">from</span><span class="hl-1"> </span><span class="hl-6">&#39;@aws-sdk/util-dynamodb&#39;</span><span class="hl-1">;</span><br/><br/><span class="hl-0">const</span><span class="hl-1"> </span><span class="hl-7">dynamodbMock</span><span class="hl-1"> = </span><span class="hl-4">mockClient</span><span class="hl-1">(</span><span class="hl-2">DynamoDBClient</span><span class="hl-1">);</span><br/><span class="hl-2">dynamodbMock</span><span class="hl-1">.</span><span class="hl-4">on</span><span class="hl-1">(</span><span class="hl-2">QueryCommand</span><span class="hl-1">).</span><span class="hl-4">resolves</span><span class="hl-1">({</span><br/><span class="hl-1">    </span><span class="hl-2">Items:</span><span class="hl-1"> [</span><br/><span class="hl-1">        </span><span class="hl-4">marshall</span><span class="hl-1">({</span><span class="hl-2">pk:</span><span class="hl-1"> </span><span class="hl-6">&#39;a&#39;</span><span class="hl-1">, </span><span class="hl-2">sk:</span><span class="hl-1"> </span><span class="hl-6">&#39;b&#39;</span><span class="hl-1">}),</span><br/><span class="hl-1">        </span><span class="hl-4">marshall</span><span class="hl-1">({</span><span class="hl-2">pk:</span><span class="hl-1"> </span><span class="hl-6">&#39;c&#39;</span><span class="hl-1">, </span><span class="hl-2">sk:</span><span class="hl-1"> </span><span class="hl-6">&#39;d&#39;</span><span class="hl-1">}),</span><br/><span class="hl-1">    ],</span><br/><span class="hl-1">});</span><br/><br/><span class="hl-0">const</span><span class="hl-1"> </span><span class="hl-7">dynamodb</span><span class="hl-1"> = </span><span class="hl-0">new</span><span class="hl-1"> </span><span class="hl-4">DynamoDBClient</span><span class="hl-1">({});</span><br/><span class="hl-0">const</span><span class="hl-1"> </span><span class="hl-7">paginator</span><span class="hl-1"> = </span><span class="hl-4">paginateQuery</span><span class="hl-1">({</span><span class="hl-2">client:</span><span class="hl-1"> </span><span class="hl-2">dynamodb</span><span class="hl-1">}, {</span><span class="hl-2">TableName:</span><span class="hl-1"> </span><span class="hl-6">&#39;mock&#39;</span><span class="hl-1">});</span><br/><br/><span class="hl-0">const</span><span class="hl-1"> </span><span class="hl-7">items</span><span class="hl-1"> = [];</span><br/><span class="hl-5">for</span><span class="hl-1"> </span><span class="hl-5">await</span><span class="hl-1"> (</span><span class="hl-0">const</span><span class="hl-1"> </span><span class="hl-7">page</span><span class="hl-1"> </span><span class="hl-0">of</span><span class="hl-1"> </span><span class="hl-2">paginator</span><span class="hl-1">) {</span><br/><span class="hl-1">    </span><span class="hl-2">items</span><span class="hl-1">.</span><span class="hl-4">push</span><span class="hl-1">(...</span><span class="hl-2">page</span><span class="hl-1">.</span><span class="hl-2">Items</span><span class="hl-1"> || []);</span><br/><span class="hl-1">}</span>
+</code></pre>
+
+<a href="#api-reference" id="api-reference" style="color: inherit; text-decoration: none;">
+  <h2>API Reference</h2>
+</a>
+<p>See the <a href="https://m-radzikowski.github.io/aws-sdk-client-mock/">full API Reference</a>.</p>
+
+<a href="#aws-lambda-example" id="aws-lambda-example" style="color: inherit; text-decoration: none;">
+  <h2>AWS Lambda example</h2>
+</a>
+<p>Example below uses Jest as a test framework, but mocks will work with any testing library.</p>
+<p>Let&#39;s take a simple Lambda function that takes a list of messages,
+sends them to SNS topic and returns message IDs:</p>
+<pre><code class="language-typescript"><span class="hl-5">import</span><span class="hl-1"> {</span><span class="hl-2">PublishCommand</span><span class="hl-1">, </span><span class="hl-2">SNSClient</span><span class="hl-1">} </span><span class="hl-5">from</span><span class="hl-1"> </span><span class="hl-6">&#39;@aws-sdk/client-sns&#39;</span><span class="hl-1">;</span><br/><br/><span class="hl-0">const</span><span class="hl-1"> </span><span class="hl-7">snsTopicArn</span><span class="hl-1"> = </span><span class="hl-2">process</span><span class="hl-1">.</span><span class="hl-2">env</span><span class="hl-1">.</span><span class="hl-7">SNS_TOPIC_ARN</span><span class="hl-1"> || </span><span class="hl-6">&#39;&#39;</span><span class="hl-1">;</span><br/><br/><span class="hl-0">const</span><span class="hl-1"> </span><span class="hl-7">sns</span><span class="hl-1"> = </span><span class="hl-0">new</span><span class="hl-1"> </span><span class="hl-4">SNSClient</span><span class="hl-1">({});</span><br/><br/><span class="hl-5">export</span><span class="hl-1"> </span><span class="hl-0">const</span><span class="hl-1"> </span><span class="hl-4">handler</span><span class="hl-1"> = </span><span class="hl-0">async</span><span class="hl-1"> (</span><span class="hl-2">event</span><span class="hl-1">: </span><span class="hl-3">Event</span><span class="hl-1">): </span><span class="hl-3">Promise</span><span class="hl-1">&lt;</span><span class="hl-3">string</span><span class="hl-1">[]&gt; </span><span class="hl-0">=&gt;</span><span class="hl-1"> {</span><br/><span class="hl-1">  </span><span class="hl-0">const</span><span class="hl-1"> </span><span class="hl-7">promises</span><span class="hl-1"> = </span><span class="hl-2">event</span><span class="hl-1">.</span><span class="hl-2">messages</span><span class="hl-1">.</span><span class="hl-4">map</span><span class="hl-1">(</span><span class="hl-0">async</span><span class="hl-1"> (</span><span class="hl-2">msg</span><span class="hl-1">, </span><span class="hl-2">idx</span><span class="hl-1">) </span><span class="hl-0">=&gt;</span><span class="hl-1"> {</span><br/><span class="hl-1">    </span><span class="hl-0">const</span><span class="hl-1"> </span><span class="hl-7">publish</span><span class="hl-1"> = </span><span class="hl-5">await</span><span class="hl-1"> </span><span class="hl-2">sns</span><span class="hl-1">.</span><span class="hl-4">send</span><span class="hl-1">(</span><span class="hl-0">new</span><span class="hl-1"> </span><span class="hl-4">PublishCommand</span><span class="hl-1">({</span><br/><span class="hl-1">      </span><span class="hl-2">TopicArn:</span><span class="hl-1"> </span><span class="hl-2">snsTopicArn</span><span class="hl-1">,</span><br/><span class="hl-1">      </span><span class="hl-2">Message:</span><span class="hl-1"> </span><span class="hl-2">msg</span><span class="hl-1">,</span><br/><span class="hl-1">    }));</span><br/><span class="hl-1">    </span><span class="hl-5">return</span><span class="hl-1"> </span><span class="hl-2">publish</span><span class="hl-1">.</span><span class="hl-2">MessageId</span><span class="hl-1">!;</span><br/><span class="hl-1">  });</span><br/><br/><span class="hl-1">  </span><span class="hl-5">return</span><span class="hl-1"> </span><span class="hl-5">await</span><span class="hl-1"> </span><span class="hl-3">Promise</span><span class="hl-1">.</span><span class="hl-4">all</span><span class="hl-1">(</span><span class="hl-2">promises</span><span class="hl-1">);</span><br/><span class="hl-1">};</span><br/><br/><span class="hl-0">interface</span><span class="hl-1"> </span><span class="hl-3">Event</span><span class="hl-1"> {</span><br/><span class="hl-1">  </span><span class="hl-2">messages</span><span class="hl-1">: </span><span class="hl-3">string</span><span class="hl-1">[];</span><br/><span class="hl-1">}</span>
+</code></pre>
+<p>Then the tests could look like this:</p>
+<pre><code class="language-typescript"><span class="hl-5">import</span><span class="hl-1"> {</span><span class="hl-2">mockClient</span><span class="hl-1">} </span><span class="hl-5">from</span><span class="hl-1"> </span><span class="hl-6">&#39;aws-sdk-client-mock&#39;</span><span class="hl-1">;</span><br/><span class="hl-5">import</span><span class="hl-1"> {</span><span class="hl-2">PublishCommand</span><span class="hl-1">, </span><span class="hl-2">SNSClient</span><span class="hl-1">} </span><span class="hl-5">from</span><span class="hl-1"> </span><span class="hl-6">&#39;@aws-sdk/client-sns&#39;</span><span class="hl-1">;</span><br/><span class="hl-5">import</span><span class="hl-1"> {</span><span class="hl-2">handler</span><span class="hl-1">} </span><span class="hl-5">from</span><span class="hl-1"> </span><span class="hl-6">&#39;../src&#39;</span><span class="hl-1">;</span><br/><br/><span class="hl-0">const</span><span class="hl-1"> </span><span class="hl-7">snsMock</span><span class="hl-1"> = </span><span class="hl-4">mockClient</span><span class="hl-1">(</span><span class="hl-2">SNSClient</span><span class="hl-1">);</span><br/><br/><span class="hl-9">/**</span><br/><span class="hl-9"> * To be sure that unit tests are independent from each other,</span><br/><span class="hl-9"> * reset mock behavior between the tests.</span><br/><span class="hl-9"> */</span><br/><span class="hl-4">beforeEach</span><span class="hl-1">(() </span><span class="hl-0">=&gt;</span><span class="hl-1"> {</span><br/><span class="hl-1">  </span><span class="hl-2">snsMock</span><span class="hl-1">.</span><span class="hl-4">reset</span><span class="hl-1">();</span><br/><span class="hl-1">});</span><br/><br/><span class="hl-4">it</span><span class="hl-1">(</span><span class="hl-6">&#39;message IDs are returned&#39;</span><span class="hl-1">, </span><span class="hl-0">async</span><span class="hl-1"> () </span><span class="hl-0">=&gt;</span><span class="hl-1"> {</span><br/><span class="hl-1">  </span><span class="hl-2">snsMock</span><span class="hl-1">.</span><span class="hl-4">on</span><span class="hl-1">(</span><span class="hl-2">PublishCommand</span><span class="hl-1">).</span><span class="hl-4">resolves</span><span class="hl-1">({</span><br/><span class="hl-1">    </span><span class="hl-2">MessageId:</span><span class="hl-1"> </span><span class="hl-6">&#39;12345678-1111-2222-3333-111122223333&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">  });</span><br/><br/><span class="hl-1">  </span><span class="hl-0">const</span><span class="hl-1"> </span><span class="hl-7">result</span><span class="hl-1"> = </span><span class="hl-5">await</span><span class="hl-1"> </span><span class="hl-4">handler</span><span class="hl-1">({</span><br/><span class="hl-1">    </span><span class="hl-2">messages:</span><span class="hl-1"> [</span><span class="hl-6">&#39;one&#39;</span><span class="hl-1">, </span><span class="hl-6">&#39;two&#39;</span><span class="hl-1">, </span><span class="hl-6">&#39;three&#39;</span><span class="hl-1">]</span><br/><span class="hl-1">  });</span><br/><br/><span class="hl-1">  </span><span class="hl-4">expect</span><span class="hl-1">(</span><span class="hl-2">result</span><span class="hl-1">).</span><span class="hl-4">toHaveLength</span><span class="hl-1">(</span><span class="hl-10">3</span><span class="hl-1">);</span><br/><span class="hl-1">  </span><span class="hl-4">expect</span><span class="hl-1">(</span><span class="hl-2">result</span><span class="hl-1">[</span><span class="hl-10">0</span><span class="hl-1">]).</span><span class="hl-4">toBe</span><span class="hl-1">(</span><span class="hl-6">&#39;12345678-1111-2222-3333-111122223333&#39;</span><span class="hl-1">);</span><br/><span class="hl-1">});</span><br/><br/><span class="hl-4">it</span><span class="hl-1">(</span><span class="hl-6">&#39;SNS Client is called&#39;</span><span class="hl-1">, </span><span class="hl-0">async</span><span class="hl-1"> () </span><span class="hl-0">=&gt;</span><span class="hl-1"> {</span><br/><span class="hl-1">  </span><span class="hl-2">snsMock</span><span class="hl-1">.</span><span class="hl-4">on</span><span class="hl-1">(</span><span class="hl-2">PublishCommand</span><span class="hl-1">).</span><span class="hl-4">resolves</span><span class="hl-1">({</span><br/><span class="hl-1">    </span><span class="hl-2">MessageId:</span><span class="hl-1"> </span><span class="hl-6">&#39;111-222-333&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">  });</span><br/><br/><span class="hl-1">  </span><span class="hl-5">await</span><span class="hl-1"> </span><span class="hl-4">handler</span><span class="hl-1">({</span><br/><span class="hl-1">    </span><span class="hl-2">messages:</span><span class="hl-1"> [</span><span class="hl-6">&#39;qq&#39;</span><span class="hl-1">, </span><span class="hl-6">&#39;xx&#39;</span><span class="hl-1">]</span><br/><span class="hl-1">  });</span><br/><br/><span class="hl-1">  </span><span class="hl-4">expect</span><span class="hl-1">(</span><span class="hl-2">snsMock</span><span class="hl-1">.</span><span class="hl-4">calls</span><span class="hl-1">()).</span><span class="hl-4">toHaveLength</span><span class="hl-1">(</span><span class="hl-10">2</span><span class="hl-1">);</span><br/><span class="hl-1">});</span>
+</code></pre>
+<p>For more examples, see the <a href="./test/mockClient.test.ts">unit tests</a>.</p>
+
+<a href="#compatibility" id="compatibility" style="color: inherit; text-decoration: none;">
+  <h2>Compatibility</h2>
+</a>
+<p>See <a href="compatibility.md">compatibility table</a> for AWS SDK v3 Clients.</p>
+
+<a href="#caveats" id="caveats" style="color: inherit; text-decoration: none;">
+  <h2>Caveats</h2>
+</a>
+
+<a href="#mixed-aws-sdktypes-versions" id="mixed-aws-sdktypes-versions" style="color: inherit; text-decoration: none;">
+  <h3>Mixed @aws-sdk/types versions</h3>
+</a>
+<p>If you have multiple <code>@aws-sdk</code> packages in dependencies in different versions,
+or one of your dependencies depends on the <code>@aws-sdk</code> package(s)
+in a different version than the one you use,
+you may end up with different <code>@aws-sdk/types</code> dependency versions required.</p>
+<p>If the one installed on the top level in <code>node_modules</code>
+is in a different version than required by the Client you try to mock,
+the types will be incompatible. This is because the mocking library
+will use the <code>@aws-sdk/types</code> version from the top level of <code>node_modules</code>,
+while your Client may be using a different one.</p>
+<p>This often results in a long error stack trace looking similar to this:</p>
+<pre><code><span class="hl-2">Argument</span><span class="hl-1"> </span><span class="hl-0">of</span><span class="hl-1"> </span><span class="hl-2">type</span><span class="hl-1"> </span><span class="hl-6">&#39;typeof SomeCommand&#39;</span><span class="hl-1"> </span><span class="hl-2">is</span><span class="hl-1"> </span><span class="hl-2">not</span><span class="hl-1"> </span><span class="hl-2">assignable</span><span class="hl-1"> </span><span class="hl-2">to</span><span class="hl-1"> </span><span class="hl-2">parameter</span><span class="hl-1"> </span><span class="hl-0">of</span><span class="hl-1"> </span><span class="hl-2">type</span><span class="hl-1"> </span><span class="hl-6">&#39;new (input: SomeCommandInput) =&gt; AwsCommand&lt;SomeCommandInput, MetadataBearer, any, any&gt;&#39;</span><br/><span class="hl-1">  </span><span class="hl-2">Types</span><span class="hl-1"> </span><span class="hl-0">of</span><span class="hl-1"> </span><span class="hl-2">construct</span><span class="hl-1"> </span><span class="hl-2">signatures</span><span class="hl-1"> </span><span class="hl-2">are</span><span class="hl-1"> </span><span class="hl-2">incompatible</span><span class="hl-1">.</span><br/><span class="hl-1">    </span><span class="hl-2">Type</span><span class="hl-1"> </span><span class="hl-6">&#39;new (input: SomeCommandInput) =&gt; SomeCommand&#39;</span><span class="hl-1"> </span><span class="hl-2">is</span><span class="hl-1"> </span><span class="hl-2">not</span><span class="hl-1"> </span><span class="hl-2">assignable</span><span class="hl-1"> </span><span class="hl-2">to</span><span class="hl-1"> </span><span class="hl-2">type</span><span class="hl-1"> </span><span class="hl-6">&#39;new (input: SomeCommandInput) =&gt; AwsCommand&lt;SomeCommandInput, MetadataBearer, any, any&gt;&#39;</span><span class="hl-1">.</span><br/><span class="hl-1">      </span><span class="hl-2">Construct</span><span class="hl-1"> </span><span class="hl-2">signature</span><span class="hl-1"> </span><span class="hl-5">return</span><span class="hl-1"> </span><span class="hl-2">types</span><span class="hl-1"> </span><span class="hl-6">&#39;SomeCommand&#39;</span><span class="hl-1"> </span><span class="hl-2">and</span><span class="hl-1"> </span><span class="hl-6">&#39;AwsCommand&lt;SomeCommandInput, MetadataBearer, any, any&gt;&#39;</span><span class="hl-1"> </span><span class="hl-2">are</span><span class="hl-1"> </span><span class="hl-2">incompatible</span><span class="hl-1">.</span><br/><span class="hl-1">        </span><span class="hl-2">The</span><span class="hl-1"> </span><span class="hl-2">types</span><span class="hl-1"> </span><span class="hl-0">of</span><span class="hl-1"> </span><span class="hl-6">&#39;middlewareStack.concat&#39;</span><span class="hl-1"> </span><span class="hl-2">are</span><span class="hl-1"> </span><span class="hl-2">incompatible</span><span class="hl-1"> </span><span class="hl-2">between</span><span class="hl-1"> </span><span class="hl-2">these</span><span class="hl-1"> </span><span class="hl-2">types</span><span class="hl-1">.</span><br/><span class="hl-1">          </span><span class="hl-2">Type</span><span class="hl-1"> </span><span class="hl-6">&#39;&lt;InputType extends SomeCommandInput, OutputType extends SomeCommandOutput&gt;(from: MiddlewareStack&lt;InputType, OutputType&gt;) =&gt; MiddlewareStack&lt;...&gt;&#39;</span><span class="hl-1"> </span><span class="hl-2">is</span><span class="hl-1"> </span><span class="hl-2">not</span><span class="hl-1"> </span><span class="hl-2">assignable</span><span class="hl-1"> </span><span class="hl-2">to</span><span class="hl-1"> </span><span class="hl-2">type</span><span class="hl-1"> </span><span class="hl-6">&#39;&lt;InputType extends SomeCommandInput, OutputType extends MetadataBearer&gt;(from: MiddlewareStack&lt;InputType, OutputType&gt;) =&gt; MiddlewareStack&lt;...&gt;&#39;</span><span class="hl-1">.</span><br/><span class="hl-1">            </span><span class="hl-2">Types</span><span class="hl-1"> </span><span class="hl-0">of</span><span class="hl-1"> </span><span class="hl-2">parameters</span><span class="hl-1"> </span><span class="hl-6">&#39;from&#39;</span><span class="hl-1"> </span><span class="hl-2">and</span><span class="hl-1"> </span><span class="hl-6">&#39;from&#39;</span><span class="hl-1"> </span><span class="hl-2">are</span><span class="hl-1"> </span><span class="hl-2">incompatible</span><span class="hl-1">.</span><br/><span class="hl-1">              </span><span class="hl-2">Type</span><span class="hl-1"> </span><span class="hl-6">&#39;MiddlewareStack&lt;InputType, OutputType&gt;&#39;</span><span class="hl-1"> </span><span class="hl-2">is</span><span class="hl-1"> </span><span class="hl-2">not</span><span class="hl-1"> </span><span class="hl-2">assignable</span><span class="hl-1"> </span><span class="hl-2">to</span><span class="hl-1"> </span><span class="hl-2">type</span><span class="hl-1"> </span><span class="hl-6">&#39;MiddlewareStack&lt;InputType, SomeCommandOutput&gt;&#39;</span><span class="hl-1">.</span><br/><span class="hl-1">                </span><span class="hl-2">Types</span><span class="hl-1"> </span><span class="hl-0">of</span><span class="hl-1"> </span><span class="hl-2">property</span><span class="hl-1"> </span><span class="hl-6">&#39;addRelativeTo&#39;</span><span class="hl-1"> </span><span class="hl-2">are</span><span class="hl-1"> </span><span class="hl-2">incompatible</span><span class="hl-1">.</span><br/><span class="hl-1">                  </span><span class="hl-2">Type</span><span class="hl-1"> </span><span class="hl-6">&#39;(middleware: MiddlewareType&lt;InputType, OutputType&gt;, options: RelativeMiddlewareOptions) =&gt; void&#39;</span><span class="hl-1"> </span><span class="hl-2">is</span><span class="hl-1"> </span><span class="hl-2">not</span><span class="hl-1"> </span><span class="hl-2">assignable</span><span class="hl-1"> </span><span class="hl-2">to</span><span class="hl-1"> </span><span class="hl-2">type</span><span class="hl-1"> </span><span class="hl-6">&#39;(middleware: MiddlewareType&lt;InputType, SomeCommandOutput&gt;, options: RelativeMiddlewareOptions) =&gt; void&#39;</span><span class="hl-1">.</span><br/><span class="hl-1">                    </span><span class="hl-2">Types</span><span class="hl-1"> </span><span class="hl-0">of</span><span class="hl-1"> </span><span class="hl-2">parameters</span><span class="hl-1"> </span><span class="hl-6">&#39;middleware&#39;</span><span class="hl-1"> </span><span class="hl-2">and</span><span class="hl-1"> </span><span class="hl-6">&#39;middleware&#39;</span><span class="hl-1"> </span><span class="hl-2">are</span><span class="hl-1"> </span><span class="hl-2">incompatible</span><span class="hl-1">.</span><br/><span class="hl-1">                      </span><span class="hl-2">Type</span><span class="hl-1"> </span><span class="hl-6">&#39;MiddlewareType&lt;InputType, SomeCommandOutput&gt;&#39;</span><span class="hl-1"> </span><span class="hl-2">is</span><span class="hl-1"> </span><span class="hl-2">not</span><span class="hl-1"> </span><span class="hl-2">assignable</span><span class="hl-1"> </span><span class="hl-2">to</span><span class="hl-1"> </span><span class="hl-2">type</span><span class="hl-1"> </span><span class="hl-6">&#39;MiddlewareType&lt;InputType, OutputType&gt;&#39;</span><span class="hl-1">.</span><br/><span class="hl-1">                        </span><span class="hl-2">Type</span><span class="hl-1"> </span><span class="hl-6">&#39;InitializeMiddleware&lt;InputType, SomeCommandOutput&gt;&#39;</span><span class="hl-1"> </span><span class="hl-2">is</span><span class="hl-1"> </span><span class="hl-2">not</span><span class="hl-1"> </span><span class="hl-2">assignable</span><span class="hl-1"> </span><span class="hl-2">to</span><span class="hl-1"> </span><span class="hl-2">type</span><span class="hl-1"> </span><span class="hl-6">&#39;MiddlewareType&lt;InputType, OutputType&gt;&#39;</span><span class="hl-1">.</span><br/><span class="hl-1">                          </span><span class="hl-2">Type</span><span class="hl-1"> </span><span class="hl-6">&#39;InitializeMiddleware&lt;InputType, SomeCommandOutput&gt;&#39;</span><span class="hl-1"> </span><span class="hl-2">is</span><span class="hl-1"> </span><span class="hl-2">not</span><span class="hl-1"> </span><span class="hl-2">assignable</span><span class="hl-1"> </span><span class="hl-2">to</span><span class="hl-1"> </span><span class="hl-2">type</span><span class="hl-1"> </span><span class="hl-6">&#39;InitializeMiddleware&lt;InputType, OutputType&gt;&#39;</span><span class="hl-1">.</span><br/><span class="hl-1">                            </span><span class="hl-2">Call</span><span class="hl-1"> </span><span class="hl-2">signature</span><span class="hl-1"> </span><span class="hl-5">return</span><span class="hl-1"> </span><span class="hl-2">types</span><span class="hl-1"> </span><span class="hl-6">&#39;InitializeHandler&lt;InputType, SomeCommandOutput&gt;&#39;</span><span class="hl-1"> </span><span class="hl-2">and</span><span class="hl-1"> </span><span class="hl-6">&#39;InitializeHandler&lt;InputType, OutputType&gt;&#39;</span><span class="hl-1"> </span><span class="hl-2">are</span><span class="hl-1"> </span><span class="hl-2">incompatible</span><span class="hl-1">.</span><br/><span class="hl-1">                              </span><span class="hl-2">Type</span><span class="hl-1"> </span><span class="hl-6">&#39;Promise&lt;InitializeHandlerOutput&lt;SomeCommandOutput&gt;&gt;&#39;</span><span class="hl-1"> </span><span class="hl-2">is</span><span class="hl-1"> </span><span class="hl-2">not</span><span class="hl-1"> </span><span class="hl-2">assignable</span><span class="hl-1"> </span><span class="hl-2">to</span><span class="hl-1"> </span><span class="hl-2">type</span><span class="hl-1"> </span><span class="hl-6">&#39;Promise&lt;InitializeHandlerOutput&lt;OutputType&gt;&gt;&#39;</span><span class="hl-1">.</span><br/><span class="hl-1">                                </span><span class="hl-2">Type</span><span class="hl-1"> </span><span class="hl-6">&#39;InitializeHandlerOutput&lt;SomeCommandOutput&gt;&#39;</span><span class="hl-1"> </span><span class="hl-2">is</span><span class="hl-1"> </span><span class="hl-2">not</span><span class="hl-1"> </span><span class="hl-2">assignable</span><span class="hl-1"> </span><span class="hl-2">to</span><span class="hl-1"> </span><span class="hl-2">type</span><span class="hl-1"> </span><span class="hl-6">&#39;InitializeHandlerOutput&lt;OutputType&gt;&#39;</span><span class="hl-1">.</span><br/><span class="hl-1">                                  </span><span class="hl-2">Types</span><span class="hl-1"> </span><span class="hl-0">of</span><span class="hl-1"> </span><span class="hl-2">property</span><span class="hl-1"> </span><span class="hl-6">&#39;output&#39;</span><span class="hl-1"> </span><span class="hl-2">are</span><span class="hl-1"> </span><span class="hl-2">incompatible</span><span class="hl-1">.</span><br/><span class="hl-1">                                    </span><span class="hl-2">Type</span><span class="hl-1"> </span><span class="hl-6">&#39;SomeCommandOutput&#39;</span><span class="hl-1"> </span><span class="hl-2">is</span><span class="hl-1"> </span><span class="hl-2">not</span><span class="hl-1"> </span><span class="hl-2">assignable</span><span class="hl-1"> </span><span class="hl-2">to</span><span class="hl-1"> </span><span class="hl-2">type</span><span class="hl-1"> </span><span class="hl-6">&#39;OutputType&#39;</span><span class="hl-1">.</span><br/><span class="hl-1">                                      </span><span class="hl-6">&#39;SomeCommandOutput&#39;</span><span class="hl-1"> </span><span class="hl-2">is</span><span class="hl-1"> </span><span class="hl-2">assignable</span><span class="hl-1"> </span><span class="hl-2">to</span><span class="hl-1"> </span><span class="hl-2">the</span><span class="hl-1"> </span><span class="hl-2">constraint</span><span class="hl-1"> </span><span class="hl-0">of</span><span class="hl-1"> </span><span class="hl-2">type</span><span class="hl-1"> </span><span class="hl-6">&#39;OutputType&#39;</span><span class="hl-1">, </span><span class="hl-2">but</span><span class="hl-1"> </span><span class="hl-6">&#39;OutputType&#39;</span><span class="hl-1"> </span><span class="hl-2">could</span><span class="hl-1"> </span><span class="hl-2">be</span><span class="hl-1"> </span><span class="hl-2">instantiated</span><span class="hl-1"> </span><span class="hl-5">with</span><span class="hl-1"> </span><span class="hl-2">a</span><span class="hl-1"> </span><span class="hl-2">different</span><span class="hl-1"> </span><span class="hl-2">subtype</span><span class="hl-1"> </span><span class="hl-0">of</span><span class="hl-1"> </span><span class="hl-2">constraint</span><span class="hl-1"> </span><span class="hl-6">&#39;MetadataBearer&#39;</span><span class="hl-1">.</span>
+</code></pre>
+<p>This is a common problem when using the Amplify library.</p>
+<p>The solution for this is to force the version of the <code>@aws-sdk/types</code>
+matching your Clients to be installed on the top-level of <code>node_modules</code>.</p>
+<p>The easiest way to do this is to add the <code>@aws-sdk/types</code>
+in the selected version to <code>package.json</code> explicitly.</p>
+<p>However, depending on your project structure, you may need to force it differently.
+For example, when using <code>yarn</code>, you can add the <code>@aws-sdk/types</code> in selected version
+to the <a href="https://classic.yarnpkg.com/en/docs/selective-version-resolutions/">resolutions</a>
+section in <code>package.json</code>.</p>
+
+<a href="#order-of-mock-behaviors" id="order-of-mock-behaviors" style="color: inherit; text-decoration: none;">
+  <h3>Order of mock behaviors</h3>
+</a>
+<p>Wider Command matchers must be declared first,
+otherwise, they will take precedence over previous ones.</p>
+<p>In this case, all <code>PublishCommand</code> sends will return message ID <code>222</code>:</p>
+<pre><code class="language-typescript"><span class="hl-2">snsMock</span><br/><span class="hl-1">  .</span><span class="hl-4">on</span><span class="hl-1">(</span><span class="hl-2">PublishCommand</span><span class="hl-1">, </span><span class="hl-2">myInput</span><span class="hl-1">).</span><span class="hl-4">resolves</span><span class="hl-1">({</span><span class="hl-2">MessageId:</span><span class="hl-1"> </span><span class="hl-6">&#39;111&#39;</span><span class="hl-1">})</span><br/><span class="hl-1">  .</span><span class="hl-4">on</span><span class="hl-1">(</span><span class="hl-2">PublishCommand</span><span class="hl-1">).</span><span class="hl-4">resolves</span><span class="hl-1">({</span><span class="hl-2">MessageId:</span><span class="hl-1"> </span><span class="hl-6">&#39;222&#39;</span><span class="hl-1">});</span>
+</code></pre>
+<p>If the order of the declarations is switched, sends with input matching <code>myInput</code>
+will return ID <code>111</code> and all others <code>222</code>.</p>
+<p>It works similarly with <code>onAnyCommand()</code>.</p>
+
+<a href="#order-of-type-and-instance-mocks" id="order-of-type-and-instance-mocks" style="color: inherit; text-decoration: none;">
+  <h3>Order of type and instance mocks</h3>
+</a>
+<p>When you create both a Client type mock
+and a specific Client instance mock(s),
+you need to declare type mock last.
+Otherwise, the other instances will not be mocked.</p>
+<p>Right now if you create a mock for the Client type,
+and then mock a specific instance of this Client,
+with the order of mocking as here:</p>
+<pre><code class="language-typescript"><span class="hl-0">const</span><span class="hl-1"> </span><span class="hl-7">sns1</span><span class="hl-1"> = </span><span class="hl-0">new</span><span class="hl-1"> </span><span class="hl-4">SNSClient</span><span class="hl-1">({}); </span><span class="hl-9">// not mocked</span><br/><br/><span class="hl-4">mockClient</span><span class="hl-1">(</span><span class="hl-2">SNSClient</span><span class="hl-1">).</span><span class="hl-4">resolves</span><span class="hl-1">({</span><span class="hl-2">MessageId:</span><span class="hl-1"> </span><span class="hl-6">&#39;123&#39;</span><span class="hl-1">});</span><br/><br/><span class="hl-0">const</span><span class="hl-1"> </span><span class="hl-7">sns2</span><span class="hl-1"> = </span><span class="hl-0">new</span><span class="hl-1"> </span><span class="hl-4">SNSClient</span><span class="hl-1">({}); </span><span class="hl-9">// mocked</span><br/><span class="hl-4">mockClient</span><span class="hl-1">(</span><span class="hl-2">sns2</span><span class="hl-1">).</span><span class="hl-4">resolves</span><span class="hl-1">({</span><span class="hl-2">MessageId:</span><span class="hl-1"> </span><span class="hl-6">&#39;456&#39;</span><span class="hl-1">});</span><br/><br/><span class="hl-0">const</span><span class="hl-1"> </span><span class="hl-7">sns3</span><span class="hl-1"> = </span><span class="hl-0">new</span><span class="hl-1"> </span><span class="hl-4">SNSClient</span><span class="hl-1">({}); </span><span class="hl-9">// not mocked</span>
+</code></pre>
+<p>Declaring mocks in this order will fix it:</p>
+<pre><code class="language-typescript"><span class="hl-0">const</span><span class="hl-1"> </span><span class="hl-7">sns1</span><span class="hl-1"> = </span><span class="hl-0">new</span><span class="hl-1"> </span><span class="hl-4">SNSClient</span><span class="hl-1">({}); </span><span class="hl-9">// mocked - default</span><br/><br/><span class="hl-0">const</span><span class="hl-1"> </span><span class="hl-7">sns2</span><span class="hl-1"> = </span><span class="hl-0">new</span><span class="hl-1"> </span><span class="hl-4">SNSClient</span><span class="hl-1">({}); </span><span class="hl-9">// mocked</span><br/><span class="hl-4">mockClient</span><span class="hl-1">(</span><span class="hl-2">sns2</span><span class="hl-1">).</span><span class="hl-4">resolves</span><span class="hl-1">({</span><span class="hl-2">MessageId:</span><span class="hl-1"> </span><span class="hl-6">&#39;456&#39;</span><span class="hl-1">});</span><br/><br/><span class="hl-4">mockClient</span><span class="hl-1">(</span><span class="hl-2">SNSClient</span><span class="hl-1">).</span><span class="hl-4">resolves</span><span class="hl-1">({</span><span class="hl-2">MessageId:</span><span class="hl-1"> </span><span class="hl-6">&#39;123&#39;</span><span class="hl-1">});</span><br/><br/><span class="hl-0">const</span><span class="hl-1"> </span><span class="hl-7">sns3</span><span class="hl-1"> = </span><span class="hl-0">new</span><span class="hl-1"> </span><span class="hl-4">SNSClient</span><span class="hl-1">({}); </span><span class="hl-9">// mocked - default</span>
+</code></pre>
+<p>PRs to fix this are welcome.</p>
+</div></div><div class="col-4 col-menu menu-sticky-wrap menu-highlight"><nav class="tsd-navigation primary"><ul><li class="current"><a href="modules.html">Exports</a></li></ul></nav><nav class="tsd-navigation secondary menu-sticky"><ul><li class="tsd-kind-class tsd-has-type-parameter"><a href="classes/AwsStub.html" class="tsd-kind-icon">Aws<wbr/>Stub</a></li><li class="tsd-kind-class tsd-has-type-parameter"><a href="classes/CommandBehavior.html" class="tsd-kind-icon">Command<wbr/>Behavior</a></li><li class="tsd-kind-interface"><a href="interfaces/AwsError.html" class="tsd-kind-icon">Aws<wbr/>Error</a></li><li class="tsd-kind-type-alias tsd-has-type-parameter"><a href="modules.html#AwsClientBehavior" class="tsd-kind-icon">Aws<wbr/>Client<wbr/>Behavior</a></li><li class="tsd-kind-type-alias tsd-has-type-parameter"><a href="modules.html#AwsClientStub" class="tsd-kind-icon">Aws<wbr/>Client<wbr/>Stub</a></li><li class="tsd-kind-function tsd-has-type-parameter"><a href="modules.html#mockClient" class="tsd-kind-icon">mock<wbr/>Client</a></li><li class="tsd-kind-function"><a href="modules.html#mockLibStorageUpload" class="tsd-kind-icon">mock<wbr/>Lib<wbr/>Storage<wbr/>Upload</a></li></ul></nav></div></div></div><footer class="with-border-bottom"><div class="container"><h2>Legend</h2><div class="tsd-legend-group"><ul class="tsd-legend"><li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li><li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li></ul><ul class="tsd-legend"><li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li></ul></div><h2>Settings</h2><p>Theme <select id="theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></p></div></footer><div class="container tsd-generator"><p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></div><div class="overlay"></div><script src="assets/main.js"></script></body></html>
