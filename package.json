@@ -32,7 +32,9 @@
     "size": "size-limit",
     "size:analyze": "size-limit --why",
     "release": "standard-version",
-    "generate-compatibility": "ts-node ./misc/generate-compatibility.ts"
+    "generate-compatibility": "ts-node ./misc/generate-compatibility.ts",
+    "verdaccio": "rimraf verdaccio-storage && verdaccio -c verdaccio.yml",
+    "local-publish": "npm publish --registry http://localhost:4873/"
   },
   "main": "dist/cjs/index.js",
   "types": "dist/types/index.d.ts",
@@ -77,7 +79,8 @@
     "ts-node": "10.2.1",
     "tsd": "0.17.0",
     "typedoc": "0.22.3",
-    "typescript": "4.2.4"
+    "typescript": "4.2.4",
+    "verdaccio": "5.1.5"
   },
   "jest": {
     "preset": "ts-jest",
