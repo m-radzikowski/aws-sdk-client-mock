@@ -1,8 +1,8 @@
 # Compatibility table
 
-Generated automatically for **AWS SDK v3 Client mock v0.5.4**
+Generated automatically for **AWS SDK v3 Client mock v0.5.5**
 
-Compatible clients: 277 of 277
+Compatible clients: 277 of 278
 
 | Client | Package | Version | Compatible |
 |---|---|---|---|
@@ -146,6 +146,7 @@ Compatible clients: 277 of 277
 | IoTThingsGraph | [@aws-sdk/client-iotthingsgraph](https://www.npmjs.com/package/@aws-sdk/client-iotthingsgraph) | 3.31.0 | Yes ✅ |
 | Ivs | [@aws-sdk/client-ivs](https://www.npmjs.com/package/@aws-sdk/client-ivs) | 3.31.0 | Yes ✅ |
 | Kafka | [@aws-sdk/client-kafka](https://www.npmjs.com/package/@aws-sdk/client-kafka) | 3.31.0 | Yes ✅ |
+| KafkaConnect | [@aws-sdk/client-kafkaconnect](https://www.npmjs.com/package/@aws-sdk/client-kafkaconnect) | 3.32.0 | No ❌ |
 | Kendra | [@aws-sdk/client-kendra](https://www.npmjs.com/package/@aws-sdk/client-kendra) | 3.31.0 | Yes ✅ |
 | KinesisAnalyticsV2 | [@aws-sdk/client-kinesis-analytics-v2](https://www.npmjs.com/package/@aws-sdk/client-kinesis-analytics-v2) | 3.31.0 | Yes ✅ |
 | KinesisAnalytics | [@aws-sdk/client-kinesis-analytics](https://www.npmjs.com/package/@aws-sdk/client-kinesis-analytics) | 3.31.0 | Yes ✅ |
@@ -183,7 +184,7 @@ Compatible clients: 277 of 277
 | MediaStoreData | [@aws-sdk/client-mediastore-data](https://www.npmjs.com/package/@aws-sdk/client-mediastore-data) | 3.31.0 | Yes ✅ |
 | MediaStore | [@aws-sdk/client-mediastore](https://www.npmjs.com/package/@aws-sdk/client-mediastore) | 3.31.0 | Yes ✅ |
 | MediaTailor | [@aws-sdk/client-mediatailor](https://www.npmjs.com/package/@aws-sdk/client-mediatailor) | 3.31.0 | Yes ✅ |
-| Memorydb | [@aws-sdk/client-memorydb](https://www.npmjs.com/package/@aws-sdk/client-memorydb) | 3.31.0 | Yes ✅ |
+| Memorydb | [@aws-sdk/client-memorydb](https://www.npmjs.com/package/@aws-sdk/client-memorydb) | 3.32.0 | Yes ✅ |
 | Mgn | [@aws-sdk/client-mgn](https://www.npmjs.com/package/@aws-sdk/client-mgn) | 3.31.0 | Yes ✅ |
 | MigrationHub | [@aws-sdk/client-migration-hub](https://www.npmjs.com/package/@aws-sdk/client-migration-hub) | 3.31.0 | Yes ✅ |
 | MigrationHubConfig | [@aws-sdk/client-migrationhub-config](https://www.npmjs.com/package/@aws-sdk/client-migrationhub-config) | 3.31.0 | Yes ✅ |
@@ -195,7 +196,7 @@ Compatible clients: 277 of 277
 | NetworkFirewall | [@aws-sdk/client-network-firewall](https://www.npmjs.com/package/@aws-sdk/client-network-firewall) | 3.31.0 | Yes ✅ |
 | NetworkManager | [@aws-sdk/client-networkmanager](https://www.npmjs.com/package/@aws-sdk/client-networkmanager) | 3.31.0 | Yes ✅ |
 | Nimble | [@aws-sdk/client-nimble](https://www.npmjs.com/package/@aws-sdk/client-nimble) | 3.31.0 | Yes ✅ |
-| Opensearch | [@aws-sdk/client-opensearch](https://www.npmjs.com/package/@aws-sdk/client-opensearch) | 3.31.0 | Yes ✅ |
+| Opensearch | [@aws-sdk/client-opensearch](https://www.npmjs.com/package/@aws-sdk/client-opensearch) | 3.32.0 | Yes ✅ |
 | OpsWorks | [@aws-sdk/client-opsworks](https://www.npmjs.com/package/@aws-sdk/client-opsworks) | 3.31.0 | Yes ✅ |
 | OpsWorksCM | [@aws-sdk/client-opsworkscm](https://www.npmjs.com/package/@aws-sdk/client-opsworkscm) | 3.31.0 | Yes ✅ |
 | Organizations | [@aws-sdk/client-organizations](https://www.npmjs.com/package/@aws-sdk/client-organizations) | 3.31.0 | Yes ✅ |
