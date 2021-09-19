@@ -1,0 +1,6 @@
+storage: verdaccio-storage
+
+packages:
+  "**":
+    access: $all
+    publish: $all

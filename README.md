@@ -272,6 +272,7 @@ await s3Upload.done();
 
 You can call `mockLibStorageUpload()` without providing an S3Client mock.
 In that case, the client mock will be created and returned from the function.
+However, you still need to have `@aws-sdk/client-s3` installed as a dependency.
 
 #### Paginated operations
 
