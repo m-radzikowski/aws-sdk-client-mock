@@ -23,6 +23,7 @@
     "pretest": "rimraf coverage/",
     "test": "jest --coverage",
     "test-types": "tsd",
+    "test-e2e": "ts-node test-e2e/run-e2e-test.ts",
     "lint": "eslint .",
     "typedoc": "typedoc",
     "build:cjs": "tsc -p tsconfig.json",
@@ -32,7 +33,6 @@
     "size": "size-limit",
     "size:analyze": "size-limit --why",
     "release": "standard-version",
-    "generate-compatibility": "ts-node ./misc/generate-compatibility.ts",
     "verdaccio": "rimraf verdaccio-storage && verdaccio -c verdaccio.yml",
     "local-publish": "npm publish --registry http://localhost:4873/"
   },
@@ -71,7 +71,6 @@
     "husky": "7.0.2",
     "jest": "27.2.0",
     "lint-staged": "11.1.2",
-    "npms-cli": "1.6.0",
     "rimraf": "3.0.2",
     "size-limit": "5.0.3",
     "standard-version": "9.3.1",
@@ -85,7 +84,8 @@
   "jest": {
     "preset": "ts-jest",
     "resetMocks": true,
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "modulePathIgnorePatterns": ["test-e2e", "verdaccio-storage"]
   },
   "lint-staged": {
     "*.ts": "yarn lint"

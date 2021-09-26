@@ -1,0 +1,29 @@
+name: e2e
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build_and_release:
+    name: Build and release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0 # fetch full history, so changelog can be generated
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+          registry-url: 'https://registry.npmjs.org'
+
+      - run: yarn run ci
+
+      - run: yarn run build
+
+      - run: yarn run release
+
+      - name: run e2e tests
+        run: |
+          yarn run verdaccio &
+          yarn run local-publish
+          yarn run test-e2e

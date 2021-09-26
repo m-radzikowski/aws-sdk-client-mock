@@ -39,11 +39,11 @@ jobs:
 
       - run: yarn run release
 
-      - run: yarn run generate-compatibility
-      - name: commit compatibility table
+      - name: run e2e tests
         run: |
-          git add compatibility.md
-          git diff-index --quiet HEAD || git commit -m 'docs: update compatibility table'
+          yarn run verdaccio &
+          yarn run local-publish
+          yarn run test-e2e
 
       - run: npm publish
         env:
