@@ -84,7 +84,8 @@
   "jest": {
     "preset": "ts-jest",
     "resetMocks": true,
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "modulePathIgnorePatterns": ["test-e2e", "verdaccio-storage"]
   },
   "lint-staged": {
     "*.ts": "yarn lint"
