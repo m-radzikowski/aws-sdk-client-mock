@@ -2,4 +2,3 @@
 *.js
 test-d/**
 dist/**
-compatibility/**

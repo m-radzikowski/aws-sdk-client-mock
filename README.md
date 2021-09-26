@@ -36,7 +36,6 @@ In action:
     - [Paginated operations](#paginated-operations)
 - [API Reference](#api-reference)
 - [AWS Lambda example](#aws-lambda-example)
-- [Compatibility](#compatibility)
 - [Caveats](#caveats)
   - [Mixed @aws-sdk/types versions](#mixed-aws-sdktypes-versions)
   - [Order of mock behaviors](#order-of-mock-behaviors)
@@ -379,10 +378,6 @@ it('SNS Client is called', async () => {
 ```
 
 For more examples, see the [unit tests](./test/mockClient.test.ts).
-
-## Compatibility
-
-See [compatibility table](compatibility.md) for AWS SDK v3 Clients.
 
 ## Caveats
 
