@@ -48,10 +48,6 @@
     "sinon": "^11.1.1",
     "tslib": "^2.1.0"
   },
-  "peerDependencies": {
-    "@aws-sdk/client-s3": "^3.0.0",
-    "@aws-sdk/types": "^3.0.0"
-  },
   "devDependencies": {
     "@aws-sdk/client-dynamodb": "3.31.0",
     "@aws-sdk/client-s3": "3.31.0",
@@ -85,7 +81,10 @@
     "preset": "ts-jest",
     "resetMocks": true,
     "testEnvironment": "node",
-    "modulePathIgnorePatterns": ["test-e2e", "verdaccio-storage"]
+    "modulePathIgnorePatterns": [
+      "test-e2e",
+      "verdaccio-storage"
+    ]
   },
   "lint-staged": {
     "*.ts": "yarn lint"
