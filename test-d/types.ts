@@ -1,5 +1,5 @@
 import {AwsClientStub, mockClient} from '../src';
-import {ListTopicsCommand, PublishCommand, SNSClient} from '@aws-sdk/client-sns';
+import {ListTopicsCommand, PublishCommand, PublishCommandOutput, SNSClient} from '@aws-sdk/client-sns';
 import {expectError, expectType} from 'tsd';
 
 expectType<AwsClientStub<SNSClient>>(mockClient(SNSClient));
@@ -26,3 +26,7 @@ expectError(mockClient(SNSClient).on(ListTopicsCommand, {TopicArn: '', Message: 
 // invalid output types
 expectError(mockClient(SNSClient).on(PublishCommand).resolves({MessageId: '', Topics: []}));
 expectError(mockClient(SNSClient).on(PublishCommand).resolves({Topics: []}));
+
+// Sinon Spy
+expectType<PublishCommand>(mockClient(SNSClient).commandCalls(PublishCommand)[0].args[0]);
+expectType<Promise<PublishCommandOutput>>(mockClient(SNSClient).commandCalls(PublishCommand)[0].returnValue);

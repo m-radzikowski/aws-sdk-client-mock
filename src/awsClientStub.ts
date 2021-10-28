@@ -42,11 +42,11 @@ export class AwsStub<TInput extends object, TOutput extends MetadataBearer> impl
      *
      * Install `@types/sinon` for TypeScript typings.
      */
-    public send: SinonStub<[AwsCommand<TInput, TOutput>], unknown>;
+    public send: SinonStub<[AwsCommand<TInput, TOutput>], Promise<TOutput>>;
 
     private readonly anyCommandBehavior: CommandBehavior<TInput, TOutput, TOutput>;
 
-    constructor(send: SinonStub<[AwsCommand<TInput, TOutput>], unknown>) {
+    constructor(send: SinonStub<[AwsCommand<TInput, TOutput>], Promise<TOutput>>) {
         this.send = send;
         this.anyCommandBehavior = new CommandBehavior(this, send);
     }
@@ -78,15 +78,27 @@ export class AwsStub<TInput extends object, TOutput extends MetadataBearer> impl
      * Returns recorded calls to the stub.
      * Clear history with {@link resetHistory} or {@link reset}.
      */
-    calls(): SinonSpyCall<[AwsCommand<TInput, TOutput>], unknown>[] {
+    calls(): SinonSpyCall<[AwsCommand<TInput, TOutput>], Promise<TOutput>>[] {
         return this.send.getCalls();
     }
 
     /**
      * Returns n-th recorded call to the stub.
      */
-    call(n: number): SinonSpyCall<[AwsCommand<TInput, TOutput>], unknown> {
+    call(n: number): SinonSpyCall<[AwsCommand<TInput, TOutput>], Promise<TOutput>> {
         return this.send.getCall(n);
+    }
+
+    commandCalls<TCmd extends AwsCommand<any, any>,
+        TCmdInput extends TCmd extends AwsCommand<infer TIn, any> ? TIn : never,
+        TCmdOutput extends TCmd extends AwsCommand<any, infer TOut> ? TOut : never,
+        >(
+        commandType: new (input: TCmdInput) => TCmd,
+    ): SinonSpyCall<[TCmd], Promise<TCmdOutput>>[] {
+        return this.send.getCalls()
+            .filter((call): call is SinonSpyCall<[TCmd], Promise<TCmdOutput>> =>
+                call.args[0] instanceof commandType,
+            );
     }
 
     /**

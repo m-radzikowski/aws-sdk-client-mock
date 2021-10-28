@@ -104,6 +104,22 @@ describe('spying on the mock', () => {
         expect(snsMock.call(1).args[0].input).toStrictEqual(publishCmd2.input);
     });
 
+    it('finds calls of given command type', async () => {
+        snsMock.resolves({
+            MessageId: uuid1,
+        });
+
+        const sns = new SNSClient({});
+        await sns.send(publishCmd1);
+        await sns.send(new ListTopicsCommand({}));
+
+        expect(snsMock.calls()).toHaveLength(2);
+        expect(snsMock.commandCalls(PublishCommand)).toHaveLength(1);
+
+        expect(snsMock.commandCalls(PublishCommand)[0].args[0].input).toStrictEqual(publishCmd1.input);
+        expect(snsMock.commandCalls(PublishCommand)[0].returnValue).toStrictEqual(Promise.resolve({MessageId: uuid1}));
+    });
+
     it('resets calls history', async () => {
         const sns = new SNSClient({});
         await sns.send(publishCmd1);
