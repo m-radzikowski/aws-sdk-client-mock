@@ -89,6 +89,12 @@ export class AwsStub<TInput extends object, TOutput extends MetadataBearer> impl
         return this.send.getCall(n);
     }
 
+    /**
+     * Returns recorded calls of given Command only.
+     * @param commandType Command type to match
+     * @param input Command payload to match
+     * @param strict Should the payload match strictly (default false, will match if all defined payload properties match)
+     */
     commandCalls<TCmd extends AwsCommand<any, any>,
         TCmdInput extends TCmd extends AwsCommand<infer TIn, any> ? TIn : never,
         TCmdOutput extends TCmd extends AwsCommand<any, infer TOut> ? TOut : never,
