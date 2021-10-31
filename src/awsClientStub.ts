@@ -94,11 +94,15 @@ export class AwsStub<TInput extends object, TOutput extends MetadataBearer> impl
         TCmdOutput extends TCmd extends AwsCommand<any, infer TOut> ? TOut : never,
         >(
         commandType: new (input: TCmdInput) => TCmd,
+        input?: Partial<TCmdInput>,
+        strict?: boolean,
     ): SinonSpyCall<[TCmd], Promise<TCmdOutput>>[] {
         return this.send.getCalls()
-            .filter((call): call is SinonSpyCall<[TCmd], Promise<TCmdOutput>> =>
-                call.args[0] instanceof commandType,
-            );
+            .filter((call): call is SinonSpyCall<[TCmd], Promise<TCmdOutput>> => {
+                const isProperType = call.args[0] instanceof commandType;
+                const inputMatches = this.createInputMatcher(input, strict).test(call.args[0]);
+                return isProperType && inputMatches;
+            });
     }
 
     /**
