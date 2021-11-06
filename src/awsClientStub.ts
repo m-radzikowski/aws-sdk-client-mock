@@ -42,11 +42,11 @@ export class AwsStub<TInput extends object, TOutput extends MetadataBearer> impl
      *
      * Install `@types/sinon` for TypeScript typings.
      */
-    public send: SinonStub<[AwsCommand<TInput, TOutput>], unknown>;
+    public send: SinonStub<[AwsCommand<TInput, TOutput>], Promise<TOutput>>;
 
     private readonly anyCommandBehavior: CommandBehavior<TInput, TOutput, TOutput>;
 
-    constructor(send: SinonStub<[AwsCommand<TInput, TOutput>], unknown>) {
+    constructor(send: SinonStub<[AwsCommand<TInput, TOutput>], Promise<TOutput>>) {
         this.send = send;
         this.anyCommandBehavior = new CommandBehavior(this, send);
     }
@@ -78,15 +78,37 @@ export class AwsStub<TInput extends object, TOutput extends MetadataBearer> impl
      * Returns recorded calls to the stub.
      * Clear history with {@link resetHistory} or {@link reset}.
      */
-    calls(): SinonSpyCall<[AwsCommand<TInput, TOutput>], unknown>[] {
+    calls(): SinonSpyCall<[AwsCommand<TInput, TOutput>], Promise<TOutput>>[] {
         return this.send.getCalls();
     }
 
     /**
      * Returns n-th recorded call to the stub.
      */
-    call(n: number): SinonSpyCall<[AwsCommand<TInput, TOutput>], unknown> {
+    call(n: number): SinonSpyCall<[AwsCommand<TInput, TOutput>], Promise<TOutput>> {
         return this.send.getCall(n);
+    }
+
+    /**
+     * Returns recorded calls of given Command only.
+     * @param commandType Command type to match
+     * @param input Command payload to match
+     * @param strict Should the payload match strictly (default false, will match if all defined payload properties match)
+     */
+    commandCalls<TCmd extends AwsCommand<any, any>,
+        TCmdInput extends TCmd extends AwsCommand<infer TIn, any> ? TIn : never,
+        TCmdOutput extends TCmd extends AwsCommand<any, infer TOut> ? TOut : never,
+        >(
+        commandType: new (input: TCmdInput) => TCmd,
+        input?: Partial<TCmdInput>,
+        strict?: boolean,
+    ): SinonSpyCall<[TCmd], Promise<TCmdOutput>>[] {
+        return this.send.getCalls()
+            .filter((call): call is SinonSpyCall<[TCmd], Promise<TCmdOutput>> => {
+                const isProperType = call.args[0] instanceof commandType;
+                const inputMatches = this.createInputMatcher(input, strict).test(call.args[0]);
+                return isProperType && inputMatches;
+            });
     }
 
     /**

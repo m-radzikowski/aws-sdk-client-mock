@@ -34,6 +34,7 @@ In action:
     - [DynamoDB DocumentClient](#dynamodb-documentclient)
     - [Lib Storage Upload](#lib-storage-upload)
     - [Paginated operations](#paginated-operations)
+  - [Inspect](#inspect)
 - [API Reference](#api-reference)
 - [AWS Lambda example](#aws-lambda-example)
 - [Caveats](#caveats)
@@ -212,20 +213,6 @@ snsMock
     });
 ```
 
-Inspect received calls:
-
-```typescript
-snsMock.calls(); // all received calls
-snsMock.call(0); // first received call
-```
-
-Under the hood, the library uses [Sinon.js](https://sinonjs.org/) `stub`.
-You can get the stub instance to configure and use it directly:
-
-```typescript
-const snsSendStub = snsMock.send;
-```
-
 #### DynamoDB DocumentClient
 
 You can mock the `DynamoDBDocumentClient` just like any other Client:
@@ -297,6 +284,35 @@ const items = [];
 for await (const page of paginator) {
     items.push(...page.Items || []);
 }
+```
+
+### Inspect
+
+Inspect received calls:
+
+```typescript
+snsMock.calls(); // all received calls
+snsMock.call(0); // first received call
+```
+
+Get calls of a specified command:
+
+```typescript
+snsMock.commandCalls(PublishCommand)
+```
+
+Get calls of a specified command with given payload
+(you can force strict matching by passing third param `strict: true`):
+
+```typescript
+snsMock.commandCalls(PublishCommand, {Message: 'My message'})
+```
+
+Under the hood, the library uses [Sinon.js](https://sinonjs.org/) `stub`.
+You can get the stub instance to configure and use it directly:
+
+```typescript
+const snsSendStub = snsMock.send;
 ```
 
 ## API Reference
