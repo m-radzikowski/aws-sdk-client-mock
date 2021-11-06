@@ -23,7 +23,7 @@
     "pretest": "rimraf coverage/",
     "test": "jest --coverage",
     "test-types": "tsd",
-    "test-e2e": "ts-node test-e2e/run-e2e-test.ts",
+    "test-e2e": "ts-node test-e2e/simple/run.ts & ts-node test-e2e/libStorage/run.ts",
     "lint": "eslint .",
     "typedoc": "typedoc",
     "build:cjs": "tsc -p tsconfig.json",
