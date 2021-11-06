@@ -1,7 +1,7 @@
 {
   "name": "aws-sdk-client-mock",
   "description": "Easy and powerful mocking of AWS SDK v3 Clients",
-  "version": "0.5.5",
+  "version": "0.5.6",
   "license": "MIT",
   "author": {
     "name": "Maciej Radzikowski",
@@ -85,7 +85,10 @@
     "preset": "ts-jest",
     "resetMocks": true,
     "testEnvironment": "node",
-    "modulePathIgnorePatterns": ["test-e2e", "verdaccio-storage"]
+    "modulePathIgnorePatterns": [
+      "test-e2e",
+      "verdaccio-storage"
+    ]
   },
   "lint-staged": {
     "*.ts": "yarn lint"

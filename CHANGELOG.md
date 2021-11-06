@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.5.6](https://github.com/m-radzikowski/aws-sdk-client-mock/compare/v0.5.5...v0.5.6) (2021-11-06)
+
+
+### Features
+
+* getting mock calls with command type and payload filter ([#61](https://github.com/m-radzikowski/aws-sdk-client-mock/issues/61)) ([b3f3250](https://github.com/m-radzikowski/aws-sdk-client-mock/commit/b3f32507162e7e0054e40807c9119faf5266f969))
+
 ### [0.5.5](https://github.com/m-radzikowski/aws-sdk-client-mock/compare/v0.5.4...v0.5.5) (2021-09-19)
 
 
