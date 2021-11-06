@@ -36,9 +36,29 @@
     "verdaccio": "rimraf verdaccio-storage && verdaccio -c verdaccio.yml",
     "local-publish": "npm publish --registry http://localhost:4873/"
   },
+  "exports": {
+    ".": {
+      "import": "./dist/es/index.js",
+      "require": "./dist/cjs/index.js"
+    },
+    "./libStorage": {
+      "import": "./dist/es/libStorage.js",
+      "require": "./dist/cjs/libStorage.js"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "dist/types/index.d.ts"
+      ],
+      "libStorage": [
+        "dist/types/libStorage.d.ts"
+      ]
+    }
+  },
+  "module": "dist/es/index.js",
   "main": "dist/cjs/index.js",
   "types": "dist/types/index.d.ts",
-  "module": "dist/es/index.js",
   "files": [
     "dist",
     "src"
