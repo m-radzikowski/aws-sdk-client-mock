@@ -502,3 +502,11 @@ const sns3 = new SNSClient({}); // mocked - default
 ```
 
 PRs to fix this are welcome.
+
+### Using with Mocha
+
+When testing with Mocha, call `mockClient()`
+in the `beforeEach()` method, not in the global scope,
+to prevent overriding the mock between test files.
+See [this](https://github.com/m-radzikowski/aws-sdk-client-mock/issues/64)
+for more details.
