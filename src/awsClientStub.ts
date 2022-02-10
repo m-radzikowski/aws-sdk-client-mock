@@ -1,5 +1,6 @@
 import {Client, Command, MetadataBearer} from '@aws-sdk/types';
 import {match, SinonSpyCall, SinonStub} from 'sinon';
+import {mockClient} from './mockClient';
 
 export type AwsClientBehavior<TClient extends Client<any, any, any>> =
     TClient extends Client<infer TInput, infer TOutput, any> ? Behavior<TInput, TOutput, TOutput> : never;
@@ -44,22 +45,24 @@ export class AwsStub<TInput extends object, TOutput extends MetadataBearer> impl
      */
     public send: SinonStub<[AwsCommand<TInput, TOutput>], Promise<TOutput>>;
 
-    private readonly anyCommandBehavior: CommandBehavior<TInput, TOutput, TOutput>;
-
-    constructor(send: SinonStub<[AwsCommand<TInput, TOutput>], Promise<TOutput>>) {
+    constructor(
+        private client: Client<TInput, TOutput, any>,
+        send: SinonStub<[AwsCommand<TInput, TOutput>], Promise<TOutput>>,
+    ) {
         this.send = send;
-        this.anyCommandBehavior = new CommandBehavior(this, send);
     }
 
-    /** Resets stub's history and behavior. */
+    /**
+     * Resets stub. It will replace the stub with a new one, with clean history and behavior.
+     */
     reset(): AwsStub<TInput, TOutput> {
-        this.send.reset();
-        return this;
-    }
-
-    /** Resets stub's behavior. */
-    resetBehavior(): AwsStub<TInput, TOutput> {
-        this.send.resetBehavior();
+        /* sinon.stub.reset() does not remove the fakes which in some conditions can break subsequent stubs,
+         * so instead of calling send.reset(), we recreate the stub.
+         * See: https://github.com/sinonjs/sinon/issues/1572
+         * We are only affected by the broken reset() behavior of this bug, since we always use matchers.
+         */
+        const newStub = mockClient(this.client);
+        this.send = newStub.send;
         return this;
     }
 
@@ -131,8 +134,6 @@ export class AwsStub<TInput extends object, TOutput extends MetadataBearer> impl
      * Allows specifying the behavior for any Command with given input (parameters).
      *
      * If the input is not specified, the given behavior will be used for any Command with any input.
-     * This is no different from using {@link resolves}, {@link rejects}, etc. directly,
-     * but can be used for readability.
      * @param input Command payload to match
      * @param strict Should the payload match strictly (default false, will match if all defined payload properties match)
      */
@@ -149,27 +150,33 @@ export class AwsStub<TInput extends object, TOutput extends MetadataBearer> impl
 
     /**
      * Sets a successful response that will be returned from any `Client#send()` invocation.
+     *
+     * Same as `mock.onAnyCommand().resolves()`.
      * @param response Content to be returned
      */
     resolves(response: CommandResponse<TOutput>): AwsStub<TInput, TOutput> {
-        return this.anyCommandBehavior.resolves(response);
+        return this.onAnyCommand().resolves(response);
     }
 
     /**
      * Sets a failure response that will be returned from any `Client#send()` invocation.
      * The response will always be an `Error` instance.
+     *
+     * Same as `mock.onAnyCommand().rejects()`.
      * @param error Error text, Error instance or Error parameters to be returned
      */
     rejects(error?: string | Error | AwsError): AwsStub<TInput, TOutput> {
-        return this.anyCommandBehavior.rejects(error);
+        return this.onAnyCommand().rejects(error);
     }
 
     /**
      * Sets a function that will be called on any `Client#send()` invocation.
+     *
+     * Same as `mock.onAnyCommand().callsFake()`.
      * @param fn Function taking Command input and returning result
      */
     callsFake(fn: (input: any) => any): AwsStub<TInput, TOutput> {
-        return this.anyCommandBehavior.callsFake(fn);
+        return this.onAnyCommand().callsFake(fn);
     }
 
 }
