@@ -21,22 +21,6 @@ describe('setting up the mock', () => {
         expect(publish).toBeUndefined();
     });
 
-    it('resets mock behavior', async () => {
-        snsMock.resolves({
-            MessageId: uuid1,
-        });
-
-        const sns = new SNSClient({});
-        const publish1 = await sns.send(publishCmd1);
-
-        snsMock.resetBehavior();
-
-        const publish2 = await sns.send(publishCmd2);
-
-        expect(publish1.MessageId).toBe(uuid1);
-        expect(publish2).toBeUndefined();
-    });
-
     it('resets mock behavior on mock reset', async () => {
         snsMock.resolves({
             MessageId: uuid1,

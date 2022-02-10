@@ -66,12 +66,6 @@ export class AwsStub<TInput extends object, TOutput extends MetadataBearer> impl
         return this;
     }
 
-    /** Resets stub's behavior. */
-    resetBehavior(): AwsStub<TInput, TOutput> {
-        this.send.resetBehavior();
-        return this;
-    }
-
     /** Resets stub's calls history. */
     resetHistory(): AwsStub<TInput, TOutput> {
         this.send.resetHistory();
