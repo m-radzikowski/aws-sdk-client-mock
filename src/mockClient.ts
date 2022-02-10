@@ -21,7 +21,7 @@ export const mockClient = <TInput extends object, TOutput extends MetadataBearer
 
     const sendStub = stub(instance, 'send') as SinonStub<[Command<TInput, any, TOutput, any, any>], Promise<TOutput>>;
 
-    return new AwsStub<TInput, TOutput>(sendStub);
+    return new AwsStub<TInput, TOutput>(instance, sendStub);
 };
 
 type ClassType<T> = {

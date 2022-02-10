@@ -1,5 +1,6 @@
 import {Client, Command, MetadataBearer} from '@aws-sdk/types';
 import {match, SinonSpyCall, SinonStub} from 'sinon';
+import {mockClient} from './mockClient';
 
 export type AwsClientBehavior<TClient extends Client<any, any, any>> =
     TClient extends Client<infer TInput, infer TOutput, any> ? Behavior<TInput, TOutput, TOutput> : never;
@@ -44,16 +45,24 @@ export class AwsStub<TInput extends object, TOutput extends MetadataBearer> impl
      */
     public send: SinonStub<[AwsCommand<TInput, TOutput>], Promise<TOutput>>;
 
-    private readonly anyCommandBehavior: CommandBehavior<TInput, TOutput, TOutput>;
-
-    constructor(send: SinonStub<[AwsCommand<TInput, TOutput>], Promise<TOutput>>) {
+    constructor(
+        private client: Client<TInput, TOutput, any>,
+        send: SinonStub<[AwsCommand<TInput, TOutput>], Promise<TOutput>>,
+    ) {
         this.send = send;
-        this.anyCommandBehavior = new CommandBehavior(this, send);
     }
 
-    /** Resets stub's history and behavior. */
+    /**
+     * Resets stub. It will replace the stub with a new one, with clean history and behavior.
+     */
     reset(): AwsStub<TInput, TOutput> {
-        this.send.reset();
+        /* sinon.stub.reset() does not remove the fakes which in some conditions can break subsequent stubs,
+         * so instead of calling send.reset(), we recreate the stub.
+         * See: https://github.com/sinonjs/sinon/issues/1572
+         * We are only affected by the broken reset() behavior of this bug, since we always use matchers.
+         */
+        const newStub = mockClient(this.client);
+        this.send = newStub.send;
         return this;
     }
 
