@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.6.0](https://github.com/m-radzikowski/aws-sdk-client-mock/compare/v0.5.6...v0.6.0) (2022-02-12)
+
+
+### ⚠ BREAKING CHANGES
+
+* recreate mock on reset() (#76)
+
+### Bug Fixes
+
+* recreate mock on reset() ([#76](https://github.com/m-radzikowski/aws-sdk-client-mock/issues/76)) ([9e1a873](https://github.com/m-radzikowski/aws-sdk-client-mock/commit/9e1a873e0dbd2c969a7f164d9dca4ebf50a5db51)), closes [#1572](https://github.com/m-radzikowski/aws-sdk-client-mock/issues/1572) [#1572](https://github.com/m-radzikowski/aws-sdk-client-mock/issues/1572)
+
 ### [0.5.6](https://github.com/m-radzikowski/aws-sdk-client-mock/compare/v0.5.5...v0.5.6) (2021-11-06)
 
 
