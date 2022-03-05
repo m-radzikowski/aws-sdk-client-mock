@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.6.1](https://github.com/m-radzikowski/aws-sdk-client-mock/compare/v0.6.0...v0.6.1) (2022-03-05)
+
+
+### Bug Fixes
+
+* bump typescript to 4.6.2 ([5c29961](https://github.com/m-radzikowski/aws-sdk-client-mock/commit/5c29961e2c0e93e23d0cac705aad8cbcb8ec406d)), closes [#79](https://github.com/m-radzikowski/aws-sdk-client-mock/issues/79)
+
 ## [0.6.0](https://github.com/m-radzikowski/aws-sdk-client-mock/compare/v0.5.6...v0.6.0) (2022-02-12)
 
 
