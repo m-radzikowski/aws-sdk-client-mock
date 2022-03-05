@@ -5,7 +5,7 @@ uplinks:
     url: https://registry.npmjs.org/
 
 packages:
-  "**":
+  "**": # see https://stackoverflow.com/a/66099458/2512304 for npm config to publish without auth
     access: $all
     publish: $all
     proxy: npmjs
