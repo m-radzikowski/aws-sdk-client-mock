@@ -198,6 +198,22 @@ snsMock
     });
 ```
 
+Specify chained behaviors - next behaviors for consecutive calls:
+
+```typescript
+snsMock
+    .on(PublishCommand)
+    .resolvesOnce({ // for the first command call
+        MessageId: '12345678-1111-1111-1111-111122223333'
+    })
+    .resolvesOnce({ // for the second command call
+        MessageId: '12345678-2222-2222-2222-111122223333'
+    })
+    .resolves({ // for further calls
+        MessageId: '12345678-3333-3333-3333-111122223333'
+    });
+```
+
 Specify mock throwing an error:
 
 ```typescript
@@ -217,6 +233,9 @@ snsMock
         }
     });
 ```
+
+Together with `resolvesOnce()`, you can also use `rejectsOnce()` and `callsFakeOnce()`
+to specify consecutive behaviors. 
 
 #### DynamoDB DocumentClient
 
