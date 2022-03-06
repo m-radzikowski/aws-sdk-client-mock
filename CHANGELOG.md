@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.6.2](https://github.com/m-radzikowski/aws-sdk-client-mock/compare/v0.6.1...v0.6.2) (2022-03-06)
+
+
+### Features
+
+* chained behaviors for consecutive command calls ([#80](https://github.com/m-radzikowski/aws-sdk-client-mock/issues/80)) ([fe131a9](https://github.com/m-radzikowski/aws-sdk-client-mock/commit/fe131a92afedd653ad576d7ac415d24a1984d6c1))
+
 ### [0.6.1](https://github.com/m-radzikowski/aws-sdk-client-mock/compare/v0.6.0...v0.6.1) (2022-03-05)
 
 
