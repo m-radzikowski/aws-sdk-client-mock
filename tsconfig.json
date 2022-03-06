@@ -35,6 +35,7 @@
     "gitRevision": "main",
     "validation": {
       "invalidLink": true
-    }
+    },
+    "media": "media/"
   }
 }
