@@ -33,6 +33,7 @@
     "name": "AWS SDK v3 Client mock",
     "includeVersion": true,
     "listInvalidSymbolLinks": true,
-    "gitRevision": "main"
+    "gitRevision": "main",
+    "media": "media/"
   }
 }
