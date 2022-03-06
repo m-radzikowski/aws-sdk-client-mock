@@ -9,9 +9,15 @@ interface Behavior<TInput extends object, TOutput extends MetadataBearer, TComma
 
     resolves(response: CommandResponse<TCommandOutput>): AwsStub<TInput, TOutput>;
 
+    resolvesOnce(response: CommandResponse<TCommandOutput>): Behavior<TInput, TOutput, TCommandOutput>;
+
     rejects(error?: string | Error | AwsError): AwsStub<TInput, TOutput>;
 
+    rejectsOnce(error?: string | Error | AwsError): Behavior<TInput, TOutput, TCommandOutput>;
+
     callsFake(fn: (input: any) => any): AwsStub<TInput, TOutput>; // TODO Types
+
+    callsFakeOnce(fn: (input: any) => any): Behavior<TInput, TOutput, TCommandOutput>; // TODO Types
 
 }
 
@@ -158,6 +164,10 @@ export class AwsStub<TInput extends object, TOutput extends MetadataBearer> impl
         return this.onAnyCommand().resolves(response);
     }
 
+    resolvesOnce(response: CommandResponse<TOutput>): CommandBehavior<TInput, TOutput, TOutput> {
+        return this.onAnyCommand().resolvesOnce(response);
+    }
+
     /**
      * Sets a failure response that will be returned from any `Client#send()` invocation.
      * The response will always be an `Error` instance.
@@ -167,6 +177,10 @@ export class AwsStub<TInput extends object, TOutput extends MetadataBearer> impl
      */
     rejects(error?: string | Error | AwsError): AwsStub<TInput, TOutput> {
         return this.onAnyCommand().rejects(error);
+    }
+
+    rejectsOnce(error?: string | Error | AwsError): CommandBehavior<TInput, TOutput, TOutput> {
+        return this.onAnyCommand().rejectsOnce(error);
     }
 
     /**
@@ -179,9 +193,14 @@ export class AwsStub<TInput extends object, TOutput extends MetadataBearer> impl
         return this.onAnyCommand().callsFake(fn);
     }
 
+    callsFakeOnce(fn: (input: any) => any): CommandBehavior<TInput, TOutput, TOutput> {
+        return this.onAnyCommand().callsFakeOnce(fn);
+    }
 }
 
 export class CommandBehavior<TInput extends object, TOutput extends MetadataBearer, TCommandOutput extends TOutput> implements Behavior<TInput, TOutput, TCommandOutput> {
+
+    private nextChainableCallNumber = 0;
 
     constructor(
         private clientStub: AwsStub<TInput, TOutput>,
@@ -199,6 +218,11 @@ export class CommandBehavior<TInput extends object, TOutput extends MetadataBear
         return this.clientStub;
     }
 
+    resolvesOnce(response: CommandResponse<TCommandOutput>): CommandBehavior<TInput, TOutput, TCommandOutput> {
+        this.send = this.send.onCall(this.nextChainableCallNumber++).resolves(response);
+        return this;
+    }
+
     /**
      * Sets a failure response that will be returned from the `Client#send()` invocation
      * for specified Command and/or its input.
@@ -206,16 +230,25 @@ export class CommandBehavior<TInput extends object, TOutput extends MetadataBear
      * @param error Error text, Error instance or Error parameters to be returned
      */
     rejects(error?: string | Error | AwsError): AwsStub<TInput, TOutput> {
-        if (typeof error === 'string') {
-            error = new Error(error);
-        }
-        if (!(error instanceof Error)) {
-            error = Object.assign(new Error(), error);
-        }
-
-        this.send.rejects(error);
-
+        this.send.rejects(CommandBehavior.normalizeError(error));
         return this.clientStub;
+    }
+
+    rejectsOnce(error?: string | Error | AwsError): CommandBehavior<TInput, TOutput, TCommandOutput> {
+        this.send.onCall(this.nextChainableCallNumber++).rejects(CommandBehavior.normalizeError(error));
+        return this;
+    }
+
+    private static normalizeError(error?: string | Error | AwsError): Error {
+        if (typeof error === 'string') {
+            return new Error(error);
+        }
+
+        if (!(error instanceof Error)) {
+            return Object.assign(new Error(), error);
+        }
+
+        return error;
     }
 
     /**
@@ -228,6 +261,16 @@ export class CommandBehavior<TInput extends object, TOutput extends MetadataBear
         return this.clientStub;
     }
 
+    callsFakeOnce(fn: (input: any) => any): CommandBehavior<TInput, TOutput, TCommandOutput> {
+        this.send.onCall(this.nextChainableCallNumber++).callsFake(cmd => fn(cmd.input));
+        return this;
+    }
+
+    on<TCmdInput extends TInput, TCmdOutput extends TOutput>(
+        command: new (input: TCmdInput) => AwsCommand<TCmdInput, TCmdOutput>, input?: Partial<TCmdInput>, strict = false,
+    ): CommandBehavior<TInput, TOutput, TCmdOutput> {
+        return this.clientStub.on(command, input, strict);
+    }
 }
 
 type AwsCommand<Input extends ClientInput, Output extends ClientOutput, ClientInput extends object = any, ClientOutput extends MetadataBearer = any> = Command<ClientInput, Input, ClientOutput, Output, any>;

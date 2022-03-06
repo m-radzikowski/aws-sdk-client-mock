@@ -16,5 +16,6 @@ export const publishCmd3 = new PublishCommand({
     Message: 'third mock message',
 });
 
-export const uuid1 = '12345678-1111-2222-3333-111122223333';
-export const uuid2 = '12345678-4444-5555-6666-111122223333';
+export const uuid1 = '12345678-1111-1111-1111-111122223333';
+export const uuid2 = '12345678-2222-2222-2222-111122223333';
+export const uuid3 = '12345678-3333-3333-3333-111122223333';

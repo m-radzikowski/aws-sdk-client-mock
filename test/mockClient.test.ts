@@ -1,7 +1,7 @@
 import {AwsClientBehavior, AwsClientStub, mockClient} from '../src';
 import {ListTopicsCommand, PublishCommand, SNSClient} from '@aws-sdk/client-sns';
 import {MaybeSinonProxy} from '../src/sinon';
-import {publishCmd1, publishCmd2, topicArn, uuid1, uuid2} from './fixtures';
+import {publishCmd1, publishCmd2, topicArn, uuid1, uuid2, uuid3} from './fixtures';
 
 let snsMock: AwsClientStub<SNSClient>;
 
@@ -170,6 +170,17 @@ describe('mocking behaviors in different ways', () => {
                 expect(publish.MessageId).toBe(uuid1);
             });
 
+            it('returns mocked response once', async () => {
+                behavior.resolvesOnce({MessageId: uuid1});
+
+                const sns = new SNSClient({});
+                const publish1 = await sns.send(publishCmd1);
+                const publish2 = await sns.send(publishCmd1);
+
+                expect(publish1.MessageId).toBe(uuid1);
+                expect(publish2).toBeUndefined();
+            });
+
             it('returns mocked response for multiple calls', async () => {
                 behavior.resolves({
                     MessageId: uuid1,
@@ -214,6 +225,18 @@ describe('mocking behaviors in different ways', () => {
                 const sns = new SNSClient({});
 
                 await expect(sns.send(publishCmd1)).rejects.toThrow();
+            });
+
+            it('throws an error once', async () => {
+                behavior.rejectsOnce();
+
+                const sns = new SNSClient({});
+
+                await expect(sns.send(publishCmd1)).rejects.toThrow();
+
+                const publish2 = sns.send(publishCmd1);
+
+                expect(publish2).toBeUndefined();
             });
 
             it('throws custom simple error', async () => {
@@ -265,6 +288,17 @@ describe('mocking behaviors in different ways', () => {
                 const publish = await sns.send(publishCmd1);
 
                 expect(publish.MessageId).toBe(uuid1);
+            });
+
+            it('returns function result once', async () => {
+                behavior.callsFakeOnce(() => ({MessageId: uuid1}));
+
+                const sns = new SNSClient({});
+                const publish1 = await sns.send(publishCmd1);
+                const publish2 = await sns.send(publishCmd1);
+
+                expect(publish1.MessageId).toBe(uuid1);
+                expect(publish2).toBeUndefined();
             });
 
             it('returns async function result', async () => {
@@ -487,6 +521,96 @@ describe('behavior declaration order', () => {
 
         expect(publish1.MessageId).toBe(uuid2);
         expect(publish2.MessageId).toBe(uuid2);
+    });
+});
+
+describe('chained behaviors', () => {
+    it('chains results', async () => {
+        snsMock
+            .resolvesOnce({MessageId: uuid1})
+            .resolvesOnce({MessageId: uuid2})
+            .resolves({MessageId: uuid3});
+
+        const sns = new SNSClient({});
+        const publish1 = await sns.send(publishCmd1);
+        const publish2 = await sns.send(publishCmd1);
+        const publish3 = await sns.send(publishCmd1);
+
+        expect(publish1.MessageId).toBe(uuid1);
+        expect(publish2.MessageId).toBe(uuid2);
+        expect(publish3.MessageId).toBe(uuid3);
+    });
+
+    it('chains results for different commands', async () => {
+        snsMock
+            .on(PublishCommand)
+            .resolvesOnce({MessageId: uuid1})
+            .resolvesOnce({MessageId: uuid2})
+            .resolves({MessageId: uuid3})
+            .on(ListTopicsCommand)
+            .resolvesOnce({Topics: [{TopicArn: topicArn}]});
+
+        const sns = new SNSClient({});
+        const publish1 = await sns.send(publishCmd1);
+        const publish2 = await sns.send(publishCmd1);
+        const publish3 = await sns.send(publishCmd1);
+        const listTopics1 = await sns.send(new ListTopicsCommand({}));
+        const listTopics2 = await sns.send(new ListTopicsCommand({}));
+
+        expect(publish1.MessageId).toBe(uuid1);
+        expect(publish2.MessageId).toBe(uuid2);
+        expect(publish3.MessageId).toBe(uuid3);
+        expect(listTopics1.Topics).toHaveLength(1);
+        expect(listTopics2).toBeUndefined();
+    });
+
+    it('chains results for different command after resolving once', async () => {
+        snsMock
+            .on(PublishCommand)
+            .resolvesOnce({MessageId: uuid1})
+            .on(ListTopicsCommand)
+            .resolvesOnce({Topics: [{TopicArn: topicArn}]});
+
+        const sns = new SNSClient({});
+        const publish1 = await sns.send(publishCmd1);
+        const publish2 = await sns.send(publishCmd1);
+        const listTopics1 = await sns.send(new ListTopicsCommand({}));
+        const listTopics2 = await sns.send(new ListTopicsCommand({}));
+
+        expect(publish1.MessageId).toBe(uuid1);
+        expect(publish2).toBeUndefined();
+        expect(listTopics1.Topics).toHaveLength(1);
+        expect(listTopics2).toBeUndefined();
+    });
+
+    it('chains results, rejects, and mock functions', async () => {
+        snsMock
+            .resolvesOnce({MessageId: uuid1})
+            .rejectsOnce()
+            .callsFakeOnce(() => ({MessageId: uuid2}));
+
+        const sns = new SNSClient({});
+        const publish1 = await sns.send(publishCmd1);
+        await expect(sns.send(publishCmd1)).rejects.toThrow();
+        const publish3 = await sns.send(publishCmd1);
+        const publish4 = await sns.send(publishCmd1);
+
+        expect(publish1.MessageId).toBe(uuid1);
+        expect(publish3.MessageId).toBe(uuid2);
+        expect(publish4).toBeUndefined();
+    });
+
+    it('overrides chain results for command', async () => {
+        snsMock
+            .on(PublishCommand).resolvesOnce({MessageId: uuid1})
+            .on(PublishCommand).resolvesOnce({MessageId: uuid2});
+
+        const sns = new SNSClient({});
+        const publish1 = await sns.send(publishCmd1);
+        const publish2 = await sns.send(publishCmd1);
+
+        expect(publish1.MessageId).toBe(uuid2);
+        expect(publish2).toBeUndefined();
     });
 });
 
