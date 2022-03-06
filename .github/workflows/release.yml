@@ -31,17 +31,17 @@ jobs:
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
 
-      - run: yarn run typedoc
-      - name: commit docs website
-        run: |
-          git add docs
-          git diff-index --quiet HEAD || git commit -m 'docs: update docs website'
-
       - name: Create release
         id: create_release
         run: |
           yarn run release
           echo ::set-output name=tag_name::$(git describe HEAD --abbrev=0)
+
+      - run: yarn run typedoc
+      - name: commit docs website
+        run: |
+          git add docs
+          git diff-index --quiet HEAD || git commit -m 'docs: update docs website'
 
       - name: run e2e tests
         run: |
