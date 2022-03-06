@@ -612,6 +612,19 @@ describe('chained behaviors', () => {
         expect(publish1.MessageId).toBe(uuid2);
         expect(publish2).toBeUndefined();
     });
+
+    it('overrides chain results for all commands', async () => {
+        snsMock
+            .on(PublishCommand).resolvesOnce({MessageId: uuid1})
+            .onAnyCommand().resolvesOnce({MessageId: uuid2});
+
+        const sns = new SNSClient({});
+        const publish1 = await sns.send(publishCmd1);
+        const publish2 = await sns.send(publishCmd2);
+
+        expect(publish1.MessageId).toBe(uuid2);
+        expect(publish2).toBeUndefined();
+    });
 });
 
 const resolveImmediately = <T>(x: T): Promise<T> => new Promise(resolve => {
