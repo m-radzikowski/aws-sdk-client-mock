@@ -34,6 +34,7 @@ In action:
     - [DynamoDB DocumentClient](#dynamodb-documentclient)
     - [Lib Storage Upload](#lib-storage-upload)
     - [Paginated operations](#paginated-operations)
+    - [SDK v2-style mocks](#sdk-v2-style-mocks)
   - [Inspect](#inspect)
 - [API Reference](#api-reference)
 - [AWS Lambda example](#aws-lambda-example)
@@ -237,38 +238,6 @@ snsMock
 Together with `resolvesOnce()`, you can also use `rejectsOnce()` and `callsFakeOnce()`
 to specify consecutive behaviors.
 
-#### SDK v2-style mocks
-
-The AWS SDK v3 gives an option to use it similarly to v2 SDK,
-with command method call instead of `send()`:
-
-```typescript
-import {SNS} from '@aws-sdk/client-sns';
-
-const sns = new SNS({});
-const result = await sns.publish({
-    TopicArn: 'arn:aws:sns:us-east-1:111111111111:MyTopic',
-    Message: 'My message',
-});
-```
-
-Although this approach is not recommended by AWS,
-those calls can be mocked in the standard way:
-
-```typescript
-import {PublishCommand, SNSClient} from '@aws-sdk/client-sns';
-
-const snsMock = mockClient(SNSClient);
-snsMock
-    .on(PublishCommand)
-    .resolves({
-        MessageId: '12345678-1111-2222-3333-111122223333',
-    });
-```
-
-Notice that in mocks you still need to use `SNSClient`, not `SNS`,
-as well as `Command` classes.
-
 #### DynamoDB DocumentClient
 
 You can mock the `DynamoDBDocumentClient` just like any other Client:
@@ -341,6 +310,38 @@ for await (const page of paginator) {
     items.push(...page.Items || []);
 }
 ```
+
+#### SDK v2-style mocks
+
+The AWS SDK v3 gives an option to use it similarly to v2 SDK,
+with command method call instead of `send()`:
+
+```typescript
+import {SNS} from '@aws-sdk/client-sns';
+
+const sns = new SNS({});
+const result = await sns.publish({
+    TopicArn: 'arn:aws:sns:us-east-1:111111111111:MyTopic',
+    Message: 'My message',
+});
+```
+
+Although this approach is not recommended by AWS,
+those calls can be mocked in the standard way:
+
+```typescript
+import {PublishCommand, SNSClient} from '@aws-sdk/client-sns';
+
+const snsMock = mockClient(SNSClient);
+snsMock
+    .on(PublishCommand)
+    .resolves({
+        MessageId: '12345678-1111-2222-3333-111122223333',
+    });
+```
+
+Notice that in mocks you still need to use `SNSClient`, not `SNS`,
+as well as `Command` classes.
 
 ### Inspect
 
