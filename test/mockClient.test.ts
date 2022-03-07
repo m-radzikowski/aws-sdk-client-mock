@@ -1,5 +1,5 @@
 import {AwsClientBehavior, AwsClientStub, mockClient} from '../src';
-import {ListTopicsCommand, PublishCommand, SNSClient} from '@aws-sdk/client-sns';
+import {ListTopicsCommand, PublishCommand, SNS, SNSClient} from '@aws-sdk/client-sns';
 import {MaybeSinonProxy} from '../src/sinon';
 import {publishCmd1, publishCmd2, topicArn, uuid1, uuid2, uuid3} from './fixtures';
 
@@ -344,6 +344,18 @@ describe('mocking behaviors in different ways', () => {
                     done();
                 });
             });
+        });
+
+        it('supports SDK v2-style calls', async () => {
+            behavior.resolves({MessageId: uuid1});
+
+            const sns = new SNS({});
+            const publish = await sns.publish({
+                TopicArn: topicArn,
+                Message: 'mock message',
+            });
+
+            expect(publish.MessageId).toBe(uuid1);
         });
     });
 });
