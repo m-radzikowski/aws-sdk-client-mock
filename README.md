@@ -285,6 +285,24 @@ You can call `mockLibStorageUpload()` without providing an S3Client mock.
 In that case, the client mock will be created and returned from the function.
 However, you still need to have `@aws-sdk/client-s3` installed as a dependency.
 
+By default, the `@aws-sdk/lib-storage` `Upload#done()` will complete successfuly.
+To cause a failure, you need to specify the `rejects()` behavior
+of one of the [AWS SDK Commands used under the hood by the `lib-storage`](https://github.com/aws/aws-sdk-js-v3/blob/main/lib/lib-storage/src/Upload.ts).
+
+For uploading a small file (under the defined multipart upload single part size),
+`lib-storage` sends a `PutObjectCommand`. To make it fail:
+
+```ts
+s3Mock.on(PutObjectCommand).rejects();
+```
+
+For bigger files, it makes a series of calls including `CreateMultipartUploadCommand`,
+`UploadPartCommand`, and `CompleteMultipartUploadCommand`. Making any of them fail will fail the upload:
+
+```ts
+s3Mock.on(UploadPartCommand).rejects();
+```
+
 #### Paginated operations
 
 To mock a [paginated operation](https://aws.amazon.com/blogs/developer/pagination-using-async-iterators-in-modular-aws-sdk-for-javascript/)
