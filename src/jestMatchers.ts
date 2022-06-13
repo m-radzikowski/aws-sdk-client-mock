@@ -186,7 +186,7 @@ function printCalls(ctx: jest.MatcherContext, calls: AnySpyCall[]): string[] {
         '',
         ...calls.map(
             (c, i) =>
-                `  ${i + 1}, ${c.args[0].constructor.name}, ${ctx.utils.printReceived(
+                `  ${i + 1}. ${c.args[0].constructor.name}: ${ctx.utils.printReceived(
                     c.args[0].input
                 )}`
         )] : [];

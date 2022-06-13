@@ -61,7 +61,7 @@ describe('toHaveReceivedCommandTimes', () => {
 SNSClient received 'PublishCommand' 1 times
 Calls:
 
-  1, PublishCommand, { TopicArn: 'arn:aws:sns:us-east-1:111111111111:MyTopic', Message: 'mock message' }`);
+  1. PublishCommand: { TopicArn: 'arn:aws:sns:us-east-1:111111111111:MyTopic', Message: 'mock message' }`);
 
     });
 
@@ -84,8 +84,8 @@ Calls:
 SNSClient received 'PublishCommand' 2 times
 Calls:
 
-  1, PublishCommand, { TopicArn: 'arn:aws:sns:us-east-1:111111111111:MyTopic', Message: 'mock message' }
-  2, PublishCommand, { TopicArn: 'arn:aws:sns:us-east-1:111111111111:MyTopic', Message: 'mock message' }`);
+  1. PublishCommand: { TopicArn: 'arn:aws:sns:us-east-1:111111111111:MyTopic', Message: 'mock message' }
+  2. PublishCommand: { TopicArn: 'arn:aws:sns:us-east-1:111111111111:MyTopic', Message: 'mock message' }`);
     });
 });
 
@@ -120,7 +120,7 @@ SNSClient received 'PublishCommand' 0 times`);
 SNSClient received 'PublishCommand' 1 times
 Calls:
 
-  1, PublishCommand, { TopicArn: 'arn:aws:sns:us-east-1:111111111111:MyTopic', Message: 'mock message' }`);
+  1. PublishCommand: { TopicArn: 'arn:aws:sns:us-east-1:111111111111:MyTopic', Message: 'mock message' }`);
     });
 });
 
@@ -145,7 +145,7 @@ describe('toHaveReceivedCommandWith', () => {
 SNSClient received 'PublishCommand' 0 times
 Calls:
 
-  1, PublishCommand, { TopicArn: 'arn:aws:sns:us-east-1:111111111111:MyTopic', Message: 'mock message' }`);
+  1. PublishCommand: { TopicArn: 'arn:aws:sns:us-east-1:111111111111:MyTopic', Message: 'mock message' }`);
     });
 
     it('matches not received', async () => {
@@ -165,7 +165,7 @@ Calls:
 SNSClient received 'PublishCommand' 1 times
 Calls:
 
-  1, PublishCommand, { TopicArn: 'arn:aws:sns:us-east-1:111111111111:MyTopic', Message: 'mock message' }`);
+  1. PublishCommand: { TopicArn: 'arn:aws:sns:us-east-1:111111111111:MyTopic', Message: 'mock message' }`);
     });
 });
 
@@ -195,8 +195,8 @@ SNSClient received 1. 'PublishCommand' with input
 { TopicArn: 'arn:aws:sns:us-east-1:111111111111:MyTopic', Message: 'mock message' }
 Calls:
 
-  1, PublishCommand, { TopicArn: 'arn:aws:sns:us-east-1:111111111111:MyTopic', Message: 'mock message' }
-  2, PublishCommand, { TopicArn: 'arn:aws:sns:us-east-1:111111111111:MyTopic',
+  1. PublishCommand: { TopicArn: 'arn:aws:sns:us-east-1:111111111111:MyTopic', Message: 'mock message' }
+  2. PublishCommand: { TopicArn: 'arn:aws:sns:us-east-1:111111111111:MyTopic',
   Message: 'second mock message' }`);
     });
 
@@ -217,6 +217,6 @@ SNSClient received 1. 'PublishCommand' with input
 { TopicArn: 'arn:aws:sns:us-east-1:111111111111:MyTopic', Message: 'mock message' }
 Calls:
 
-  1, PublishCommand, { TopicArn: 'arn:aws:sns:us-east-1:111111111111:MyTopic', Message: 'mock message' }`);
+  1. PublishCommand: { TopicArn: 'arn:aws:sns:us-east-1:111111111111:MyTopic', Message: 'mock message' }`);
     });
 });
