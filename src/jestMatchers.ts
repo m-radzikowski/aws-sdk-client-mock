@@ -2,6 +2,7 @@
 import assert from 'assert';
 import type { MetadataBearer } from '@aws-sdk/types';
 import type { AwsCommand, AwsStub } from './awsClientStub';
+import type { SinonSpyCall } from 'sinon';
 
 /**
  * Provides {@link jest} matcher for testing {@link AwsStub} command calls
@@ -97,7 +98,7 @@ declare global {
 
 type ClientMock = AwsStub<any, any>;
 type AnyCommand = AwsCommand<any, any>;
-type AnySpyCall = sinon.SinonSpyCall<[AnyCommand]>;
+type AnySpyCall = SinonSpyCall<[AnyCommand]>;
 type MessageFunctionParams<CheckData> = {
     cmd: string;
     client: string;
