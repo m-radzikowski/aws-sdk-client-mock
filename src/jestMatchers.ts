@@ -104,6 +104,7 @@ type MessageFunctionParams<CheckData> = {
     calls: AnySpyCall[];
     commandCalls: AnySpyCall[];
     data: CheckData;
+    notPrefix: string;
 };
 
 /**
@@ -114,12 +115,15 @@ type MessageFunctionParams<CheckData> = {
  * @returns
  */
 function printCalls(ctx: jest.MatcherContext, calls: AnySpyCall[]): string[] {
-    return calls.map(
-        (c, i) =>
-            `  ${i + 1}, ${c.args[0].constructor.name}, ${ctx.utils.printReceived(
-                c.args[0].input
-            )}`
-    );
+    return calls.length > 0 ? [
+        'Calls:',
+        '',
+        ...calls.map(
+            (c, i) =>
+                `  ${i + 1}, ${c.args[0].constructor.name}, ${ctx.utils.printReceived(
+                    c.args[0].input
+                )}`
+        )] : [];
 }
 
 export function processMatch<CheckData>({
@@ -129,7 +133,6 @@ export function processMatch<CheckData>({
     check,
     input,
     message,
-    notMessage,
 }: {
     ctx: jest.MatcherContext;
     mockClient: ClientMock;
@@ -140,7 +143,6 @@ export function processMatch<CheckData>({
     };
     input: Record<string, unknown> | undefined;
     message: (params: MessageFunctionParams<CheckData>) => string[];
-    notMessage: (params: MessageFunctionParams<CheckData>) => string[];
 }): jest.CustomMatcherResult {
     assert(
         command &&
@@ -164,9 +166,10 @@ export function processMatch<CheckData>({
             cmd,
             data,
             commandCalls,
+            notPrefix: ctx.isNot ? 'not ' : '',
         };
 
-        return (ctx.isNot ? notMessage(msgParams) : message(msgParams)).join('\n');
+        return message(msgParams).join('\n');
     };
 
     return { pass, message: msg };
@@ -189,26 +192,11 @@ export const matchers: jest.ExpectExtendMap = {
             command,
             input: undefined,
             check: ({ commandCalls }) => ({ pass: commandCalls.length === expectedCalls, data: {} }),
-            message: ({ client, cmd, commandCalls }) => [
-                `Expected ${client} have received ${cmd} ${this.utils.printExpected(
+            message: ({ client, cmd, commandCalls, notPrefix }) => [
+                `Expected ${client} to ${notPrefix}receive ${cmd} ${this.utils.printExpected(
                     expectedCalls
                 )} times`,
-                `Received ${client} have received ${cmd} ${this.utils.printReceived(
-                    commandCalls.length
-                )} times`,
-                'Calls:',
-                '',
-                ...printCalls(this, commandCalls),
-            ],
-            notMessage: ({ client, cmd, commandCalls }) => [
-                `Expected ${client} have not received ${cmd} ${this.utils.printExpected(
-                    expectedCalls
-                )} times`,
-                `Received ${client} have received ${cmd} exactly ${this.utils.printReceived(
-                    commandCalls.length
-                )} times`,
-                'Calls:',
-                '',
+                `${client} received ${cmd} ${this.utils.printReceived(commandCalls.length)} times`,
                 ...printCalls(this, commandCalls),
             ],
         });
@@ -227,17 +215,9 @@ export const matchers: jest.ExpectExtendMap = {
             command,
             input: undefined,
             check: ({ commandCalls }) => ({ pass: commandCalls.length > 0, data: {} }),
-            message: ({ client, cmd }) => [
-                `Expected ${client} have received ${cmd}`,
-                `Received ${client} have not received ${cmd}`,
-            ],
-            notMessage: ({ client, cmd, commandCalls }) => [
-                `Expected ${client} have not received ${cmd}`,
-                `Received ${client} have received ${cmd} ${this.utils.printReceived(
-                    commandCalls.length
-                )} times`,
-                'Calls:',
-                '',
+            message: ({ client, cmd, notPrefix, commandCalls }) => [
+                `Expected ${client} to ${notPrefix}receive ${cmd}`,
+                `${client} received ${cmd} ${this.utils.printReceived(commandCalls.length)} times`,
                 ...printCalls(this, commandCalls),
             ],
         });
@@ -257,25 +237,12 @@ export const matchers: jest.ExpectExtendMap = {
             command,
             input,
             check: ({ commandCalls }) => ({ pass: commandCalls.length > 0, data: {} }),
-            message: ({ client, cmd, calls }) => [
-                `Expected ${client} have received ${cmd} with ${this.utils.printExpected(
+            message: ({ client, cmd, calls, notPrefix, commandCalls }) => [
+                `Expected ${client} to ${notPrefix}receive ${cmd} with ${this.utils.printExpected(
                     input
                 )}`,
-                `But ${this.utils.printReceived(0)} have been received`,
-                'Calls:',
-                '',
+                `${client} received ${cmd} ${this.utils.printReceived(commandCalls.length)} times`,
                 ...printCalls(this, calls),
-            ],
-            notMessage: ({ client, cmd, commandCalls }) => [
-                `Expected ${client} Not have received ${cmd} with ${this.utils.printExpected(
-                    input
-                )}`,
-                `But ${this.utils.printReceived(
-                    commandCalls.length
-                )} have been received`,
-                'Calls:',
-                '',
-                ...printCalls(this, commandCalls),
             ],
         });
     },
@@ -310,9 +277,9 @@ export const matchers: jest.ExpectExtendMap = {
                 };
             },
             input,
-            message: ({ cmd, client, calls, data }) => [
-                `Expected ${client} have ${call} received ${cmd}`,
-                `Received ${data.cmd} with input`,
+            message: ({ cmd, client, calls, data, notPrefix }) => [
+                `Expected ${client} to ${notPrefix}receive ${call}. ${cmd}`,
+                `${client} received ${call}. ${data.cmd} with input`,
                 this.utils.printDiffOrStringify(
                     input,
                     data.received.input,
@@ -320,13 +287,7 @@ export const matchers: jest.ExpectExtendMap = {
                     'Received',
                     false
                 ),
-                'Command Calls:',
-                '',
                 ...printCalls(this, calls),
-            ],
-            notMessage: ({ cmd, client, data }) => [
-                `Expected ${client} Not have ${call} received ${cmd} with matching input`,
-                `But ${data.cmd} have been received matching given input`,
             ],
         });
     },
