@@ -160,6 +160,11 @@ export class AwsStub<TInput extends object, TOutput extends MetadataBearer> impl
         this.send = send;
     }
 
+    /** Returns the class name of the underlying mocked client class */
+    clientName(): string {
+        return this.client.constructor.name;
+    }
+
     /**
      * Resets stub. It will replace the stub with a new one, with clean history and behavior.
      */
@@ -333,7 +338,7 @@ export class CommandBehavior<TInput extends object, TOutput extends MetadataBear
     }
 }
 
-type AwsCommand<Input extends ClientInput, Output extends ClientOutput, ClientInput extends object = any, ClientOutput extends MetadataBearer = any> = Command<ClientInput, Input, ClientOutput, Output, any>;
+export type AwsCommand<Input extends ClientInput, Output extends ClientOutput, ClientInput extends object = any, ClientOutput extends MetadataBearer = any> = Command<ClientInput, Input, ClientOutput, Output, any>;
 type CommandResponse<TOutput> = Partial<TOutput> | PromiseLike<Partial<TOutput>>;
 
 export interface AwsError extends Partial<Error>, Partial<MetadataBearer> {
