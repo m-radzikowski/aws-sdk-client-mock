@@ -1,7 +1,7 @@
 import { AwsClientStub, mockClient } from '../src';
 import { PublishCommand, SNSClient } from '@aws-sdk/client-sns';
 import { publishCmd1, publishCmd2, uuid1 } from './fixtures';
-import { matchers } from '../src/jestMatchers';
+import { baseMatchers, aliasMatchers } from '../src/jestMatchers';
 import { inspect } from 'util';
 
 let snsMock: AwsClientStub<SNSClient>;
@@ -35,6 +35,15 @@ afterEach(() => {
     snsMock.restore();
 });
 
+describe('matcher aliases', ()=>{
+    it('adds matcher aliases', ()=> {
+        expect(aliasMatchers.toReceiveCommand).toBe(baseMatchers.toHaveReceivedCommand);
+        expect(aliasMatchers.toReceiveCommandTimes).toBe(baseMatchers.toHaveReceivedCommandTimes);
+        expect(aliasMatchers.toReceiveCommandWith).toBe(baseMatchers.toHaveReceivedCommandWith);
+        expect(aliasMatchers.toReceiveNthCommandWith).toBe(baseMatchers.toHaveReceivedNthCommandWith);
+    });
+});
+
 describe('toHaveReceivedCommandTimes', () => {
     it('matches calls count', async () => {
         snsMock.resolves({
@@ -45,7 +54,7 @@ describe('toHaveReceivedCommandTimes', () => {
         await sns.send(publishCmd1);
 
 
-        const match = matchers.toHaveReceivedCommandTimes.call(contextMock as any, snsMock, PublishCommand, 2) as jest.CustomMatcherResult;
+        const match = baseMatchers.toHaveReceivedCommandTimes.call(contextMock as any, snsMock, PublishCommand, 2) as jest.CustomMatcherResult;
         expect(match.pass).toBeFalsy();
 
         expect(match.message()).toEqual(`Expected SNSClient to receive 'PublishCommand' 2 times
@@ -68,7 +77,7 @@ Calls:
         await sns.send(publishCmd1);
 
 
-        const match = matchers.toHaveReceivedCommandTimes.call(contextMock as any, snsMock, PublishCommand, 2) as jest.CustomMatcherResult;
+        const match = baseMatchers.toHaveReceivedCommandTimes.call(contextMock as any, snsMock, PublishCommand, 2) as jest.CustomMatcherResult;
         expect(match.pass).toBeTruthy();
 
         expect(match.message()).toEqual(`Expected SNSClient to not receive 'PublishCommand' 2 times
@@ -87,7 +96,7 @@ describe('toHaveReceivedCommand', () => {
             MessageId: uuid1,
         });
 
-        const match = matchers.toHaveReceivedCommand.call(contextMock as any, snsMock, PublishCommand, 2) as jest.CustomMatcherResult;
+        const match = baseMatchers.toHaveReceivedCommand.call(contextMock as any, snsMock, PublishCommand, 2) as jest.CustomMatcherResult;
         expect(match.pass).toBeFalsy();
 
         expect(match.message()).toEqual(`Expected SNSClient to receive 'PublishCommand'
@@ -104,7 +113,7 @@ SNSClient received 'PublishCommand' 0 times`);
         const sns = new SNSClient({});
         await sns.send(publishCmd1);
 
-        const match = matchers.toHaveReceivedCommand.call(contextMock as any, snsMock, PublishCommand, 2) as jest.CustomMatcherResult;
+        const match = baseMatchers.toHaveReceivedCommand.call(contextMock as any, snsMock, PublishCommand, 2) as jest.CustomMatcherResult;
         expect(match.pass).toBeTruthy();
 
         expect(match.message()).toEqual(`Expected SNSClient to not receive 'PublishCommand'
@@ -124,7 +133,7 @@ describe('toHaveReceivedCommandWith', () => {
         const sns = new SNSClient({});
         await sns.send(publishCmd1);
 
-        const match = matchers.toHaveReceivedCommandWith.call(contextMock as any,
+        const match = baseMatchers.toHaveReceivedCommandWith.call(contextMock as any,
             snsMock, PublishCommand,
             publishCmd2.input
         ) as jest.CustomMatcherResult;
@@ -149,7 +158,7 @@ Calls:
         const sns = new SNSClient({});
         await sns.send(publishCmd1);
 
-        const match = matchers.toHaveReceivedCommandWith.call(contextMock as any, snsMock, PublishCommand, publishCmd1.input) as jest.CustomMatcherResult;
+        const match = baseMatchers.toHaveReceivedCommandWith.call(contextMock as any, snsMock, PublishCommand, publishCmd1.input) as jest.CustomMatcherResult;
         expect(match.pass).toBeTruthy();
 
         expect(match.message()).toEqual(`Expected SNSClient to not receive 'PublishCommand' with { TopicArn: 'arn:aws:sns:us-east-1:111111111111:MyTopic', Message: 'mock message' }
@@ -172,7 +181,7 @@ describe('toHaveNthReceivedCommandWith', () => {
         await sns.send(publishCmd1);
         await sns.send(publishCmd2);
 
-        const match = matchers.toHaveNthReceivedCommandWith.call(contextMock as any,
+        const match = baseMatchers.toHaveReceivedNthCommandWith.call(contextMock as any,
             snsMock, 1, PublishCommand,
             publishCmd2.input
         ) as jest.CustomMatcherResult;
@@ -199,7 +208,7 @@ Calls:
         const sns = new SNSClient({});
         await sns.send(publishCmd1);
 
-        const match = matchers.toHaveNthReceivedCommandWith.call(contextMock as any, snsMock, 1, PublishCommand, publishCmd1.input) as jest.CustomMatcherResult;
+        const match = baseMatchers.toHaveReceivedNthCommandWith.call(contextMock as any, snsMock, 1, PublishCommand, publishCmd1.input) as jest.CustomMatcherResult;
         expect(match.pass).toBeTruthy();
 
         expect(match.message()).toEqual(`Expected SNSClient to not receive 1. 'PublishCommand'

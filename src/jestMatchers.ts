@@ -4,31 +4,7 @@ import type { MetadataBearer } from '@aws-sdk/types';
 import type { AwsCommand, AwsStub } from './awsClientStub';
 import type { SinonSpyCall } from 'sinon';
 
-/**
- * Provides {@link jest} matcher for testing {@link AwsStub} command calls
- *
- * @example
- *
- * ```ts
- * import { mockClient } from "aws-sdk-client-mock";
- * import { ScanCommand } from "@aws-sdk/client-dynamodb";
- *
- * const awsMock = mockClient(DynamoDBClient);
- *
- * awsMock.on(ScanCommand).resolves({
- *   Items: [{ Info: { S: '{ "val": "info" }' }, LockID: { S: "fooId" } }],
- * });
- *
- * it("Should call scan command", async () => {
- *    // check result ... maybe :)
- *    await expect(sut()).resolves.toEqual({ ... });
- *
- *    // Assert awsMock to have recevied a Scan Command at least one time
- *    expect(awsMock).toHaveReceivedCommand(ScanCommand);
- * });
- * ```
- */
-export interface AwsSdkJestMockMatchers<E, R> extends Record<string, any> {
+export interface AwsSdkJestMockBaseMatchers<E, R> extends Record<string, any> {
     /**
      * Asserts {@link AwsStub Aws Client Mock} received a {@link command} exact number of {@link times}
      *
@@ -87,6 +63,96 @@ export interface AwsSdkJestMockMatchers<E, R> extends Record<string, any> {
         input: Partial<TCmdInput>
     ): R;
 }
+
+export interface AwsSdkJestMockAliasMatchers<E, R> {
+    /**
+     * Asserts {@link AwsStub Aws Client Mock} received a {@link command} exact number of {@link times}
+     * 
+     * @alias {@link AwsSdkJestMockBaseMatchers.toHaveReceivedCommandTimes}
+     * @param command aws-sdk command constructor
+     * @param times
+     */
+    toReceiveCommandTimes<
+        TCmdInput extends object,
+        TCmdOutput extends MetadataBearer
+    >(
+        command: new (input: TCmdInput) => AwsCommand<TCmdInput, TCmdOutput>,
+        times: number
+    ): R;
+
+    /**
+     * Asserts {@link AwsStub Aws Client Mock} received a {@link command} at least one time
+     *
+     * @alias {@link AwsSdkJestMockBaseMatchers.toHaveReceivedCommand}
+     * @param command aws-sdk command constructor
+     */
+    toReceiveCommand<
+        TCmdInput extends object,
+        TCmdOutput extends MetadataBearer
+    >(
+        command: new (input: TCmdInput) => AwsCommand<TCmdInput, TCmdOutput>
+    ): R;
+
+    /**
+     * Asserts {@link AwsStub Aws Client Mock} received a {@link command} at leas one time with input
+     * matching {@link input}
+     *
+     * @alias {@link AwsSdkJestMockBaseMatchers.toHaveReceivedCommandWith}
+     * @param command aws-sdk command constructor
+     * @param input
+     */
+    toReceiveCommandWith<
+        TCmdInput extends object,
+        TCmdOutput extends MetadataBearer
+    >(
+        command: new (input: TCmdInput) => AwsCommand<TCmdInput, TCmdOutput>,
+        input: Partial<TCmdInput>
+    ): R;
+
+    /**
+     * Asserts {@link AwsStub Aws Client Mock} received a {@link command} as defined {@link call} number
+     * with matching {@link input}
+     *
+     * @alias {@link AwsSdkJestMockBaseMatchers.toHaveReceivedNthCommandWith}
+     * @param call call number to assert
+     * @param command aws-sdk command constructor
+     * @param input
+     */
+    toReceiveNthCommandWith<
+        TCmdInput extends object,
+        TCmdOutput extends MetadataBearer
+    >(
+        call: number,
+        command: new (input: TCmdInput) => AwsCommand<TCmdInput, TCmdOutput>,
+        input: Partial<TCmdInput>
+    ): R;
+}
+
+/**
+ * Provides {@link jest} matcher for testing {@link AwsStub} command calls
+ *
+ * @example
+ *
+ * ```ts
+ * import { mockClient } from "aws-sdk-client-mock";
+ * import { ScanCommand } from "@aws-sdk/client-dynamodb";
+ *
+ * const awsMock = mockClient(DynamoDBClient);
+ *
+ * awsMock.on(ScanCommand).resolves({
+ *   Items: [{ Info: { S: '{ "val": "info" }' }, LockID: { S: "fooId" } }],
+ * });
+ *
+ * it("Should call scan command", async () => {
+ *    // check result ... maybe :)
+ *    await expect(sut()).resolves.toEqual({ ... });
+ *
+ *    // Assert awsMock to have recevied a Scan Command at least one time
+ *    expect(awsMock).toHaveReceivedCommand(ScanCommand);
+ * });
+ * ```
+ */
+export interface AwsSdkJestMockMatchers<E, R> extends AwsSdkJestMockBaseMatchers<E, R>, AwsSdkJestMockAliasMatchers<E, R>, Record<string, any> { }
 
 declare global {
     namespace jest {
@@ -175,8 +241,8 @@ export function processMatch<CheckData>({
     return { pass, message: msg };
 }
 
-/** Using them for testing */
-export const matchers: jest.ExpectExtendMap = {
+/* Using them for testing */
+export const baseMatchers: { [P in keyof AwsSdkJestMockBaseMatchers<unknown, unknown>]: jest.CustomMatcher } = {
     /**
      * implementation of {@link AwsSdkJestMockMatchers.toHaveReceivedCommandTimes} matcher
      */
@@ -249,7 +315,7 @@ export const matchers: jest.ExpectExtendMap = {
     /**
      * implementation of {@link AwsSdkJestMockMatchers.toHaveReceivedNthCommandWith} matcher
      */
-    toHaveNthReceivedCommandWith(
+    toHaveReceivedNthCommandWith(
         this: jest.MatcherContext,
         mockClient: ClientMock,
         call: number,
@@ -293,7 +359,16 @@ export const matchers: jest.ExpectExtendMap = {
     },
 };
 
+/* typing ensures keys matching */
+export const aliasMatchers: { [P in keyof AwsSdkJestMockAliasMatchers<unknown, unknown>]: jest.CustomMatcher } = {
+    toReceiveCommandTimes: baseMatchers.toHaveReceivedCommandTimes,
+    toReceiveCommand: baseMatchers.toHaveReceivedCommand,
+    toReceiveCommandWith: baseMatchers.toHaveReceivedCommandWith,
+    toReceiveNthCommandWith: baseMatchers.toHaveReceivedNthCommandWith,
+};
+
+
 // Skip registration if jest expect does not exist
 if (typeof expect !== 'undefined' && typeof expect.extend === 'function') {
-    expect.extend(matchers);
+    expect.extend({ ...baseMatchers, ...aliasMatchers });
 }
