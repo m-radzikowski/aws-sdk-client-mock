@@ -1,6 +1,7 @@
 import {Progress, Upload} from '@aws-sdk/lib-storage';
 import {S3Client} from '@aws-sdk/client-s3';
-import {AwsClientStub, mockClient, mockLibStorageUpload} from '../src';
+import {AwsClientStub, mockClient} from '../src';
+import {mockLibStorageUpload} from '../src/libStorage';
 
 let s3Mock: AwsClientStub<S3Client>;
 
