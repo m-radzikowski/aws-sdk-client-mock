@@ -78,7 +78,7 @@ export interface AwsSdkJestMockMatchers<E, R> extends Record<string, any> {
      * @param command aws-sdk command constructor
      * @param input
      */
-    toHaveNthReceivedCommandWith<
+    toHaveReceivedNthCommandWith<
         TCmdInput extends object,
         TCmdOutput extends MetadataBearer
     >(
@@ -280,7 +280,7 @@ export const matchers: jest.ExpectExtendMap = {
         });
     },
     /**
-     * implementation of {@link AwsSdkJestMockMatchers.toHaveNthReceivedCommandWith} matcher
+     * implementation of {@link AwsSdkJestMockMatchers.toHaveReceivedNthCommandWith} matcher
      */
     toHaveNthReceivedCommandWith(
         this: jest.MatcherContext,
