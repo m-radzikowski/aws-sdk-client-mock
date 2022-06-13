@@ -3,7 +3,7 @@ import {mockLibStorageUpload} from 'aws-sdk-client-mock/libStorage';
 import {S3Client} from '@aws-sdk/client-s3';
 import {Progress, Upload} from '@aws-sdk/lib-storage';
 
-it('mocks SNS client', async () => {
+it('mocks S3 Client Upload', async () => {
     const s3Mock = mockClient(S3Client);
     mockLibStorageUpload(s3Mock);
 
