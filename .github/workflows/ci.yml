@@ -41,6 +41,15 @@ jobs:
       - run: yarn run test-types
       - run: yarn run size
 
+      - name: bump version
+        run: yarn run release --skip.commit --skip.tag
+
+      - name: run e2e tests
+        run: |
+          yarn run verdaccio &
+          yarn run local-publish
+          yarn run test-e2e
+
   codecov:
     name: Codecov
     runs-on: ubuntu-latest

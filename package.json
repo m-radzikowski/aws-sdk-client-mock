@@ -23,7 +23,7 @@
     "pretest": "rimraf coverage/",
     "test": "jest --coverage",
     "test-types": "tsd",
-    "test-e2e": "ts-node test-e2e/run-e2e-test.ts",
+    "test-e2e": "ts-node test-e2e/simple/run.ts & ts-node test-e2e/libStorage/run.ts",
     "lint": "eslint .",
     "typedoc": "typedoc",
     "build:cjs": "tsc -p tsconfig.json",
@@ -36,9 +36,29 @@
     "verdaccio": "rimraf verdaccio-storage && verdaccio -c verdaccio.yml",
     "local-publish": "npm publish --registry http://localhost:4873/"
   },
+  "exports": {
+    ".": {
+      "import": "./dist/es/index.js",
+      "require": "./dist/cjs/index.js"
+    },
+    "./libStorage": {
+      "import": "./dist/es/libStorage.js",
+      "require": "./dist/cjs/libStorage.js"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "dist/types/index.d.ts"
+      ],
+      "libStorage": [
+        "dist/types/libStorage.d.ts"
+      ]
+    }
+  },
+  "module": "dist/es/index.js",
   "main": "dist/cjs/index.js",
   "types": "dist/types/index.d.ts",
-  "module": "dist/es/index.js",
   "files": [
     "dist",
     "src"
@@ -47,10 +67,6 @@
     "@types/sinon": "10.0.10",
     "sinon": "^11.1.1",
     "tslib": "^2.1.0"
-  },
-  "peerDependencies": {
-    "@aws-sdk/client-s3": "^3.0.0",
-    "@aws-sdk/types": "^3.0.0"
   },
   "devDependencies": {
     "@aws-sdk/client-dynamodb": "3.49.0",
