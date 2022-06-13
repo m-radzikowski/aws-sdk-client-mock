@@ -89,9 +89,8 @@ export interface AwsSdkJestMockMatchers<E, R> extends Record<string, any> {
 }
 
 declare global {
-    // eslint-disable-next-line
     namespace jest {
-        // eslint-disable-next-line
+        // eslint-disable-next-line @typescript-eslint/no-empty-interface
         interface Matchers<R = void, T = {}> extends AwsSdkJestMockMatchers<T, R> { }
     }
 }
