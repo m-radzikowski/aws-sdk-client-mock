@@ -20,6 +20,7 @@ assignees: ''
 **Environment**
 
 - Node version: 
+- Testing lib and version: <!-- e.g. Mocha, Jest, ... -->
 - Typescript version: 
 - AWS SDK v3 Client mock version: 
 - AWS JS SDK libs and versions:
