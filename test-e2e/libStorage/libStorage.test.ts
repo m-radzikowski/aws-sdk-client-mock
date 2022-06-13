@@ -9,10 +9,11 @@ it('mocks S3 Client Upload', async () => {
 
     const s3Upload = new Upload({
         client: new S3Client({}),
+        partSize: 5 * 1024 * 1024, // 5 MB
         params: {
             Bucket: 'mock',
             Key: 'test',
-            Body: 'qwe',
+            Body: 'x'.repeat(6 * 1024 * 1024), // 6 MB
         },
     });
 
@@ -23,5 +24,5 @@ it('mocks S3 Client Upload', async () => {
 
     await s3Upload.done();
 
-    expect(uploadProgress).toHaveLength(1);
+    expect(uploadProgress).toHaveLength(2);
 });
