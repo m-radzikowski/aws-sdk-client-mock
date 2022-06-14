@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.0.0](https://github.com/m-radzikowski/aws-sdk-client-mock/compare/v0.6.2...v1.0.0) (2022-06-14)
+
+
+### ⚠ BREAKING CHANGES
+
+* remove @aws-sdk types and client-s3 from peer dependencies (#57)
+
+### Features
+
+* introduce jest matchers ([#97](https://github.com/m-radzikowski/aws-sdk-client-mock/issues/97)) ([b5f2c10](https://github.com/m-radzikowski/aws-sdk-client-mock/commit/b5f2c100075ad0d30856ec611bed739812b4a872))
+
+
+### Bug Fixes
+
+* remove [@aws-sdk](https://github.com/aws-sdk) types and client-s3 from peer dependencies ([#57](https://github.com/m-radzikowski/aws-sdk-client-mock/issues/57)) ([c66e050](https://github.com/m-radzikowski/aws-sdk-client-mock/commit/c66e050ba87895120277af3b4739f761c1ed231a))
+
 ### [0.6.2](https://github.com/m-radzikowski/aws-sdk-client-mock/compare/v0.6.1...v0.6.2) (2022-03-06)
 
 

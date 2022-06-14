@@ -1,7 +1,7 @@
 {
   "name": "aws-sdk-client-mock",
   "description": "Easy and powerful mocking of AWS SDK v3 Clients",
-  "version": "0.6.2",
+  "version": "1.0.0",
   "license": "MIT",
   "author": {
     "name": "Maciej Radzikowski",
