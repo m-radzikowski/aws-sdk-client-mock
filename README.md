@@ -393,6 +393,22 @@ You can get the stub instance to configure and use it directly:
 const snsSendStub = snsMock.send;
 ```
 
+### Jest matchers
+
+Library provides [Jest](https://jestjs.io/) matchers that simplify verification
+that the mocked Client was called with given Commands:
+
+```ts
+expect(snsMock).toHaveReceivedCommand(PublishCommand);
+expect(snsMock).toHaveReceivedCommandTimes(PublishCommand, 2);
+expect(snsMock).toHaveReceivedCommandWith(PublishCommand, {Message: 'My message'});
+expect(snsMock).toHaveReceivedNthCommandWith(2, PublishCommand, {Message: 'My message'});
+```
+
+Shorter aliases exist, like `toReceiveCommandTimes()`. 
+
+Matchers are automatically imported with the library.
+
 ## API Reference
 
 See the [full API Reference](https://m-radzikowski.github.io/aws-sdk-client-mock/).
@@ -458,7 +474,7 @@ it('message IDs are returned', async () => {
   expect(result[0]).toBe('12345678-1111-2222-3333-111122223333');
 });
 
-it('SNS Client is called', async () => {
+it('SNS Client is called with PublishCommand', async () => {
   snsMock.on(PublishCommand).resolves({
     MessageId: '111-222-333',
   });
@@ -467,7 +483,7 @@ it('SNS Client is called', async () => {
     messages: ['qq', 'xx']
   });
 
-  expect(snsMock.calls()).toHaveLength(2);
+  expect(snsMock).toHaveReceivedCommandTimes(PublishCommand, 2);
 });
 ```
 
