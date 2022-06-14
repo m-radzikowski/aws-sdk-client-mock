@@ -36,6 +36,7 @@ In action:
     - [Paginated operations](#paginated-operations)
     - [SDK v2-style mocks](#sdk-v2-style-mocks)
   - [Inspect](#inspect)
+  - [Jest matchers](#jest-matchers)
 - [API Reference](#api-reference)
 - [AWS Lambda example](#aws-lambda-example)
 - [Caveats](#caveats)
