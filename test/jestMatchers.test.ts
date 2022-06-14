@@ -1,11 +1,11 @@
-import { AwsClientStub, mockClient } from '../src';
-import { PublishCommand, SNSClient } from '@aws-sdk/client-sns';
-import { publishCmd1, publishCmd2, uuid1 } from './fixtures';
-import { baseMatchers, aliasMatchers } from '../src/jestMatchers';
-import { inspect } from 'util';
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+import {AwsClientStub, mockClient} from '../src';
+import {PublishCommand, SNSClient} from '@aws-sdk/client-sns';
+import {publishCmd1, publishCmd2, uuid1} from './fixtures';
+import {aliasMatchers, baseMatchers} from '../src/jestMatchers';
+import {inspect} from 'util';
 
 let snsMock: AwsClientStub<SNSClient>;
-
 
 const contextMock = {
     isNot: false,
@@ -20,23 +20,22 @@ const contextMock = {
 beforeEach(() => {
     snsMock = mockClient(SNSClient);
 
-    contextMock.isNot = false,
-    contextMock.equals.mockReturnValue(true),
-    contextMock.utils.printExpected.mockImplementation((v) => inspect(v, { compact: true }));
-    contextMock.utils.printReceived.mockImplementation((v) => inspect(v, { compact: true }));
+    contextMock.isNot = false;
+    contextMock.equals.mockReturnValue(true);
+    contextMock.utils.printExpected.mockImplementation((v) => inspect(v, {compact: true}));
+    contextMock.utils.printReceived.mockImplementation((v) => inspect(v, {compact: true}));
     contextMock.utils.printDiffOrStringify.mockImplementation((a, b) => [
-        inspect(a, { compact: true }),
-        inspect(b, { compact: true }),
-    ].join('\n')
-    );
+        inspect(a, {compact: true}),
+        inspect(b, {compact: true}),
+    ].join('\n'));
 });
 
 afterEach(() => {
     snsMock.restore();
 });
 
-describe('matcher aliases', ()=>{
-    it('adds matcher aliases', ()=> {
+describe('matcher aliases', () => {
+    it('adds matcher aliases', () => {
         expect(aliasMatchers.toReceiveCommand).toBe(baseMatchers.toHaveReceivedCommand);
         expect(aliasMatchers.toReceiveCommandTimes).toBe(baseMatchers.toHaveReceivedCommandTimes);
         expect(aliasMatchers.toReceiveCommandWith).toBe(baseMatchers.toHaveReceivedCommandWith);
@@ -52,7 +51,6 @@ describe('toHaveReceivedCommandTimes', () => {
 
         const sns = new SNSClient({});
         await sns.send(publishCmd1);
-
 
         const match = baseMatchers.toHaveReceivedCommandTimes.call(contextMock as any, snsMock, PublishCommand, 2) as jest.CustomMatcherResult;
         expect(match.pass).toBeFalsy();
@@ -76,7 +74,6 @@ Calls:
         await sns.send(publishCmd1);
         await sns.send(publishCmd1);
 
-
         const match = baseMatchers.toHaveReceivedCommandTimes.call(contextMock as any, snsMock, PublishCommand, 2) as jest.CustomMatcherResult;
         expect(match.pass).toBeTruthy();
 
@@ -88,7 +85,6 @@ Calls:
   2. PublishCommand: { TopicArn: 'arn:aws:sns:us-east-1:111111111111:MyTopic', Message: 'mock message' }`);
     });
 });
-
 
 describe('toHaveReceivedCommand', () => {
     it('matches received', () => {
@@ -135,7 +131,7 @@ describe('toHaveReceivedCommandWith', () => {
 
         const match = baseMatchers.toHaveReceivedCommandWith.call(contextMock as any,
             snsMock, PublishCommand,
-            publishCmd2.input
+            publishCmd2.input,
         ) as jest.CustomMatcherResult;
 
         expect(match.pass).toBeFalsy();
@@ -183,7 +179,7 @@ describe('toHaveNthReceivedCommandWith', () => {
 
         const match = baseMatchers.toHaveReceivedNthCommandWith.call(contextMock as any,
             snsMock, 1, PublishCommand,
-            publishCmd2.input
+            publishCmd2.input,
         ) as jest.CustomMatcherResult;
 
         expect(match.pass).toBeFalsy();
@@ -203,7 +199,7 @@ Calls:
     it('matches not received', async () => {
         contextMock.isNot = true;
 
-        snsMock.resolves({ MessageId: uuid1 });
+        snsMock.resolves({MessageId: uuid1});
 
         const sns = new SNSClient({});
         await sns.send(publishCmd1);

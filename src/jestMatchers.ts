@@ -1,22 +1,20 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import assert from 'assert';
-import type { MetadataBearer } from '@aws-sdk/types';
-import type { AwsCommand, AwsStub } from './awsClientStub';
-import type { SinonSpyCall } from 'sinon';
+import type {MetadataBearer} from '@aws-sdk/types';
+import type {AwsCommand, AwsStub} from './awsClientStub';
+import type {SinonSpyCall} from 'sinon';
 
-export interface AwsSdkJestMockBaseMatchers<E, R> extends Record<string, any> {
+export interface AwsSdkJestMockBaseMatchers<R> extends Record<string, any> {
     /**
      * Asserts {@link AwsStub Aws Client Mock} received a {@link command} exact number of {@link times}
      *
      * @param command aws-sdk command constructor
      * @param times
      */
-    toHaveReceivedCommandTimes<
-        TCmdInput extends object,
-        TCmdOutput extends MetadataBearer
-    >(
+    toHaveReceivedCommandTimes<TCmdInput extends object,
+        TCmdOutput extends MetadataBearer>(
         command: new (input: TCmdInput) => AwsCommand<TCmdInput, TCmdOutput>,
-        times: number
+        times: number,
     ): R;
 
     /**
@@ -24,11 +22,9 @@ export interface AwsSdkJestMockBaseMatchers<E, R> extends Record<string, any> {
      *
      * @param command aws-sdk command constructor
      */
-    toHaveReceivedCommand<
-        TCmdInput extends object,
-        TCmdOutput extends MetadataBearer
-    >(
-        command: new (input: TCmdInput) => AwsCommand<TCmdInput, TCmdOutput>
+    toHaveReceivedCommand<TCmdInput extends object,
+        TCmdOutput extends MetadataBearer>(
+        command: new (input: TCmdInput) => AwsCommand<TCmdInput, TCmdOutput>,
     ): R;
 
     /**
@@ -38,12 +34,10 @@ export interface AwsSdkJestMockBaseMatchers<E, R> extends Record<string, any> {
      * @param command aws-sdk command constructor
      * @param input
      */
-    toHaveReceivedCommandWith<
-        TCmdInput extends object,
-        TCmdOutput extends MetadataBearer
-    >(
+    toHaveReceivedCommandWith<TCmdInput extends object,
+        TCmdOutput extends MetadataBearer>(
         command: new (input: TCmdInput) => AwsCommand<TCmdInput, TCmdOutput>,
-        input: Partial<TCmdInput>
+        input: Partial<TCmdInput>,
     ): R;
 
     /**
@@ -54,30 +48,26 @@ export interface AwsSdkJestMockBaseMatchers<E, R> extends Record<string, any> {
      * @param command aws-sdk command constructor
      * @param input
      */
-    toHaveReceivedNthCommandWith<
-        TCmdInput extends object,
-        TCmdOutput extends MetadataBearer
-    >(
+    toHaveReceivedNthCommandWith<TCmdInput extends object,
+        TCmdOutput extends MetadataBearer>(
         call: number,
         command: new (input: TCmdInput) => AwsCommand<TCmdInput, TCmdOutput>,
-        input: Partial<TCmdInput>
+        input: Partial<TCmdInput>,
     ): R;
 }
 
-export interface AwsSdkJestMockAliasMatchers<E, R> {
+export interface AwsSdkJestMockAliasMatchers<R> {
     /**
      * Asserts {@link AwsStub Aws Client Mock} received a {@link command} exact number of {@link times}
-     * 
+     *
      * @alias {@link AwsSdkJestMockBaseMatchers.toHaveReceivedCommandTimes}
      * @param command aws-sdk command constructor
      * @param times
      */
-    toReceiveCommandTimes<
-        TCmdInput extends object,
-        TCmdOutput extends MetadataBearer
-    >(
+    toReceiveCommandTimes<TCmdInput extends object,
+        TCmdOutput extends MetadataBearer>(
         command: new (input: TCmdInput) => AwsCommand<TCmdInput, TCmdOutput>,
-        times: number
+        times: number,
     ): R;
 
     /**
@@ -86,11 +76,9 @@ export interface AwsSdkJestMockAliasMatchers<E, R> {
      * @alias {@link AwsSdkJestMockBaseMatchers.toHaveReceivedCommand}
      * @param command aws-sdk command constructor
      */
-    toReceiveCommand<
-        TCmdInput extends object,
-        TCmdOutput extends MetadataBearer
-    >(
-        command: new (input: TCmdInput) => AwsCommand<TCmdInput, TCmdOutput>
+    toReceiveCommand<TCmdInput extends object,
+        TCmdOutput extends MetadataBearer>(
+        command: new (input: TCmdInput) => AwsCommand<TCmdInput, TCmdOutput>,
     ): R;
 
     /**
@@ -101,12 +89,10 @@ export interface AwsSdkJestMockAliasMatchers<E, R> {
      * @param command aws-sdk command constructor
      * @param input
      */
-    toReceiveCommandWith<
-        TCmdInput extends object,
-        TCmdOutput extends MetadataBearer
-    >(
+    toReceiveCommandWith<TCmdInput extends object,
+        TCmdOutput extends MetadataBearer>(
         command: new (input: TCmdInput) => AwsCommand<TCmdInput, TCmdOutput>,
-        input: Partial<TCmdInput>
+        input: Partial<TCmdInput>,
     ): R;
 
     /**
@@ -118,13 +104,11 @@ export interface AwsSdkJestMockAliasMatchers<E, R> {
      * @param command aws-sdk command constructor
      * @param input
      */
-    toReceiveNthCommandWith<
-        TCmdInput extends object,
-        TCmdOutput extends MetadataBearer
-    >(
+    toReceiveNthCommandWith<TCmdInput extends object,
+        TCmdOutput extends MetadataBearer>(
         call: number,
         command: new (input: TCmdInput) => AwsCommand<TCmdInput, TCmdOutput>,
-        input: Partial<TCmdInput>
+        input: Partial<TCmdInput>,
     ): R;
 }
 
@@ -152,12 +136,14 @@ export interface AwsSdkJestMockAliasMatchers<E, R> {
  * });
  * ```
  */
-export interface AwsSdkJestMockMatchers<E, R> extends AwsSdkJestMockBaseMatchers<E, R>, AwsSdkJestMockAliasMatchers<E, R>, Record<string, any> { }
+export interface AwsSdkJestMockMatchers<R> extends AwsSdkJestMockBaseMatchers<R>, AwsSdkJestMockAliasMatchers<R>, Record<string, any> {
+}
 
 declare global {
     namespace jest {
         // eslint-disable-next-line @typescript-eslint/no-empty-interface
-        interface Matchers<R = void, T = {}> extends AwsSdkJestMockMatchers<T, R> { }
+        interface Matchers<R = void> extends AwsSdkJestMockMatchers<R> {
+        }
     }
 }
 
@@ -187,8 +173,8 @@ function printCalls(ctx: jest.MatcherContext, calls: AnySpyCall[]): string[] {
         ...calls.map(
             (c, i) =>
                 `  ${i + 1}. ${c.args[0].constructor.name}: ${ctx.utils.printReceived(
-                    c.args[0].input
-                )}`
+                    c.args[0].input,
+                )}`,
         )] : [];
 }
 
@@ -215,12 +201,12 @@ export function processMatch<CheckData>({
         typeof command === 'function' &&
         typeof command.name === 'string' &&
         command.name.length > 0,
-        'Command must be valid AWS Sdk Command'
+        'Command must be valid AWS Sdk Command',
     );
 
     const calls = mockClient.calls();
     const commandCalls = mockClient.commandCalls(command, input);
-    const { pass, data } = check({ calls, commandCalls });
+    const {pass, data} = check({calls, commandCalls});
 
     const msg = (): string => {
         const cmd = ctx.utils.printExpected(command.name);
@@ -238,11 +224,11 @@ export function processMatch<CheckData>({
         return message(msgParams).join('\n');
     };
 
-    return { pass, message: msg };
+    return {pass, message: msg};
 }
 
 /* Using them for testing */
-export const baseMatchers: { [P in keyof AwsSdkJestMockBaseMatchers<unknown, unknown>]: jest.CustomMatcher } = {
+export const baseMatchers: { [P in keyof AwsSdkJestMockBaseMatchers<unknown>]: jest.CustomMatcher } = {
     /**
      * implementation of {@link AwsSdkJestMockMatchers.toHaveReceivedCommandTimes} matcher
      */
@@ -250,17 +236,17 @@ export const baseMatchers: { [P in keyof AwsSdkJestMockBaseMatchers<unknown, unk
         this: jest.MatcherContext,
         mockClient: ClientMock,
         command: new () => AnyCommand,
-        expectedCalls: number
+        expectedCalls: number,
     ) {
         return processMatch({
             ctx: this,
             mockClient,
             command,
             input: undefined,
-            check: ({ commandCalls }) => ({ pass: commandCalls.length === expectedCalls, data: {} }),
-            message: ({ client, cmd, commandCalls, notPrefix }) => [
+            check: ({commandCalls}) => ({pass: commandCalls.length === expectedCalls, data: {}}),
+            message: ({client, cmd, commandCalls, notPrefix}) => [
                 `Expected ${client} to ${notPrefix}receive ${cmd} ${this.utils.printExpected(
-                    expectedCalls
+                    expectedCalls,
                 )} times`,
                 `${client} received ${cmd} ${this.utils.printReceived(commandCalls.length)} times`,
                 ...printCalls(this, commandCalls),
@@ -273,15 +259,15 @@ export const baseMatchers: { [P in keyof AwsSdkJestMockBaseMatchers<unknown, unk
     toHaveReceivedCommand(
         this: jest.MatcherContext,
         mockClient: ClientMock,
-        command: new () => AnyCommand
+        command: new () => AnyCommand,
     ) {
         return processMatch({
             ctx: this,
             mockClient,
             command,
             input: undefined,
-            check: ({ commandCalls }) => ({ pass: commandCalls.length > 0, data: {} }),
-            message: ({ client, cmd, notPrefix, commandCalls }) => [
+            check: ({commandCalls}) => ({pass: commandCalls.length > 0, data: {}}),
+            message: ({client, cmd, notPrefix, commandCalls}) => [
                 `Expected ${client} to ${notPrefix}receive ${cmd}`,
                 `${client} received ${cmd} ${this.utils.printReceived(commandCalls.length)} times`,
                 ...printCalls(this, commandCalls),
@@ -295,17 +281,17 @@ export const baseMatchers: { [P in keyof AwsSdkJestMockBaseMatchers<unknown, unk
         this: jest.MatcherContext,
         mockClient: ClientMock,
         command: new () => AnyCommand,
-        input: Record<string, unknown>
+        input: Record<string, unknown>,
     ) {
         return processMatch({
             ctx: this,
             mockClient,
             command,
             input,
-            check: ({ commandCalls }) => ({ pass: commandCalls.length > 0, data: {} }),
-            message: ({ client, cmd, calls, notPrefix, commandCalls }) => [
+            check: ({commandCalls}) => ({pass: commandCalls.length > 0, data: {}}),
+            message: ({client, cmd, calls, notPrefix, commandCalls}) => [
                 `Expected ${client} to ${notPrefix}receive ${cmd} with ${this.utils.printExpected(
-                    input
+                    input,
                 )}`,
                 `${client} received ${cmd} ${this.utils.printReceived(commandCalls.length)} times`,
                 ...printCalls(this, calls),
@@ -320,18 +306,18 @@ export const baseMatchers: { [P in keyof AwsSdkJestMockBaseMatchers<unknown, unk
         mockClient: ClientMock,
         call: number,
         command: new () => AnyCommand,
-        input?: Record<string, unknown>
+        input?: Record<string, unknown>,
     ) {
         assert(
             call && typeof call === 'number' && call > 0,
-            'Call number must be a number and greater as 0'
+            'Call number must be a number and greater as 0',
         );
 
         return processMatch<{ received: AnyCommand; cmd: string }>({
             ctx: this,
             mockClient,
             command,
-            check: ({ calls }) => {
+            check: ({calls}) => {
                 const received = calls[call - 1].args[0];
                 return {
                     pass:
@@ -343,7 +329,7 @@ export const baseMatchers: { [P in keyof AwsSdkJestMockBaseMatchers<unknown, unk
                 };
             },
             input,
-            message: ({ cmd, client, calls, data, notPrefix }) => [
+            message: ({cmd, client, calls, data, notPrefix}) => [
                 `Expected ${client} to ${notPrefix}receive ${call}. ${cmd}`,
                 `${client} received ${call}. ${data.cmd} with input`,
                 this.utils.printDiffOrStringify(
@@ -351,7 +337,7 @@ export const baseMatchers: { [P in keyof AwsSdkJestMockBaseMatchers<unknown, unk
                     data.received.input,
                     'Expected',
                     'Received',
-                    false
+                    false,
                 ),
                 ...printCalls(this, calls),
             ],
@@ -360,15 +346,14 @@ export const baseMatchers: { [P in keyof AwsSdkJestMockBaseMatchers<unknown, unk
 };
 
 /* typing ensures keys matching */
-export const aliasMatchers: { [P in keyof AwsSdkJestMockAliasMatchers<unknown, unknown>]: jest.CustomMatcher } = {
+export const aliasMatchers: { [P in keyof AwsSdkJestMockAliasMatchers<unknown>]: jest.CustomMatcher } = {
     toReceiveCommandTimes: baseMatchers.toHaveReceivedCommandTimes,
     toReceiveCommand: baseMatchers.toHaveReceivedCommand,
     toReceiveCommandWith: baseMatchers.toHaveReceivedCommandWith,
     toReceiveNthCommandWith: baseMatchers.toHaveReceivedNthCommandWith,
 };
 
-
 // Skip registration if jest expect does not exist
 if (typeof expect !== 'undefined' && typeof expect.extend === 'function') {
-    expect.extend({ ...baseMatchers, ...aliasMatchers });
+    expect.extend({...baseMatchers, ...aliasMatchers});
 }
