@@ -17,6 +17,7 @@ Features:
 - 🌊&nbsp; **fluent interface** - declaring behavior is short and readable
 - 🔍&nbsp; **matching options** - defining mock behavior by Command type and/or its input payload
 - 🕵️&nbsp; **spying** - checking if Commands were actually sent
+- 🃏&nbsp; **Jest matchers** - easily verifying sent Commands
 - 🖋️&nbsp; **fully typed** - same type control for declaring mock's behavior as when writing regular code
 - ✅&nbsp; **fully tested** - reliable mocks help instead of impeding
 
