@@ -13,5 +13,6 @@ it('mocks SNS client', async () => {
         Message: 'My message',
     }));
 
+    expect(snsMock).toHaveReceivedCommandTimes(PublishCommand, 1);
     expect(result.MessageId).toBe('12345678-1111-2222-3333-111122223333');
 });
