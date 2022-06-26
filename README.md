@@ -255,17 +255,16 @@ ddbMock.on(QueryCommand).resolves({
 
 #### Lib Storage Upload
 
-To mock `@aws-sdk/lib-storage` `Upload` you need to call
-a helper function `mockLibStorageUpload()`
-that will configure required S3Client command mocks:
+To mock `@aws-sdk/lib-storage` `Upload` you need to mock
+at least two commands: `CreateMultipartUploadCommand` and `UploadPartCommand`
+used [under the hood](https://github.com/aws/aws-sdk-js-v3/blob/main/lib/lib-storage/src/Upload.ts):
 
 ```typescript
-import {mockLibStorageUpload} from 'aws-sdk-client-mock/libStorage';
-import {Upload} from '@aws-sdk/lib-storage';
-import {S3Client} from '@aws-sdk/client-s3';
+import {S3Client, CreateMultipartUploadCommand, UploadPartCommand} from '@aws-sdk/client-s3';
 
 const s3Mock = mockClient(S3Client);
-mockLibStorageUpload(s3Mock);
+s3Mock.on(CreateMultipartUploadCommand).resolves({UploadId: '1'});
+s3Mock.on(UploadPartCommand).resolves({ETag: '1'});
 
 const s3Upload = new Upload({
     client: new S3Client({}),
@@ -283,16 +282,10 @@ s3Upload.on('httpUploadProgress', (progress) => {
 await s3Upload.done();
 ```
 
-When using with Jest, it requires Jest v28.0.0 or higher,
-[supporting package exports](https://github.com/facebook/jest/issues/9771).
+This way, the  `Upload#done()` will complete successfuly.
 
-You can call `mockLibStorageUpload()` without providing an S3Client mock.
-In that case, the client mock will be created and returned from the function.
-However, you still need to have `@aws-sdk/client-s3` installed as a dependency.
-
-By default, the `@aws-sdk/lib-storage` `Upload#done()` will complete successfuly.
 To cause a failure, you need to specify the `rejects()` behavior
-of one of the [AWS SDK Commands used under the hood by the `lib-storage`](https://github.com/aws/aws-sdk-js-v3/blob/main/lib/lib-storage/src/Upload.ts).
+for one of the AWS SDK Commands used by the `@aws-sdk/lib-storage`.
 
 For uploading a small file (under the defined multipart upload single part size),
 `lib-storage` sends a `PutObjectCommand`. To make it fail:
