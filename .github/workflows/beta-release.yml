@@ -1,0 +1,64 @@
+name: Beta Release
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build_and_release:
+    name: Build and release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0 # fetch full history, so changelog can be generated
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+          registry-url: 'https://registry.npmjs.org'
+
+      - run: yarn run ci
+
+      - run: yarn run lint
+      - run: yarn run test
+
+      - run: yarn run build
+
+      - run: yarn run test-types
+      - run: yarn run size
+
+      - name: git config
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+
+      - name: Create release
+        id: create_release
+        run: |
+          yarn run release --prerelease beta
+          echo ::set-output name=tag_name::$(git describe HEAD --abbrev=0)
+
+      - name: run e2e tests
+        run: |
+          yarn run verdaccio &
+          yarn run local-publish
+          yarn run test-e2e
+
+      - run: npm publish --tag beta
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          tags: true
+
+      - name: Generate Release body
+        run: npx extract-changelog-release > RELEASE_BODY.md
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag_name: ${{ steps.create_release.outputs.tag_name }}
+          body_path: RELEASE_BODY.md
+          prerelease: true
