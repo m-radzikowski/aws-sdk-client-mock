@@ -1,218 +1,230 @@
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import {AwsClientStub, mockClient} from '../src';
 import {PublishCommand, SNSClient} from '@aws-sdk/client-sns';
-import {publishCmd1, publishCmd2, uuid1} from './fixtures';
-import {aliasMatchers, baseMatchers} from '../src/jestMatchers';
-import {inspect} from 'util';
+import {publishCmd1, publishCmd2} from './fixtures';
 
 let snsMock: AwsClientStub<SNSClient>;
 
-const contextMock = {
-    isNot: false,
-    equals: jest.fn(),
-    utils: {
-        printExpected: jest.fn(),
-        printReceived: jest.fn(),
-        printDiffOrStringify: jest.fn(),
-    },
-};
-
 beforeEach(() => {
     snsMock = mockClient(SNSClient);
-
-    contextMock.isNot = false;
-    contextMock.equals.mockReturnValue(true);
-    contextMock.utils.printExpected.mockImplementation((v) => inspect(v, {compact: true}));
-    contextMock.utils.printReceived.mockImplementation((v) => inspect(v, {compact: true}));
-    contextMock.utils.printDiffOrStringify.mockImplementation((a, b) => [
-        inspect(a, {compact: true}),
-        inspect(b, {compact: true}),
-    ].join('\n'));
 });
 
 afterEach(() => {
     snsMock.restore();
 });
 
-describe('matcher aliases', () => {
-    it('adds matcher aliases', () => {
-        expect(aliasMatchers.toReceiveCommand).toBe(baseMatchers.toHaveReceivedCommand);
-        expect(aliasMatchers.toReceiveCommandTimes).toBe(baseMatchers.toHaveReceivedCommandTimes);
-        expect(aliasMatchers.toReceiveCommandWith).toBe(baseMatchers.toHaveReceivedCommandWith);
-        expect(aliasMatchers.toReceiveNthCommandWith).toBe(baseMatchers.toHaveReceivedNthCommandWith);
+describe('toHaveReceivedCommand', () => {
+    it('passes on receiving Command', async () => {
+        const sns = new SNSClient({});
+        await sns.send(publishCmd1);
+
+        expect(() => expect(snsMock).toHaveReceivedCommand(PublishCommand)).not.toThrow();
+    });
+
+    it('fails on not receiving Command', () => {
+        expect(() => expect(snsMock).toHaveReceivedCommand(PublishCommand)).toThrowErrorMatchingInlineSnapshot(`
+"Expected SNSClient to receive <green>\\"PublishCommand\\"</>
+SNSClient received <green>\\"PublishCommand\\"</> <red>0</> times"
+`);
+    });
+
+    it('fails on receiving Command with not', async () => {
+        const sns = new SNSClient({});
+        await sns.send(publishCmd1);
+
+        expect(() => expect(snsMock).not.toHaveReceivedCommand(PublishCommand)).toThrowErrorMatchingInlineSnapshot(`
+"Expected SNSClient to not receive <green>\\"PublishCommand\\"</>
+SNSClient received <green>\\"PublishCommand\\"</> <red>1</> times
+
+Calls:
+  1. PublishCommand: <red>{\\"Message\\": \\"mock message\\", \\"TopicArn\\": \\"arn:aws:sns:us-east-1:111111111111:MyTopic\\"}</>"
+`);
     });
 });
 
 describe('toHaveReceivedCommandTimes', () => {
-    it('matches calls count', async () => {
-        snsMock.resolves({
-            MessageId: uuid1,
-        });
-
-        const sns = new SNSClient({});
-        await sns.send(publishCmd1);
-
-        const match = baseMatchers.toHaveReceivedCommandTimes.call(contextMock as any, snsMock, PublishCommand, 2) as jest.CustomMatcherResult;
-        expect(match.pass).toBeFalsy();
-
-        expect(match.message()).toEqual(`Expected SNSClient to receive 'PublishCommand' 2 times
-SNSClient received 'PublishCommand' 1 times
-Calls:
-
-  1. PublishCommand: { TopicArn: 'arn:aws:sns:us-east-1:111111111111:MyTopic', Message: 'mock message' }`);
-
-    });
-
-    it('matches not calls count', async () => {
-        contextMock.isNot = true;
-
-        snsMock.resolves({
-            MessageId: uuid1,
-        });
-
-        const sns = new SNSClient({});
-        await sns.send(publishCmd1);
-        await sns.send(publishCmd1);
-
-        const match = baseMatchers.toHaveReceivedCommandTimes.call(contextMock as any, snsMock, PublishCommand, 2) as jest.CustomMatcherResult;
-        expect(match.pass).toBeTruthy();
-
-        expect(match.message()).toEqual(`Expected SNSClient to not receive 'PublishCommand' 2 times
-SNSClient received 'PublishCommand' 2 times
-Calls:
-
-  1. PublishCommand: { TopicArn: 'arn:aws:sns:us-east-1:111111111111:MyTopic', Message: 'mock message' }
-  2. PublishCommand: { TopicArn: 'arn:aws:sns:us-east-1:111111111111:MyTopic', Message: 'mock message' }`);
-    });
-});
-
-describe('toHaveReceivedCommand', () => {
-    it('matches received', () => {
-        snsMock.resolves({
-            MessageId: uuid1,
-        });
-
-        const match = baseMatchers.toHaveReceivedCommand.call(contextMock as any, snsMock, PublishCommand, 2) as jest.CustomMatcherResult;
-        expect(match.pass).toBeFalsy();
-
-        expect(match.message()).toEqual(`Expected SNSClient to receive 'PublishCommand'
-SNSClient received 'PublishCommand' 0 times`);
-    });
-
-    it('matches not received', async () => {
-        contextMock.isNot = true;
-
-        snsMock.resolves({
-            MessageId: uuid1,
-        });
-
-        const sns = new SNSClient({});
-        await sns.send(publishCmd1);
-
-        const match = baseMatchers.toHaveReceivedCommand.call(contextMock as any, snsMock, PublishCommand, 2) as jest.CustomMatcherResult;
-        expect(match.pass).toBeTruthy();
-
-        expect(match.message()).toEqual(`Expected SNSClient to not receive 'PublishCommand'
-SNSClient received 'PublishCommand' 1 times
-Calls:
-
-  1. PublishCommand: { TopicArn: 'arn:aws:sns:us-east-1:111111111111:MyTopic', Message: 'mock message' }`);
-    });
-});
-
-describe('toHaveReceivedCommandWith', () => {
-    it('matches received', async () => {
-        snsMock.resolves({
-            MessageId: uuid1,
-        });
-
-        const sns = new SNSClient({});
-        await sns.send(publishCmd1);
-
-        const match = baseMatchers.toHaveReceivedCommandWith.call(contextMock as any,
-            snsMock, PublishCommand,
-            publishCmd2.input,
-        ) as jest.CustomMatcherResult;
-
-        expect(match.pass).toBeFalsy();
-
-        expect(match.message()).toEqual(`Expected SNSClient to receive 'PublishCommand' with { TopicArn: 'arn:aws:sns:us-east-1:111111111111:MyTopic',
-  Message: 'second mock message' }
-SNSClient received 'PublishCommand' 0 times
-Calls:
-
-  1. PublishCommand: { TopicArn: 'arn:aws:sns:us-east-1:111111111111:MyTopic', Message: 'mock message' }`);
-    });
-
-    it('matches not received', async () => {
-        contextMock.isNot = true;
-
-        snsMock.resolves({
-            MessageId: uuid1,
-        });
-
-        const sns = new SNSClient({});
-        await sns.send(publishCmd1);
-
-        const match = baseMatchers.toHaveReceivedCommandWith.call(contextMock as any, snsMock, PublishCommand, publishCmd1.input) as jest.CustomMatcherResult;
-        expect(match.pass).toBeTruthy();
-
-        expect(match.message()).toEqual(`Expected SNSClient to not receive 'PublishCommand' with { TopicArn: 'arn:aws:sns:us-east-1:111111111111:MyTopic', Message: 'mock message' }
-SNSClient received 'PublishCommand' 1 times
-Calls:
-
-  1. PublishCommand: { TopicArn: 'arn:aws:sns:us-east-1:111111111111:MyTopic', Message: 'mock message' }`);
-    });
-});
-
-describe('toHaveNthReceivedCommandWith', () => {
-    it('matches received', async () => {
-        contextMock.equals.mockReturnValue(false);
-
-        snsMock.resolves({
-            MessageId: uuid1,
-        });
-
+    it('passes on receiving Command twice', async () => {
         const sns = new SNSClient({});
         await sns.send(publishCmd1);
         await sns.send(publishCmd2);
 
-        const match = baseMatchers.toHaveReceivedNthCommandWith.call(contextMock as any,
-            snsMock, 1, PublishCommand,
-            publishCmd2.input,
-        ) as jest.CustomMatcherResult;
-
-        expect(match.pass).toBeFalsy();
-
-        expect(match.message()).toEqual(`Expected SNSClient to receive 1. 'PublishCommand'
-SNSClient received 1. 'PublishCommand' with input
-{ TopicArn: 'arn:aws:sns:us-east-1:111111111111:MyTopic',
-  Message: 'second mock message' }
-{ TopicArn: 'arn:aws:sns:us-east-1:111111111111:MyTopic', Message: 'mock message' }
-Calls:
-
-  1. PublishCommand: { TopicArn: 'arn:aws:sns:us-east-1:111111111111:MyTopic', Message: 'mock message' }
-  2. PublishCommand: { TopicArn: 'arn:aws:sns:us-east-1:111111111111:MyTopic',
-  Message: 'second mock message' }`);
+        expect(() => expect(snsMock).toHaveReceivedCommandTimes(PublishCommand, 2)).not.toThrow();
     });
 
-    it('matches not received', async () => {
-        contextMock.isNot = true;
-
-        snsMock.resolves({MessageId: uuid1});
-
+    it('fails on not receiving Command twice', async () => {
         const sns = new SNSClient({});
         await sns.send(publishCmd1);
 
-        const match = baseMatchers.toHaveReceivedNthCommandWith.call(contextMock as any, snsMock, 1, PublishCommand, publishCmd1.input) as jest.CustomMatcherResult;
-        expect(match.pass).toBeTruthy();
+        expect(() => expect(snsMock).toHaveReceivedCommandTimes(PublishCommand, 2)).toThrowErrorMatchingInlineSnapshot(`
+"Expected SNSClient to receive <green>\\"PublishCommand\\"</> <green>2</> times
+SNSClient received <green>\\"PublishCommand\\"</> <red>1</> times
 
-        expect(match.message()).toEqual(`Expected SNSClient to not receive 1. 'PublishCommand'
-SNSClient received 1. 'PublishCommand' with input
-{ TopicArn: 'arn:aws:sns:us-east-1:111111111111:MyTopic', Message: 'mock message' }
-{ TopicArn: 'arn:aws:sns:us-east-1:111111111111:MyTopic', Message: 'mock message' }
 Calls:
+  1. PublishCommand: <red>{\\"Message\\": \\"mock message\\", \\"TopicArn\\": \\"arn:aws:sns:us-east-1:111111111111:MyTopic\\"}</>"
+`);
+    });
 
-  1. PublishCommand: { TopicArn: 'arn:aws:sns:us-east-1:111111111111:MyTopic', Message: 'mock message' }`);
+    it('fails on receiving Command twice with not', async () => {
+        const sns = new SNSClient({});
+        await sns.send(publishCmd1);
+        await sns.send(publishCmd1);
+
+        expect(() => expect(snsMock).not.toHaveReceivedCommandTimes(PublishCommand, 2)).toThrowErrorMatchingInlineSnapshot(`
+"Expected SNSClient to not receive <green>\\"PublishCommand\\"</> <green>2</> times
+SNSClient received <green>\\"PublishCommand\\"</> <red>2</> times
+
+Calls:
+  1. PublishCommand: <red>{\\"Message\\": \\"mock message\\", \\"TopicArn\\": \\"arn:aws:sns:us-east-1:111111111111:MyTopic\\"}</>
+  2. PublishCommand: <red>{\\"Message\\": \\"mock message\\", \\"TopicArn\\": \\"arn:aws:sns:us-east-1:111111111111:MyTopic\\"}</>"
+`);
+    });
+});
+
+describe('toHaveReceivedCommandWith', () => {
+    it('passes on receiving Command with partial match', async () => {
+        const sns = new SNSClient({});
+        await sns.send(publishCmd1);
+        await sns.send(publishCmd2);
+
+        expect(() => expect(snsMock).toHaveReceivedCommandWith(PublishCommand, {Message: publishCmd2.input.Message})).not.toThrow();
+    });
+
+    it('fails on not receiving Command', async () => {
+        const sns = new SNSClient({});
+        await sns.send(publishCmd1);
+
+        expect(() => expect(snsMock).toHaveReceivedCommandWith(PublishCommand, {Message: publishCmd2.input.Message})).toThrowErrorMatchingInlineSnapshot(`
+"Expected SNSClient to receive <green>\\"PublishCommand\\"</> with <green>{\\"Message\\": \\"second mock message\\"}</>
+SNSClient received matching <green>\\"PublishCommand\\"</> <red>0</> times
+
+Calls:
+  1. PublishCommand: <red>{\\"Message\\": \\"mock message\\", \\"TopicArn\\": \\"arn:aws:sns:us-east-1:111111111111:MyTopic\\"}</>"
+`);
+    });
+
+    it('fails on receiving Command with partial match with not', async () => {
+        const sns = new SNSClient({});
+        await sns.send(publishCmd1);
+
+        expect(() => expect(snsMock).not.toHaveReceivedCommandWith(PublishCommand, {Message: publishCmd1.input.Message})).toThrowErrorMatchingInlineSnapshot(`
+"Expected SNSClient to not receive <green>\\"PublishCommand\\"</> with <green>{\\"Message\\": \\"mock message\\"}</>
+SNSClient received matching <green>\\"PublishCommand\\"</> <red>1</> times
+
+Calls:
+  1. PublishCommand: <red>{\\"Message\\": \\"mock message\\", \\"TopicArn\\": \\"arn:aws:sns:us-east-1:111111111111:MyTopic\\"}</>"
+`);
+    });
+
+    it('passes on match with asymmetric matcher', async () => {
+        const sns = new SNSClient({});
+        await sns.send(publishCmd1);
+
+        expect(() => expect(snsMock).toHaveReceivedCommandWith(PublishCommand, {
+            Message: expect.stringMatching(/message/), // eslint-disable-line @typescript-eslint/no-unsafe-assignment
+        })).not.toThrow();
+    });
+
+    it('fails on unmatch with asymmetric matcher', async () => {
+        const sns = new SNSClient({});
+        await sns.send(publishCmd1);
+
+        expect(() => expect(snsMock).toHaveReceivedCommandWith(PublishCommand, {
+            Message: expect.stringMatching(/qq/), // eslint-disable-line @typescript-eslint/no-unsafe-assignment
+        })).toThrowErrorMatchingInlineSnapshot(`
+"Expected SNSClient to receive <green>\\"PublishCommand\\"</> with <green>{\\"Message\\": StringMatching /qq/}</>
+SNSClient received matching <green>\\"PublishCommand\\"</> <red>0</> times
+
+Calls:
+  1. PublishCommand: <red>{\\"Message\\": \\"mock message\\", \\"TopicArn\\": \\"arn:aws:sns:us-east-1:111111111111:MyTopic\\"}</>"
+`);
+    });
+});
+
+describe('toHaveReceivedNthCommandWith', () => {
+    it('passes on receiving second Command with partial match', async () => {
+        const sns = new SNSClient({});
+        await sns.send(publishCmd1);
+        await sns.send(publishCmd2);
+
+        expect(() => expect(snsMock).toHaveReceivedNthCommandWith(2, PublishCommand, {Message: publishCmd2.input.Message})).not.toThrow();
+    });
+
+    it('fails on not receiving second Command', async () => {
+        const sns = new SNSClient({});
+        await sns.send(publishCmd1);
+        await sns.send(publishCmd1);
+
+        expect(() => expect(snsMock).toHaveReceivedNthCommandWith(2, PublishCommand, {Message: publishCmd2.input.Message})).toThrowErrorMatchingInlineSnapshot(`
+"Expected SNSClient to receive 2. <green>\\"PublishCommand\\"</> with <green>{\\"Message\\": \\"second mock message\\"}</>
+SNSClient received <red>\\"PublishCommand\\"</> with input:
+<green>- Expected  - 1</>
+<red>+ Received  + 2</>
+
+<dim>  Object {</>
+<green>-   \\"Message\\": \\"second mock message\\",</>
+<red>+   \\"Message\\": \\"mock message\\",</>
+<red>+   \\"TopicArn\\": \\"arn:aws:sns:us-east-1:111111111111:MyTopic\\",</>
+<dim>  }</>
+
+Calls:
+  1. PublishCommand: <red>{\\"Message\\": \\"mock message\\", \\"TopicArn\\": \\"arn:aws:sns:us-east-1:111111111111:MyTopic\\"}</>
+  2. PublishCommand: <red>{\\"Message\\": \\"mock message\\", \\"TopicArn\\": \\"arn:aws:sns:us-east-1:111111111111:MyTopic\\"}</>"
+`);
+    });
+
+    it('fails on receiving second Command with not', async () => {
+        const sns = new SNSClient({});
+        await sns.send(publishCmd1);
+        await sns.send(publishCmd2);
+
+        expect(() => expect(snsMock).not.toHaveReceivedNthCommandWith(2, PublishCommand, {Message: publishCmd2.input.Message})).toThrowErrorMatchingInlineSnapshot(`
+"Expected SNSClient to not receive 2. <green>\\"PublishCommand\\"</> with <green>{\\"Message\\": \\"second mock message\\"}</>
+SNSClient received <red>\\"PublishCommand\\"</> with input:
+<green>- Expected  - 0</>
+<red>+ Received  + 1</>
+
+<dim>  Object {</>
+<dim>    \\"Message\\": \\"second mock message\\",</>
+<red>+   \\"TopicArn\\": \\"arn:aws:sns:us-east-1:111111111111:MyTopic\\",</>
+<dim>  }</>
+
+Calls:
+  1. PublishCommand: <red>{\\"Message\\": \\"mock message\\", \\"TopicArn\\": \\"arn:aws:sns:us-east-1:111111111111:MyTopic\\"}</>
+  2. PublishCommand: <red>{\\"Message\\": \\"second mock message\\", \\"TopicArn\\": \\"arn:aws:sns:us-east-1:111111111111:MyTopic\\"}</>"
+`);
+    });
+
+    it('passes on match with asymmetric matcher', async () => {
+        const sns = new SNSClient({});
+        await sns.send(publishCmd1);
+        await sns.send(publishCmd2);
+
+        expect(() => expect(snsMock).toHaveReceivedNthCommandWith(2, PublishCommand, {
+            Message: expect.stringMatching(/second/), // eslint-disable-line @typescript-eslint/no-unsafe-assignment
+        })).not.toThrow();
+    });
+
+    it('fails on unmatch with asymmetric matcher', async () => {
+        const sns = new SNSClient({});
+        await sns.send(publishCmd1);
+        await sns.send(publishCmd2);
+
+        expect(() => expect(snsMock).toHaveReceivedNthCommandWith(2, PublishCommand, {
+            Message: expect.stringMatching(/qq/), // eslint-disable-line @typescript-eslint/no-unsafe-assignment
+        })).toThrowErrorMatchingInlineSnapshot(`
+"Expected SNSClient to receive 2. <green>\\"PublishCommand\\"</> with <green>{\\"Message\\": StringMatching /qq/}</>
+SNSClient received <red>\\"PublishCommand\\"</> with input:
+<green>- Expected  - 1</>
+<red>+ Received  + 2</>
+
+<dim>  Object {</>
+<green>-   \\"Message\\": StringMatching /qq/,</>
+<red>+   \\"Message\\": \\"second mock message\\",</>
+<red>+   \\"TopicArn\\": \\"arn:aws:sns:us-east-1:111111111111:MyTopic\\",</>
+<dim>  }</>
+
+Calls:
+  1. PublishCommand: <red>{\\"Message\\": \\"mock message\\", \\"TopicArn\\": \\"arn:aws:sns:us-east-1:111111111111:MyTopic\\"}</>
+  2. PublishCommand: <red>{\\"Message\\": \\"second mock message\\", \\"TopicArn\\": \\"arn:aws:sns:us-east-1:111111111111:MyTopic\\"}</>"
+`);
     });
 });
