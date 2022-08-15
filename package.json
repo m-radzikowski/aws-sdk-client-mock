@@ -21,7 +21,7 @@
     "prepare": "husky install",
     "ci": "yarn install --frozen-lockfile",
     "pretest": "rimraf coverage/",
-    "test": "jest --coverage",
+    "test": "jest --coverage --colors",
     "test-types": "tsd",
     "test-e2e": "ts-node test-e2e/simple/run.ts",
     "lint": "eslint .",
@@ -67,6 +67,7 @@
     "husky": "7.0.4",
     "jest": "28.1.1",
     "lint-staged": "11.1.2",
+    "pretty-format": "28.1.1",
     "rimraf": "3.0.2",
     "size-limit": "5.0.3",
     "standard-version": "9.3.1",
@@ -84,6 +85,9 @@
     "modulePathIgnorePatterns": [
       "test-e2e",
       "verdaccio-storage"
+    ],
+    "snapshotSerializers": [
+      "./node_modules/pretty-format/build/plugins/ConvertAnsi.js"
     ]
   },
   "lint-staged": {
