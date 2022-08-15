@@ -40,8 +40,7 @@
   "main": "dist/cjs/index.js",
   "types": "dist/types/index.d.ts",
   "files": [
-    "dist",
-    "src"
+    "dist"
   ],
   "dependencies": {
     "@types/jest": "^28.1.3",
