@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.0.0-beta.1](https://github.com/m-radzikowski/aws-sdk-client-mock/compare/v2.0.0-beta.0...v2.0.0-beta.1) (2022-06-27)
+
+
+### Bug Fixes
+
+* add @types/jest as a regular dependency ([c51c9d9](https://github.com/m-radzikowski/aws-sdk-client-mock/commit/c51c9d903a0e55285b93947b38ef6f1b0e06331e))
+
 ## [2.0.0-beta.0](https://github.com/m-radzikowski/aws-sdk-client-mock/compare/v1.0.0...v2.0.0-beta.0) (2022-06-26)
 
 
