@@ -1,7 +1,7 @@
 {
   "name": "aws-sdk-client-mock-monorepo",
   "private": true,
-  "version": "2.0.0-beta.1",
+  "version": "0.0.0",
   "packageManager": "yarn@3.2.2",
   "workspaces": [
     "packages/*"
@@ -19,7 +19,7 @@
     "docs": "yarn workspace aws-sdk-client-mock run typedoc",
     "release": "standard-version",
     "verdaccio": "rimraf verdaccio-storage && verdaccio -c verdaccio.yml",
-    "local-publish": "npm publish --registry http://localhost:4873/"
+    "publish": "yarn workspaces foreach -pv npm publish"
   },
   "devDependencies": {
     "@commitlint/cli": "13.1.0",
@@ -35,7 +35,7 @@
     "lint-staged": "11.1.2",
     "rimraf": "3.0.2",
     "size-limit": "5.0.3",
-    "standard-version": "9.3.1",
+    "standard-version": "9.5.0",
     "ts-jest": "28.0.5",
     "ts-node": "10.4.0",
     "tsd": "0.19.1",
@@ -48,6 +48,18 @@
   "commitlint": {
     "extends": [
       "@commitlint/config-conventional"
+    ]
+  },
+  "standard-version": {
+    "bumpFiles": [
+      {
+        "filename": "packages/aws-sdk-client-mock/package.json",
+        "type": "json"
+      },
+      {
+        "filename": "packages/aws-sdk-client-mock-jest/package.json",
+        "type": "json"
+      }
     ]
   }
 }

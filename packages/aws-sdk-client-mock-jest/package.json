@@ -32,7 +32,6 @@
     "build": "yarn run build:cjs && yarn run build:es",
     "size": "size-limit",
     "size:analyze": "size-limit --why",
-    "release": "standard-version",
     "local-publish": "npm publish --registry http://localhost:4873/"
   },
   "module": "dist/es/index.js",

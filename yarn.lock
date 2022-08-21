@@ -3377,7 +3377,7 @@ __metadata:
     lint-staged: 11.1.2
     rimraf: 3.0.2
     size-limit: 5.0.3
-    standard-version: 9.3.1
+    standard-version: 9.5.0
     ts-jest: 28.0.5
     ts-node: 10.4.0
     tsd: 0.19.1
@@ -4412,18 +4412,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"conventional-changelog-conventionalcommits@npm:4.5.0":
-  version: 4.5.0
-  resolution: "conventional-changelog-conventionalcommits@npm:4.5.0"
-  dependencies:
-    compare-func: ^2.0.0
-    lodash: ^4.17.15
-    q: ^1.5.1
-  checksum: e11944881f123f26a92e823a96e4d921b03203a312da9d539773c424103b49917f59fa717a079738f4d5b0e9709b0336ec323a86a56df7d008663b01e5f8b3b9
-  languageName: node
-  linkType: hard
-
-"conventional-changelog-conventionalcommits@npm:^4.3.1, conventional-changelog-conventionalcommits@npm:^4.5.0":
+"conventional-changelog-conventionalcommits@npm:4.6.3, conventional-changelog-conventionalcommits@npm:^4.3.1, conventional-changelog-conventionalcommits@npm:^4.5.0":
   version: 4.6.3
   resolution: "conventional-changelog-conventionalcommits@npm:4.6.3"
   dependencies:
@@ -4528,9 +4517,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"conventional-changelog@npm:3.1.24":
-  version: 3.1.24
-  resolution: "conventional-changelog@npm:3.1.24"
+"conventional-changelog@npm:3.1.25":
+  version: 3.1.25
+  resolution: "conventional-changelog@npm:3.1.25"
   dependencies:
     conventional-changelog-angular: ^5.0.12
     conventional-changelog-atom: ^2.0.8
@@ -4543,7 +4532,7 @@ __metadata:
     conventional-changelog-jquery: ^3.0.11
     conventional-changelog-jshint: ^2.0.9
     conventional-changelog-preset-loader: ^2.3.4
-  checksum: 54253a3e3761369a8c68ec1ea57f3847b323a0104503dfccfd305553f77e83636132406d463dfa60ad3851dba42d84a528e8cb685943e8d6d7ae3eb37aaa19bb
+  checksum: 1ea18378120cca9fd459f58ed2cf59170773cbfb2fcecad2504c7c44af076c368950013fa16f5e9428f1d723bea4c16e0c48170e152568b73b254a9c1bb93287
   languageName: node
   linkType: hard
 
@@ -6254,15 +6243,6 @@ __metadata:
     inherits: ^2.0.1
     readable-stream: ^2.0.0
   checksum: 6080eba0793dce32f475141fb3d54cc15f84ee52e420ee22ac3ab0ad639dc95a1875bc6eb9c0e1140e94972a36a89dc5542491b85f1ab8df0c126241e0f1a61b
-  languageName: node
-  linkType: hard
-
-"fs-access@npm:^1.0.1":
-  version: 1.0.1
-  resolution: "fs-access@npm:1.0.1"
-  dependencies:
-    null-check: ^1.0.0
-  checksum: 6792b115a5fc5095b3dbc42ea329afff372e0056fde8214a5b0c9c7559806378db9316660bac1682b295cc576bab3c19571f50f8a39ab4605c3d194bee0087c9
   languageName: node
   linkType: hard
 
@@ -9344,13 +9324,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"null-check@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "null-check@npm:1.0.0"
-  checksum: 6569fb2d74399e436eb4b05c7fdd341f22e87f3e0598a97309681073a364d6684997100cd329f2107d149663c506b2bfa47a0afdff23739ac1ba6ca5c4c6aa19
-  languageName: node
-  linkType: hard
-
 "nwsapi@npm:^2.2.0":
   version: 2.2.1
   resolution: "nwsapi@npm:2.2.1"
@@ -11562,28 +11535,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"standard-version@npm:9.3.1":
-  version: 9.3.1
-  resolution: "standard-version@npm:9.3.1"
+"standard-version@npm:9.5.0":
+  version: 9.5.0
+  resolution: "standard-version@npm:9.5.0"
   dependencies:
     chalk: ^2.4.2
-    conventional-changelog: 3.1.24
+    conventional-changelog: 3.1.25
     conventional-changelog-config-spec: 2.1.0
-    conventional-changelog-conventionalcommits: 4.5.0
+    conventional-changelog-conventionalcommits: 4.6.3
     conventional-recommended-bump: 6.1.0
     detect-indent: ^6.0.0
     detect-newline: ^3.1.0
     dotgitignore: ^2.1.0
     figures: ^3.1.0
     find-up: ^5.0.0
-    fs-access: ^1.0.1
     git-semver-tags: ^4.0.0
     semver: ^7.1.1
     stringify-package: ^1.0.1
     yargs: ^16.0.0
   bin:
     standard-version: bin/cli.js
-  checksum: 8cf328d8400cf603a3d189656b742bb8dd36b467d71f110ea2ee353b4864c3c5097f06a903aa5d1c1ce23233a28d71dade518e8250467784bbddf5398f6edb87
+  checksum: 55003206f7eca18ee9962566e5222d3930a1fa3c4692615d64e88f08873b9685837d669dc58361831bd3f211b6687c1681ad6a1749edf346b2db3e4564b4933c
   languageName: node
   linkType: hard
 
