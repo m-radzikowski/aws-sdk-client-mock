@@ -390,10 +390,22 @@ const snsSendStub = snsMock.send;
 
 ### Jest matchers
 
-Library provides [Jest](https://jestjs.io/) matchers that simplify verification
-that the mocked Client was called with given Commands:
+Custom [Jest](https://jestjs.io/) matchers simplify verification
+that the mocked Client was called with given Commands.
+
+Matchers are published as a separate package. Install it:
+
+```bash
+yarn add -D aws-sdk-client-mock-jest
+# or:
+npm install -D aws-sdk-client-mock-jest
+```
+
+Usage (notice the `import`):
 
 ```ts
+import 'aws-sdk-client-mock-jest';
+
 expect(snsMock).toHaveReceivedCommand(PublishCommand);
 expect(snsMock).toHaveReceivedCommandTimes(PublishCommand, 2);
 expect(snsMock).toHaveReceivedCommandWith(PublishCommand, {Message: 'My message'});
@@ -401,8 +413,6 @@ expect(snsMock).toHaveReceivedNthCommandWith(2, PublishCommand, {Message: 'My me
 ```
 
 Shorter aliases exist, like `toReceiveCommandTimes()`. 
-
-Matchers are automatically imported with the library.
 
 ## API Reference
 
@@ -482,7 +492,7 @@ it('SNS Client is called with PublishCommand', async () => {
 });
 ```
 
-For more examples, see the [unit tests](./test/mockClient.test.ts).
+For more examples, see the [unit tests](packages/aws-sdk-client-mock/test/mockClient.test.ts).
 
 ## Caveats
 

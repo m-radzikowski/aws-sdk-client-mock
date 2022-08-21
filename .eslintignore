@@ -1,5 +1,5 @@
 **/node_modules/**
 *.js
-test-d/**
+**/test-d/**
 test-e2e/**
-dist/**
+**/dist/**

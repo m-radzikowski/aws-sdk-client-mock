@@ -16,7 +16,7 @@ jobs:
           node-version: '14'
           registry-url: 'https://registry.npmjs.org'
 
-      - run: yarn run ci
+      - run: yarn install --immutable
 
       - run: yarn run lint
       - run: yarn run test
@@ -37,7 +37,7 @@ jobs:
           yarn run release
           echo ::set-output name=tag_name::$(git describe HEAD --abbrev=0)
 
-      - run: yarn run typedoc
+      - run: yarn run docs
       - name: commit docs website
         run: |
           git add docs
@@ -49,7 +49,7 @@ jobs:
           yarn run local-publish
           yarn run test-e2e
 
-      - run: npm publish
+      - run: yarn run publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 

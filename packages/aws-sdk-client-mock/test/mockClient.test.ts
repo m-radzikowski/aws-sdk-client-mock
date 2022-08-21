@@ -67,6 +67,10 @@ describe('setting up the mock', () => {
         expect(publish1.MessageId).toBe(uuid1);
         expect(publish2.MessageId).toBe(uuid2);
     });
+
+    it('returns a client name', () => {
+        expect(snsMock.clientName()).toBe('SNSClient');
+    });
 });
 
 describe('spying on the mock', () => {

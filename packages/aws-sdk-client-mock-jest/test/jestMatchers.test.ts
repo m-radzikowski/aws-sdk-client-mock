@@ -1,6 +1,7 @@
-import {AwsClientStub, mockClient} from '../src';
+import {AwsClientStub, mockClient} from 'aws-sdk-client-mock';
 import {PublishCommand, SNSClient} from '@aws-sdk/client-sns';
-import {publishCmd1, publishCmd2} from './fixtures';
+import {publishCmd1, publishCmd2} from 'aws-sdk-client-mock/test/fixtures';
+import '../src';
 
 let snsMock: AwsClientStub<SNSClient>;
 

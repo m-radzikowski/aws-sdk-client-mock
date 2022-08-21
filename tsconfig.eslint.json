@@ -1,8 +1,8 @@
 {
   "extends": "./tsconfig.json",
   "include": [
-    "src",
-    "test",
-    "test-e2e"
+    "packages/**/src",
+    "packages/**/test",
+    "packages/**/test-e2e"
   ]
 }

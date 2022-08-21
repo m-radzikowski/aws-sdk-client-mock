@@ -16,7 +16,7 @@ jobs:
           node-version: '14'
           registry-url: 'https://registry.npmjs.org'
 
-      - run: yarn run ci
+      - run: yarn install --immutable
 
       - run: yarn run lint
       - run: yarn run test
@@ -43,7 +43,7 @@ jobs:
           yarn run local-publish
           yarn run test-e2e
 
-      - run: npm publish --tag beta
+      - run: yarn run publish --tag beta
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
