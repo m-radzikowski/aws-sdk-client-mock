@@ -16,7 +16,7 @@ jobs:
           node-version: '14'
           registry-url: 'https://registry.npmjs.org'
 
-      - run: yarn run ci
+      - run: yarn install --immutable
 
       - run: yarn run lint
       - run: yarn run test
