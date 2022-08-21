@@ -8,7 +8,6 @@
   ],
   "scripts": {
     "prepare": "husky install",
-    "ci": "yarn install --immutable",
     "pretest": "rimraf coverage/",
     "test": "yarn workspaces foreach -pv run test",
     "test-types": "yarn workspaces foreach -pv run test-types",
