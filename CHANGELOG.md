@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.0.0-beta.2](https://github.com/m-radzikowski/aws-sdk-client-mock/compare/v2.0.0-beta.1...v2.0.0-beta.2) (2022-08-21)
+
+
+### ⚠ BREAKING CHANGES
+
+* move Jest matchers to a separate package (#112)
+
+### Features
+
+* support Jest asymmetric matchers ([#111](https://github.com/m-radzikowski/aws-sdk-client-mock/issues/111)) ([3bf23ef](https://github.com/m-radzikowski/aws-sdk-client-mock/commit/3bf23eff752e8cc9814fa44b95ad809baafe8aac))
+
+
+### Bug Fixes
+
+* move Jest matchers to a separate package ([#112](https://github.com/m-radzikowski/aws-sdk-client-mock/issues/112)) ([05a3a51](https://github.com/m-radzikowski/aws-sdk-client-mock/commit/05a3a51046b7076deaabdff96d4ead62145e08de))
+
 ## [2.0.0-beta.1](https://github.com/m-radzikowski/aws-sdk-client-mock/compare/v2.0.0-beta.0...v2.0.0-beta.1) (2022-06-27)
 
 
