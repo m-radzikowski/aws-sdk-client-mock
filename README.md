@@ -6,7 +6,6 @@ Easy and powerful mocking of AWS SDK v3 Clients.
 
 [![npm](https://img.shields.io/npm/v/aws-sdk-client-mock?color=brightgreen&style=flat-square)](https://www.npmjs.com/package/aws-sdk-client-mock)
 [![build](https://img.shields.io/github/workflow/status/m-radzikowski/aws-sdk-client-mock/CI?style=flat-square)](https://github.com/m-radzikowski/aws-sdk-client-mock/actions?query=workflow%3ACI)
-[![coverage](https://img.shields.io/codecov/c/github/m-radzikowski/aws-sdk-client-mock?style=flat-square)](https://app.codecov.io/gh/m-radzikowski/aws-sdk-client-mock/)
 
 </div>
 
