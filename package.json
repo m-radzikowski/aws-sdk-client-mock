@@ -18,6 +18,7 @@
     "docs": "yarn workspace aws-sdk-client-mock run typedoc",
     "release": "standard-version",
     "verdaccio": "rimraf verdaccio-storage && verdaccio -c verdaccio.yml",
+    "local-publish": "yarn workspaces foreach -pv run local-publish",
     "publish": "yarn workspaces foreach -pv npm publish"
   },
   "devDependencies": {
