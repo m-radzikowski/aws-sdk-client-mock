@@ -1,7 +1,5 @@
 import {execSync} from 'child_process';
-import * as packageJson from '../../package.json';
-
-const libVersion = packageJson.version;
+import {version as libVersion} from '../../packages/aws-sdk-client-mock/package.json';
 
 const exec = (cmd: string) => execSync(cmd, {
     cwd: __dirname,
