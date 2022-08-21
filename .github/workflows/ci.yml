@@ -28,11 +28,10 @@ jobs:
 
       - run: yarn install --immutable
 
-      - run: yarn run lint
-      - run: yarn run test
-
       - run: yarn run build
 
+      - run: yarn run lint
+      - run: yarn run test
       - run: yarn run test-types
       - run: yarn run size
 
