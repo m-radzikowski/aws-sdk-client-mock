@@ -1,7 +1,7 @@
 {
   "name": "aws-sdk-client-mock-monorepo",
   "private": true,
-  "version": "0.0.0",
+  "version": "2.0.0-beta.1",
   "packageManager": "yarn@3.2.2",
   "workspaces": [
     "packages/*"
@@ -52,6 +52,10 @@
   },
   "standard-version": {
     "bumpFiles": [
+      {
+        "filename": "package.json",
+        "type": "json"
+      },
       {
         "filename": "packages/aws-sdk-client-mock/package.json",
         "type": "json"
