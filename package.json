@@ -19,7 +19,7 @@
     "release": "standard-version",
     "verdaccio": "rimraf verdaccio-storage && verdaccio -c verdaccio.yml",
     "local-publish": "yarn workspaces foreach -pv run local-publish",
-    "publish": "yarn workspaces foreach -pv npm publish"
+    "publish": "yarn workspaces foreach -pv --no-private npm publish"
   },
   "devDependencies": {
     "@commitlint/cli": "13.1.0",
