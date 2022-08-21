@@ -1,5 +1,6 @@
 import {PublishCommand, SNSClient} from '@aws-sdk/client-sns';
 import {mockClient} from 'aws-sdk-client-mock';
+import 'aws-sdk-client-mock-jest';
 
 it('mocks SNS client', async () => {
     const snsMock = mockClient(SNSClient);

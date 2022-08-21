@@ -37,7 +37,7 @@ jobs:
           yarn run release
           echo ::set-output name=tag_name::$(git describe HEAD --abbrev=0)
 
-      - run: yarn run typedoc
+      - run: yarn run docs
       - name: commit docs website
         run: |
           git add docs

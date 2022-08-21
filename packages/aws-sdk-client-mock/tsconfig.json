@@ -1,0 +1,26 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "dist/cjs",
+    "declarationDir": "./dist/types"
+  },
+  "include": [
+    "src",
+    "dist"
+  ],
+  "typedocOptions": {
+    "entryPoints": [
+      "src/index.ts"
+    ],
+    "out": "../../docs",
+    "excludePrivate": true,
+    "excludeProtected": true,
+    "name": "AWS SDK v3 Client mock",
+    "includeVersion": true,
+    "gitRevision": "main",
+    "validation": {
+      "invalidLink": true
+    },
+    "media": "../../media/"
+  }
+}

@@ -482,7 +482,7 @@ it('SNS Client is called with PublishCommand', async () => {
 });
 ```
 
-For more examples, see the [unit tests](./test/mockClient.test.ts).
+For more examples, see the [unit tests](packages/aws-sdk-client-mock/test/mockClient.test.ts).
 
 ## Caveats
 

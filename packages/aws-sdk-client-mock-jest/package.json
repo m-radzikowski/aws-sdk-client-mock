@@ -1,0 +1,80 @@
+{
+  "name": "aws-sdk-client-mock-jest",
+  "description": "Custom Jest matchers for AWS SDK v3 Client mock",
+  "version": "2.0.0-beta.1",
+  "license": "MIT",
+  "author": {
+    "name": "Maciej Radzikowski",
+    "email": "maciej@radzikowski.com.pl",
+    "url": "https://radzikowski.com.pl"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/m-radzikowski/aws-sdk-client-mock.git",
+    "directory": "packages/aws-sdk-client-mock-jest"
+  },
+  "keywords": [
+    "aws",
+    "aws-sdk",
+    "testing",
+    "mock",
+    "unit-testing",
+    "aws-lambda",
+    "jest",
+    "jest-matchers"
+  ],
+  "scripts": {
+    "test": "jest --coverage --colors",
+    "test-types": "tsd",
+    "build:cjs": "tsc -p tsconfig.json",
+    "build:es": "tsc -p tsconfig.es.json",
+    "prebuild": "rimraf dist/",
+    "build": "yarn run build:cjs && yarn run build:es",
+    "size": "size-limit",
+    "size:analyze": "size-limit --why",
+    "release": "standard-version",
+    "local-publish": "npm publish --registry http://localhost:4873/"
+  },
+  "module": "dist/es/index.js",
+  "main": "dist/cjs/index.js",
+  "types": "dist/types/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "dependencies": {
+    "@types/jest": "^28.1.3",
+    "tslib": "^2.1.0"
+  },
+  "devDependencies": {
+    "@aws-sdk/client-sns": "3.49.0",
+    "@aws-sdk/types": "3.49.0",
+    "aws-sdk-client-mock": "workspace:*",
+    "pretty-format": "28.1.1"
+  },
+  "peerDependencies": {
+    "aws-sdk-client-mock": "workspace:*"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "resetMocks": true,
+    "testEnvironment": "node",
+    "snapshotSerializers": [
+      "../../node_modules/pretty-format/build/plugins/ConvertAnsi.js"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "statements": 100
+      }
+    }
+  },
+  "size-limit": [
+    {
+      "path": "dist/cjs/index.js",
+      "limit": "20 KB"
+    },
+    {
+      "path": "dist/es/index.js",
+      "limit": "20 KB"
+    }
+  ]
+}
