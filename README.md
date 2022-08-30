@@ -260,6 +260,7 @@ used [under the hood](https://github.com/aws/aws-sdk-js-v3/blob/main/lib/lib-sto
 
 ```typescript
 import {S3Client, CreateMultipartUploadCommand, UploadPartCommand} from '@aws-sdk/client-s3';
+import {Upload} from "@aws-sdk/lib-storage";
 
 const s3Mock = mockClient(S3Client);
 s3Mock.on(CreateMultipartUploadCommand).resolves({UploadId: '1'});
