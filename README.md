@@ -33,6 +33,7 @@ In action:
   - [Mock](#mock)
     - [DynamoDB DocumentClient](#dynamodb-documentclient)
     - [Lib Storage Upload](#lib-storage-upload)
+    - [S3 GetObjectCommand](#s3-getobjectcommand)
     - [Paginated operations](#paginated-operations)
     - [SDK v2-style mocks](#sdk-v2-style-mocks)
   - [Inspect](#inspect)
@@ -299,6 +300,44 @@ For bigger files, it makes a series of calls including `CreateMultipartUploadCom
 
 ```ts
 s3Mock.on(UploadPartCommand).rejects();
+```
+
+#### S3 GetObjectCommand
+
+AWS SDK wraps the stream in the S3 `GetObjectCommand` result to provide utility methods to parse it.
+To mock it, you need to call the wrapping function `sdkStreamMixin()` on the stream you provide as the command output:
+
+```ts
+import {GetObjectCommand, S3Client} from '@aws-sdk/client-s3';
+import {sdkStreamMixin} from '@aws-sdk/util-stream-node';
+import {mockClient} from 'aws-sdk-client-mock';
+import {Readable} from 'stream';
+import {createReadStream} from 'fs';
+
+const s3Mock = mockClient(S3Client);
+
+it('mocks get object', async () => {
+    // create Stream from string
+    const stream = new Readable();
+    stream.push('hello world');
+    stream.push(null); // end of stream
+
+    // alternatively: create Stream from file
+    // const stream = createReadStream('./test/data.txt');
+
+    // wrap the Stream with SDK mixin
+    const sdkStream = sdkStreamMixin(stream);
+
+    s3Mock.on(GetObjectCommand).resolves({Body: sdkStream});
+
+    const s3 = new S3Client({});
+
+    const getObjectResult = await s3.send(new GetObjectCommand({Bucket: '', Key: ''}));
+
+    const str = await getObjectResult.Body?.transformToString();
+
+    expect(str).toBe('hello world');
+});
 ```
 
 #### Paginated operations
