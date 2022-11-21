@@ -41,7 +41,7 @@
   ],
   "dependencies": {
     "@types/sinon": "^10.0.10",
-    "sinon": "^11.1.1",
+    "sinon": "^14.0.2",
     "tslib": "^2.1.0"
   },
   "devDependencies": {
