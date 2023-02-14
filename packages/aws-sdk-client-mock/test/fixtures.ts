@@ -1,4 +1,4 @@
-import {PublishCommand} from '@aws-sdk/client-sns';
+import {PublishCommand, SubscribeCommand} from '@aws-sdk/client-sns';
 
 export const topicArn = 'arn:aws:sns:us-east-1:111111111111:MyTopic';
 export const topicArn2 = 'arn:aws:sns:us-east-1:111111111111:MyOtherTopic';
@@ -14,6 +14,10 @@ export const publishCmd2 = new PublishCommand({
 export const publishCmd3 = new PublishCommand({
     TopicArn: topicArn2,
     Message: 'third mock message',
+});
+export const subscribeCmd1 = new SubscribeCommand({
+    TopicArn: topicArn,
+    Protocol: 'sqs',
 });
 
 export const uuid1 = '12345678-1111-1111-1111-111122223333';
