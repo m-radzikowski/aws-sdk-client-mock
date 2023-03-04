@@ -245,12 +245,20 @@ to specify consecutive behaviors.
 You can mock the `DynamoDBDocumentClient` just like any other Client:
 
 ```typescript
+import {DynamoDBClient} from '@aws-sdk/client-dynamodb';
 import {DynamoDBDocumentClient, QueryCommand} from '@aws-sdk/lib-dynamodb';
 
 const ddbMock = mockClient(DynamoDBDocumentClient);
 ddbMock.on(QueryCommand).resolves({
     Items: [{pk: 'a', sk: 'b'}],
 });
+
+const dynamodb = new DynamoDBClient({});
+const ddb = DynamoDBDocumentClient.from(dynamodb);
+
+const query = await ddb.send(new QueryCommand({
+  TableName: 'mock',
+}));
 ```
 
 #### Lib Storage Upload
