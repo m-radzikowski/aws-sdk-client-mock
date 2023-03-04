@@ -19,8 +19,17 @@ assignees: ''
 
 **Reproduction**
 
-<!-- Put a minimal reproducible example here
-     or, even better, a link to a repository with such reproduction -->
+<!--
+Put a minimal reproducible example here.
+
+It should include all code needed to reproduce the issue
+and be self-contained - without references to any code outside,
+so it can be copy-pasted and run as-is.
+
+See the StackOverflow guide on how to create
+a Minimal, Complete, and Reproducible example:
+https://stackoverflow.com/help/minimal-reproducible-example
+-->
 
 **Environment**
 
