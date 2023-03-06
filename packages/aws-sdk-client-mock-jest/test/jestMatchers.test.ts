@@ -1,6 +1,6 @@
 import {AwsClientStub, mockClient} from 'aws-sdk-client-mock';
 import {PublishCommand, SNSClient} from '@aws-sdk/client-sns';
-import {publishCmd1, publishCmd2} from 'aws-sdk-client-mock/test/fixtures';
+import {publishCmd1, publishCmd2, subscribeCmd1} from 'aws-sdk-client-mock/test/fixtures';
 import '../src';
 
 let snsMock: AwsClientStub<SNSClient>;
@@ -238,6 +238,29 @@ SNSClient received <red>\\"PublishCommand\\"</> with input:
 Calls:
   1. PublishCommand: <red>{\\"Message\\": \\"mock message\\", \\"TopicArn\\": \\"arn:aws:sns:us-east-1:111111111111:MyTopic\\"}</>
   2. PublishCommand: <red>{\\"Message\\": \\"second mock message\\", \\"TopicArn\\": \\"arn:aws:sns:us-east-1:111111111111:MyTopic\\"}</>"
+`);
+    });
+});
+
+describe('toHaveReceivedNthSpecificCommandWith', () => {
+    it('passes on receiving second Command with partial match', async () => {
+        const sns = new SNSClient({});
+        await sns.send(publishCmd1);
+        await sns.send(subscribeCmd1);
+        await sns.send(publishCmd2);
+
+        expect(() => expect(snsMock).toHaveReceivedNthSpecificCommandWith(2, PublishCommand, {Message: publishCmd2.input.Message})).not.toThrow();
+    });
+
+    it('fails on receiving less Commands than the nth expected', async () => {
+        const sns = new SNSClient({});
+        await sns.send(publishCmd1);
+
+        expect(() => expect(snsMock).toHaveReceivedNthSpecificCommandWith(2, PublishCommand, {Message: publishCmd2.input.Message})).toThrowErrorMatchingInlineSnapshot(`
+"Expected SNSClient to receive 2. <green>\\"PublishCommand\\"</> with <green>{\\"Message\\": \\"second mock message\\"}</>
+
+Calls:
+  1. PublishCommand: <red>{\\"Message\\": \\"mock message\\", \\"TopicArn\\": \\"arn:aws:sns:us-east-1:111111111111:MyTopic\\"}</>"
 `);
     });
 });

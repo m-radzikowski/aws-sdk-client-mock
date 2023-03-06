@@ -53,6 +53,20 @@ interface AwsSdkJestMockBaseMatchers<R> extends Record<string, any> {
         command: new (input: TCmdInput) => AwsCommand<TCmdInput, TCmdOutput>,
         input: Partial<TCmdInput>,
     ): R;
+
+    /**
+     * Asserts {@link AwsStub Aws Client Mock} received a {@link command} as defined specific {@link call}
+     * number with matchin {@link input}
+     * 
+     * @param call call number to assert
+     * @param command aws-sdk command constructor
+     * @param input 
+     */
+    toHaveReceivedNthSpecificCommandWith<TCmdInput extends object, TCmdOutput extends MetadataBearer>(
+        call: number,
+        command: new (input: TCmdInput) => AwsCommand<TCmdInput, TCmdOutput>,
+        input: Partial<TCmdInput>
+      ): R;
 }
 
 interface AwsSdkJestMockAliasMatchers<R> {
@@ -108,6 +122,20 @@ interface AwsSdkJestMockAliasMatchers<R> {
         command: new (input: TCmdInput) => AwsCommand<TCmdInput, TCmdOutput>,
         input: Partial<TCmdInput>,
     ): R;
+
+    /**
+     * Asserts {@link AwsStub Aws Client Mock} received a {@link command} as defined specific {@link call}
+     * number with matchin {@link input}
+     * 
+     * @param call call number to assert
+     * @param command aws-sdk command constructor
+     * @param input 
+     */
+    toReceiveNthSpecificCommandWith<TCmdInput extends object, TCmdOutput extends MetadataBearer>(
+        call: number,
+        command: new (input: TCmdInput) => AwsCommand<TCmdInput, TCmdOutput>,
+        input: Partial<TCmdInput>
+      ): R;
 }
 
 /**
@@ -348,6 +376,65 @@ const baseMatchers: { [P in keyof AwsSdkJestMockBaseMatchers<unknown>]: jest.Cus
             ],
         });
     },
+    /**
+     * implementation of {@link AwsSdkJestMockMatchers.toHaveReceivedNthSpecificCommandWith} matcher
+     */
+    toHaveReceivedNthSpecificCommandWith(
+        this: jest.MatcherContext,
+        mockClient: ClientMock,
+        call: number,
+        command: new () => AnyCommand,
+        input?: Record<string, unknown>,
+    ) {
+        assert(
+            call && typeof call === 'number' && call > 0,
+            'Call number must be a number greater than 0',
+        );
+
+        return processMatch<{ received: AnyCommand | undefined }>({
+            ctx: this,
+            mockClient,
+            command,
+            check: ({commandCalls}) => {
+                if (commandCalls.length < call) {
+                    return {pass: false, data: {received: undefined}};
+                }
+
+                const received = commandCalls[call - 1].args[0];
+
+                let pass = false;
+                if (received instanceof command) {
+                    try {
+                        expect(received.input).toEqual(
+                            expect.objectContaining(input),
+                        );
+                        pass = true;
+                    } catch (e) { // eslint-disable-line no-empty
+                    }
+                }
+
+                return {
+                    pass,
+                    data: {received},
+                };
+            },
+            message: ({cmd, client, data, notPrefix}) => [
+                `Expected ${client} to ${notPrefix}receive ${call}. ${cmd} with ${this.utils.printExpected(input)}`,
+                ...(data.received
+                    ? [
+                        `${client} received ${this.utils.printReceived(data.received.constructor.name)} with input:`,
+                        this.utils.printDiffOrStringify(
+                            input,
+                            data.received.input,
+                            'Expected',
+                            'Received',
+                            false,
+                        ),
+                    ]
+                    : []),
+            ],
+        });
+    },
 };
 
 /* typing ensures keys matching */
@@ -356,6 +443,7 @@ const aliasMatchers: { [P in keyof AwsSdkJestMockAliasMatchers<unknown>]: jest.C
     toReceiveCommand: baseMatchers.toHaveReceivedCommand,
     toReceiveCommandWith: baseMatchers.toHaveReceivedCommandWith,
     toReceiveNthCommandWith: baseMatchers.toHaveReceivedNthCommandWith,
+    toReceiveNthSpecificCommandWith: baseMatchers.toHaveReceivedNthSpecificCommandWith,
 };
 
 // Skip registration if jest expect does not exist
