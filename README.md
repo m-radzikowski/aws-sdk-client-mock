@@ -453,10 +453,20 @@ Usage (notice the `import`):
 ```ts
 import 'aws-sdk-client-mock-jest';
 
+// a PublishCommand was sent to SNS
 expect(snsMock).toHaveReceivedCommand(PublishCommand);
+
+// two PublishCommands were sent to SNS
 expect(snsMock).toHaveReceivedCommandTimes(PublishCommand, 2);
+
+// a PublishCommand with Message "My message" was sent to SNS
 expect(snsMock).toHaveReceivedCommandWith(PublishCommand, {Message: 'My message'});
+
+// the second command sent to SNS is a PublishCommand with Message "My message"
 expect(snsMock).toHaveReceivedNthCommandWith(2, PublishCommand, {Message: 'My message'});
+
+// the second PublishCommand sent to SNS has Message "My message"
+expect(snsMock).toHaveReceivedNthSpecificCommandWith(2, PublishCommand, {Message: 'My message'});
 ```
 
 Shorter aliases exist, like `toReceiveCommandTimes()`. 
