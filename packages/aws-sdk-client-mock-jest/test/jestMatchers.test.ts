@@ -251,4 +251,16 @@ describe('toHaveReceivedNthSpecificCommandWith', () => {
 
         expect(() => expect(snsMock).toHaveReceivedNthSpecificCommandWith(2, PublishCommand, {Message: publishCmd2.input.Message})).not.toThrow();
     });
+
+    it('fails on receiving less Commands than the nth expected', async () => {
+        const sns = new SNSClient({});
+        await sns.send(publishCmd1);
+
+        expect(() => expect(snsMock).toHaveReceivedNthSpecificCommandWith(2, PublishCommand, {Message: publishCmd2.input.Message})).toThrowErrorMatchingInlineSnapshot(`
+"Expected SNSClient to receive 2. <green>\\"PublishCommand\\"</> with <green>{\\"Message\\": \\"second mock message\\"}</>
+
+Calls:
+  1. PublishCommand: <red>{\\"Message\\": \\"mock message\\", \\"TopicArn\\": \\"arn:aws:sns:us-east-1:111111111111:MyTopic\\"}</>"
+`);
+    });
 });
