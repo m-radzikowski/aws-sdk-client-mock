@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.1.0](https://github.com/m-radzikowski/aws-sdk-client-mock/compare/v2.0.1...v2.1.0) (2023-03-06)
+
+
+### Features
+
+* add Jest matcher for nth specific Command ([#146](https://github.com/m-radzikowski/aws-sdk-client-mock/issues/146)) ([89ef933](https://github.com/m-radzikowski/aws-sdk-client-mock/commit/89ef93388eae31c599aec626de7d074accf04484))
+
 ### [2.0.1](https://github.com/m-radzikowski/aws-sdk-client-mock/compare/v2.0.0...v2.0.1) (2022-11-27)
 
 
