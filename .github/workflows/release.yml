@@ -41,6 +41,12 @@ jobs:
           git add docs
           git diff-index --quiet HEAD || git commit -m 'docs: update docs website'
 
+      - name: copy README and LICENSE to packages
+        run: |
+          cp README.md packages/aws-sdk-client-mock/README.md
+          cp LICENSE packages/aws-sdk-client-mock/
+          cp LICENSE packages/aws-sdk-client-mock-jest/
+
       - name: run e2e tests
         run: |
           yarn run verdaccio &
