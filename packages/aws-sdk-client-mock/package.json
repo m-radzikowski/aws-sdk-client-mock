@@ -51,7 +51,7 @@
     "@aws-sdk/client-sqs": "3.49.0",
     "@aws-sdk/lib-dynamodb": "3.49.0",
     "@aws-sdk/types": "3.49.0",
-    "typedoc": "0.22.17"
+    "typedoc": "0.23.26"
   },
   "jest": {
     "preset": "ts-jest",
