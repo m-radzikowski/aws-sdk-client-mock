@@ -474,7 +474,8 @@ Shorter aliases exist, like `toReceiveCommandTimes()`.
 To use those matchers with [Vitest](https://vitest.dev/), set `test.globals` to `true` in `vite.config.js`
 (see [#139](https://github.com/m-radzikowski/aws-sdk-client-mock/issues/139)).
 
-To use the matchers outside of Jest, you can pull in the "[expect](https://www.npmjs.com/package/expect)" library separately. To use them in Typescript or ES6 modules, you may need to add `expect` to global scope directly, e.g.
+To use the matchers outside of Jest, you can pull in the [expect](https://www.npmjs.com/package/expect) library separately
+and add it to the global scope directly, e.g.:
 
 ```ts
 const {expect} = require("expect");
