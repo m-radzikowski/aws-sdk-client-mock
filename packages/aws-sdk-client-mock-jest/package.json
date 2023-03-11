@@ -30,8 +30,6 @@
     "build:es": "tsc -p tsconfig.es.json",
     "prebuild": "rimraf dist/",
     "build": "yarn run build:cjs && yarn run build:es",
-    "size": "size-limit",
-    "size:analyze": "size-limit --why",
     "local-publish": "npm publish --registry http://localhost:4873/"
   },
   "module": "dist/es/index.js",
@@ -65,15 +63,5 @@
         "statements": 100
       }
     }
-  },
-  "size-limit": [
-    {
-      "path": "dist/cjs/index.js",
-      "limit": "20 KB"
-    },
-    {
-      "path": "dist/es/index.js",
-      "limit": "20 KB"
-    }
-  ]
+  }
 }

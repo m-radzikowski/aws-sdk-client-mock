@@ -14,7 +14,6 @@
     "test-e2e": "ts-node test-e2e/simple/run.ts",
     "lint": "eslint .",
     "build": "yarn workspaces foreach -pv --topological-dev run build",
-    "size": "yarn workspaces foreach -pv run size",
     "docs": "yarn workspace aws-sdk-client-mock run typedoc",
     "release": "standard-version",
     "verdaccio": "rimraf verdaccio-storage && verdaccio -c verdaccio.yml",
@@ -24,7 +23,6 @@
   "devDependencies": {
     "@commitlint/cli": "17.4.4",
     "@commitlint/config-conventional": "17.4.4",
-    "@size-limit/preset-small-lib": "5.0.3",
     "@types/node": "18.15.0",
     "@typescript-eslint/eslint-plugin": "5.54.1",
     "@typescript-eslint/parser": "5.54.1",
@@ -34,7 +32,6 @@
     "jest": "28.1.1",
     "lint-staged": "13.2.0",
     "rimraf": "4.4.0",
-    "size-limit": "5.0.3",
     "standard-version": "9.5.0",
     "ts-jest": "28.0.5",
     "ts-node": "10.9.1",
