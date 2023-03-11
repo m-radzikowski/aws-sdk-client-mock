@@ -121,6 +121,9 @@ By default, mocked `Client#send()` method returns `undefined`.
 Using the obtained mock instance, you can specify the mock behavior
 on receiving various commands to send.
 
+See the [AwsStub API Reference](https://m-radzikowski.github.io/aws-sdk-client-mock/classes/AwsStub.html)
+for all available methods or check out the examples below.
+
 Specify default mock behavior:
 
 ```typescript
