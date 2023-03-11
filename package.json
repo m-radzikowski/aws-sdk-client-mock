@@ -48,7 +48,18 @@
   "commitlint": {
     "extends": [
       "@commitlint/config-conventional"
-    ]
+    ],
+    "rules": {
+      "scope-enum": [
+        2,
+        "always",
+        [
+          "",
+          "core",
+          "jest"
+        ]
+      ]
+    }
   },
   "standard-version": {
     "bumpFiles": [
