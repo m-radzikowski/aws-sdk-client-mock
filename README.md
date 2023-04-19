@@ -37,6 +37,7 @@ In action:
     - [Paginated operations](#paginated-operations)
     - [SDK v2-style mocks](#sdk-v2-style-mocks)
   - [Inspect](#inspect)
+  - [Reset and restore](#reset-and-restore)
   - [Jest matchers](#jest-matchers)
 - [API Reference](#api-reference)
 - [AWS Lambda example](#aws-lambda-example)
@@ -437,6 +438,26 @@ You can get the stub instance to configure and use it directly:
 ```typescript
 const snsSendStub = snsMock.send;
 ```
+
+### Reset and restore
+
+The Client mock exposes three [Sinon.js](https://sinonjs.org/) `stub` methods:
+`reset()`, `resetHistory()`, and `restore()`.
+
+The `reset()` method resets the mock state and behavior.
+The Client will continue to be mocked, only now with a clean mock instance,
+without any behavior (set with methods like `on(...).resolves(...)`) and calls history.
+
+**You should call `clientMock.reset()` before or after every test
+(using `beforeEach()` / `beforeAll()` from your test framework)
+to keep tests independent from each other.**
+
+The `resetHistory()` only clear mocked client calls history
+that you access with `mockedClient.call(...)` and `mockedClient.calls()`.
+The behavior is preserved.
+
+The `restore()` removes the mock altogether,
+restoring the normal behavior of `client.send()`.
 
 ### Jest matchers
 
