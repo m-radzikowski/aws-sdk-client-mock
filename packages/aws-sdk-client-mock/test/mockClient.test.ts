@@ -661,8 +661,6 @@ describe('Client configuration-dependent behavior', () => {
             snsEU.send(publishCmd1),
         ]);
 
-        snsMock.call(0).thisValue as SNSClient
-
         expect(outputs).toStrictEqual([
             {MessageId: 'eu'},
             {MessageId: 'eu'},
