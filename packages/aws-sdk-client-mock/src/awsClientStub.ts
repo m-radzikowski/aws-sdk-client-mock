@@ -2,10 +2,10 @@ import {Client, Command, MetadataBearer} from '@aws-sdk/types';
 import {match, SinonSpyCall, SinonStub} from 'sinon';
 import {mockClient} from './mockClient';
 
-export type AwsClientBehavior<TClient extends Client<any, any, any>> =
-    TClient extends Client<infer TInput, infer TOutput, any> ? Behavior<TInput, TOutput, TOutput> : never;
+export type AwsClientBehavior<TClient> =
+    TClient extends Client<infer TInput, infer TOutput, infer TConfiguration> ? Behavior<TInput, TOutput, TOutput, TConfiguration> : never;
 
-export interface Behavior<TInput extends object, TOutput extends MetadataBearer, TCommandOutput extends TOutput> {
+export interface Behavior<TInput extends object, TOutput extends MetadataBearer, TCommandOutput extends TOutput, TConfiguration> {
 
     /**
      * Allows specifying the behavior for any Command with given input (parameters).
@@ -29,7 +29,7 @@ export interface Behavior<TInput extends object, TOutput extends MetadataBearer,
      * @param input Command payload to match
      * @param strict Should the payload match strictly (default false, will match if all defined payload properties match)
      */
-    onAnyCommand<TCmdInput extends TInput>(input?: Partial<TCmdInput>, strict?: boolean): Behavior<TInput, TOutput, TOutput>;
+    onAnyCommand<TCmdInput extends TInput>(input?: Partial<TCmdInput>, strict?: boolean): Behavior<TInput, TOutput, TOutput, TConfiguration>;
 
     /**
      * Allows specifying the behavior for a given Command type and its input (parameters).
@@ -42,14 +42,14 @@ export interface Behavior<TInput extends object, TOutput extends MetadataBearer,
      */
     on<TCmdInput extends TInput, TCmdOutput extends TOutput>(
         command: new (input: TCmdInput) => AwsCommand<TCmdInput, TCmdOutput>, input?: Partial<TCmdInput>, strict?: boolean,
-    ): Behavior<TInput, TOutput, TCmdOutput>;
+    ): Behavior<TInput, TOutput, TCmdOutput, TConfiguration>;
 
     /**
      * Sets a successful response that will be returned from any `Client#send()` invocation.
      *
      * @param response Content to be returned
      */
-    resolves(response: CommandResponse<TCommandOutput>): AwsStub<TInput, TOutput>;
+    resolves(response: CommandResponse<TCommandOutput>): AwsStub<TInput, TOutput, TConfiguration>;
 
     /**
      * Sets a successful response that will be returned from one `Client#send()` invocation.
@@ -67,7 +67,7 @@ export interface Behavior<TInput extends object, TOutput extends MetadataBearer,
      *
      * @param response Content to be returned
      */
-    resolvesOnce(response: CommandResponse<TCommandOutput>): Behavior<TInput, TOutput, TCommandOutput>;
+    resolvesOnce(response: CommandResponse<TCommandOutput>): Behavior<TInput, TOutput, TCommandOutput, TConfiguration>;
 
     /**
      * Sets a failure response that will be returned from any `Client#send()` invocation.
@@ -75,7 +75,7 @@ export interface Behavior<TInput extends object, TOutput extends MetadataBearer,
      *
      * @param error Error text, Error instance or Error parameters to be returned
      */
-    rejects(error?: string | Error | AwsError): AwsStub<TInput, TOutput>;
+    rejects(error?: string | Error | AwsError): AwsStub<TInput, TOutput, TConfiguration>;
 
     /**
      * Sets a failure response that will be returned from one `Client#send()` invocation.
@@ -94,14 +94,14 @@ export interface Behavior<TInput extends object, TOutput extends MetadataBearer,
      *
      * @param error Error text, Error instance or Error parameters to be returned
      */
-    rejectsOnce(error?: string | Error | AwsError): Behavior<TInput, TOutput, TCommandOutput>;
+    rejectsOnce(error?: string | Error | AwsError): Behavior<TInput, TOutput, TCommandOutput, TConfiguration>;
 
     /**
      * Sets a function that will be called on any `Client#send()` invocation.
      *
      * @param fn Function taking Command input and returning result
      */
-    callsFake(fn: (input: any) => any): AwsStub<TInput, TOutput>; // TODO Types
+    callsFake(fn: (input: any, getClient: () => Client<TInput, TOutput, TConfiguration>) => any): AwsStub<TInput, TOutput, TConfiguration>; // TODO Types
 
     /**
      * Sets a function that will be called on any `Client#send()` invocation.
@@ -119,7 +119,7 @@ export interface Behavior<TInput extends object, TOutput extends MetadataBearer,
      *
      * @param fn Function taking Command input and returning result
      */
-    callsFakeOnce(fn: (input: any) => any): Behavior<TInput, TOutput, TCommandOutput>; // TODO Types
+    callsFakeOnce(fn: (input: any, getClient: () => Client<TInput, TOutput, TConfiguration>) => any): Behavior<TInput, TOutput, TCommandOutput, TConfiguration>; // TODO Types
 
 }
 
@@ -133,8 +133,8 @@ export interface Behavior<TInput extends object, TOutput extends MetadataBearer,
  * snsMock = mockClient(SNSClient);
  * ```
  */
-export type AwsClientStub<TClient extends Client<any, any, any>> =
-    TClient extends Client<infer TInput, infer TOutput, any> ? AwsStub<TInput, TOutput> : never;
+export type AwsClientStub<TClient> =
+    TClient extends Client<infer TInput, infer TOutput, infer TConfiguration> ? AwsStub<TInput, TOutput, TConfiguration> : never;
 
 /**
  * Wrapper on the mocked `Client#send()` method,
@@ -144,7 +144,7 @@ export type AwsClientStub<TClient extends Client<any, any, any>> =
  *
  * To define resulting variable type easily, use {@link AwsClientStub}.
  */
-export class AwsStub<TInput extends object, TOutput extends MetadataBearer> implements Behavior<TInput, TOutput, TOutput> {
+export class AwsStub<TInput extends object, TOutput extends MetadataBearer, TConfiguration> implements Behavior<TInput, TOutput, TOutput, TConfiguration> {
 
     /**
      * Underlying `Client#send()` method Sinon stub.
@@ -154,7 +154,7 @@ export class AwsStub<TInput extends object, TOutput extends MetadataBearer> impl
     public send: SinonStub<[AwsCommand<TInput, TOutput>], Promise<TOutput>>;
 
     constructor(
-        private client: Client<TInput, TOutput, any>,
+        private client: Client<TInput, TOutput, TConfiguration>,
         send: SinonStub<[AwsCommand<TInput, TOutput>], Promise<TOutput>>,
     ) {
         this.send = send;
@@ -168,7 +168,7 @@ export class AwsStub<TInput extends object, TOutput extends MetadataBearer> impl
     /**
      * Resets stub. It will replace the stub with a new one, with clean history and behavior.
      */
-    reset(): AwsStub<TInput, TOutput> {
+    reset(): AwsStub<TInput, TOutput, TConfiguration> {
         /* sinon.stub.reset() does not remove the fakes which in some conditions can break subsequent stubs,
          * so instead of calling send.reset(), we recreate the stub.
          * See: https://github.com/sinonjs/sinon/issues/1572
@@ -180,7 +180,7 @@ export class AwsStub<TInput extends object, TOutput extends MetadataBearer> impl
     }
 
     /** Resets stub's calls history. */
-    resetHistory(): AwsStub<TInput, TOutput> {
+    resetHistory(): AwsStub<TInput, TOutput, TConfiguration> {
         this.send.resetHistory();
         return this;
     }
@@ -214,7 +214,7 @@ export class AwsStub<TInput extends object, TOutput extends MetadataBearer> impl
     commandCalls<TCmd extends AwsCommand<any, any>,
         TCmdInput extends TCmd extends AwsCommand<infer TIn, any> ? TIn : never,
         TCmdOutput extends TCmd extends AwsCommand<any, infer TOut> ? TOut : never,
-        >(
+    >(
         commandType: new (input: TCmdInput) => TCmd,
         input?: Partial<TCmdInput>,
         strict?: boolean,
@@ -227,17 +227,17 @@ export class AwsStub<TInput extends object, TOutput extends MetadataBearer> impl
             });
     }
 
-    onAnyCommand<TCmdInput extends TInput>(input?: Partial<TCmdInput>, strict = false): CommandBehavior<TInput, TOutput, TOutput> {
+    onAnyCommand<TCmdInput extends TInput>(input?: Partial<TCmdInput>, strict = false): CommandBehavior<TInput, TOutput, TOutput, TConfiguration> {
         const cmdStub = this.send.withArgs(this.createInputMatcher(input, strict));
         return new CommandBehavior(this, cmdStub);
     }
 
     on<TCmdInput extends TInput, TCmdOutput extends TOutput>(
         command: new (input: TCmdInput) => AwsCommand<TCmdInput, TCmdOutput>, input?: Partial<TCmdInput>, strict = false,
-    ): CommandBehavior<TInput, TOutput, TCmdOutput> {
+    ): CommandBehavior<TInput, TOutput, TCmdOutput, TConfiguration> {
         const matcher = match.instanceOf(command).and(this.createInputMatcher(input, strict));
         const cmdStub = this.send.withArgs(matcher);
-        return new CommandBehavior<TInput, TOutput, TCmdOutput>(this, cmdStub);
+        return new CommandBehavior<TInput, TOutput, TCmdOutput, TConfiguration>(this, cmdStub);
     }
 
     private createInputMatcher<TCmdInput extends TInput>(input?: Partial<TCmdInput>, strict = false) {
@@ -246,32 +246,32 @@ export class AwsStub<TInput extends object, TOutput extends MetadataBearer> impl
             : match.any;
     }
 
-    resolves(response: CommandResponse<TOutput>): AwsStub<TInput, TOutput> {
+    resolves(response: CommandResponse<TOutput>): AwsStub<TInput, TOutput, TConfiguration> {
         return this.onAnyCommand().resolves(response);
     }
 
-    resolvesOnce(response: CommandResponse<TOutput>): CommandBehavior<TInput, TOutput, TOutput> {
+    resolvesOnce(response: CommandResponse<TOutput>): CommandBehavior<TInput, TOutput, TOutput, TConfiguration> {
         return this.onAnyCommand().resolvesOnce(response);
     }
 
-    rejects(error?: string | Error | AwsError): AwsStub<TInput, TOutput> {
+    rejects(error?: string | Error | AwsError): AwsStub<TInput, TOutput, TConfiguration> {
         return this.onAnyCommand().rejects(error);
     }
 
-    rejectsOnce(error?: string | Error | AwsError): CommandBehavior<TInput, TOutput, TOutput> {
+    rejectsOnce(error?: string | Error | AwsError): CommandBehavior<TInput, TOutput, TOutput, TConfiguration> {
         return this.onAnyCommand().rejectsOnce(error);
     }
 
-    callsFake(fn: (input: any) => any): AwsStub<TInput, TOutput> {
+    callsFake(fn: (input: any, getClient: () => Client<TInput, TOutput, TConfiguration>) => any): AwsStub<TInput, TOutput, TConfiguration> {
         return this.onAnyCommand().callsFake(fn);
     }
 
-    callsFakeOnce(fn: (input: any) => any): CommandBehavior<TInput, TOutput, TOutput> {
+    callsFakeOnce(fn: (input: any, getClient: () => Client<TInput, TOutput, TConfiguration>) => any): CommandBehavior<TInput, TOutput, TOutput, TConfiguration> {
         return this.onAnyCommand().callsFakeOnce(fn);
     }
 }
 
-export class CommandBehavior<TInput extends object, TOutput extends MetadataBearer, TCommandOutput extends TOutput> implements Behavior<TInput, TOutput, TCommandOutput> {
+export class CommandBehavior<TInput extends object, TOutput extends MetadataBearer, TCommandOutput extends TOutput, TConfiguration> implements Behavior<TInput, TOutput, TCommandOutput, TConfiguration> {
 
     /**
      * Counter to simulate chainable `resolvesOnce()` and similar `*Once()` methods with Sinon `Stub#onCall()`.
@@ -279,38 +279,45 @@ export class CommandBehavior<TInput extends object, TOutput extends MetadataBear
      */
     private nextChainableCallNumber = 0;
 
+    /**
+     * Function to get the current Client object from inside the `callsFake()` callback.
+     * Since this is called from the callback when the mock function is executed,
+     * the current Client is the last on the Sinon `Stub#thisValues` list.
+     */
+    private getClient = () => this.send.thisValues[this.send.thisValues.length - 1] as Client<TInput, TOutput, TConfiguration>;
+
     constructor(
-        private clientStub: AwsStub<TInput, TOutput>,
+        private clientStub: AwsStub<TInput, TOutput, TConfiguration>,
         private send: SinonStub<[AwsCommand<TInput, TOutput>], unknown>,
     ) {
     }
 
-    onAnyCommand<TCmdInput extends TInput>(input?: Partial<TCmdInput>, strict?: boolean): Behavior<TInput, TOutput, TOutput> {
+    onAnyCommand<TCmdInput extends TInput>(input?: Partial<TCmdInput>, strict?: boolean): Behavior<TInput, TOutput, TOutput, TConfiguration> {
         return this.clientStub.onAnyCommand(input, strict);
     }
 
     on<TCmdInput extends TInput, TCmdOutput extends TOutput>(
         command: new (input: TCmdInput) => AwsCommand<TCmdInput, TCmdOutput>, input?: Partial<TCmdInput>, strict = false,
-    ): CommandBehavior<TInput, TOutput, TCmdOutput> {
+    ): CommandBehavior<TInput, TOutput, TCmdOutput, TConfiguration> {
         return this.clientStub.on(command, input, strict);
     }
 
-    resolves(response: CommandResponse<TCommandOutput>): AwsStub<TInput, TOutput> {
+    resolves(response: CommandResponse<TCommandOutput>): AwsStub<TInput, TOutput, TConfiguration> {
         this.send.resolves(response);
         return this.clientStub;
     }
 
-    resolvesOnce(response: CommandResponse<TCommandOutput>): CommandBehavior<TInput, TOutput, TCommandOutput> {
+    resolvesOnce(response: CommandResponse<TCommandOutput>): CommandBehavior<TInput, TOutput, TCommandOutput, TConfiguration> {
         this.send = this.send.onCall(this.nextChainableCallNumber++).resolves(response);
         return this;
     }
 
-    rejects(error?: string | Error | AwsError): AwsStub<TInput, TOutput> {
+    rejects(error?: string | Error | AwsError): AwsStub<TInput, TOutput, TConfiguration> {
         this.send.rejects(CommandBehavior.normalizeError(error));
         return this.clientStub;
     }
 
-    rejectsOnce(error?: string | Error | AwsError): CommandBehavior<TInput, TOutput, TCommandOutput> {
+    rejectsOnce(error?: string | Error | AwsError): CommandBehavior<TInput, TOutput, TCommandOutput, TConfiguration> {
         this.send.onCall(this.nextChainableCallNumber++).rejects(CommandBehavior.normalizeError(error));
         return this;
     }
@@ -327,13 +334,13 @@ export class CommandBehavior<TInput extends object, TOutput extends MetadataBear
         return error;
     }
 
-    callsFake(fn: (input: any) => any): AwsStub<TInput, TOutput> {
-        this.send.callsFake(cmd => fn(cmd.input));
+    callsFake(fn: (input: any, getClient: () => Client<TInput, TOutput, TConfiguration>) => any): AwsStub<TInput, TOutput, TConfiguration> {
+        this.send.callsFake(cmd => fn(cmd.input, this.getClient));
         return this.clientStub;
     }
 
-    callsFakeOnce(fn: (input: any) => any): CommandBehavior<TInput, TOutput, TCommandOutput> {
-        this.send.onCall(this.nextChainableCallNumber++).callsFake(cmd => fn(cmd.input));
+    callsFakeOnce(fn: (input: any, getClient: () => Client<TInput, TOutput, TConfiguration>) => any): CommandBehavior<TInput, TOutput, TCommandOutput, TConfiguration> {
+        this.send.onCall(this.nextChainableCallNumber++).callsFake(cmd => fn(cmd.input, this.getClient));
         return this;
     }
 }

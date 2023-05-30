@@ -643,6 +643,133 @@ describe('chained behaviors', () => {
     });
 });
 
+describe('Client configuration-dependent behavior', () => {
+    it('provides the Client used to send the Command', async () => {
+        const snsEU = new SNSClient({region: 'eu-west-1'});
+        const snsUS = new SNSClient({region: 'us-east-1'});
+
+        snsMock.on(PublishCommand).callsFake(async (input, getClient) => {
+            const client = getClient();
+            const region = await client.config.region();
+            return {MessageId: region.substring(0, 2)};
+        });
+
+        const outputs = await Promise.all([
+            snsEU.send(publishCmd1),
+            snsEU.send(publishCmd1),
+            snsUS.send(publishCmd1),
+            snsEU.send(publishCmd1),
+        ]);
+
+        snsMock.call(0).thisValue as SNSClient
+
+        expect(outputs).toStrictEqual([
+            {MessageId: 'eu'},
+            {MessageId: 'eu'},
+            {MessageId: 'us'},
+            {MessageId: 'eu'},
+        ]);
+    });
+
+    it('provides the Client used to send the Command once', async () => {
+        const snsEU = new SNSClient({region: 'eu-west-1'});
+        const snsUS = new SNSClient({region: 'us-east-1'});
+
+        snsMock.on(PublishCommand)
+            .callsFakeOnce(async (input, getClient) => {
+                const client = getClient();
+                const region = await client.config.region();
+                return {MessageId: region.substring(0, 2)};
+            })
+            .callsFakeOnce(async (input, getClient) => {
+                const client = getClient();
+                const region = await client.config.region();
+                return {MessageId: region.substring(0, 2).toUpperCase()};
+            });
+
+        const outputs = await Promise.all([
+            snsEU.send(publishCmd1),
+            snsUS.send(publishCmd1),
+        ]);
+
+        expect(outputs).toStrictEqual([
+            {MessageId: 'eu'},
+            {MessageId: 'US'},
+        ]);
+    });
+
+    it('provides the Client used to send any Command', async () => {
+        const snsEU = new SNSClient({region: 'eu-west-1'});
+        const snsUS = new SNSClient({region: 'us-east-1'});
+
+        snsMock
+            .onAnyCommand()
+            .callsFake(async (input, getClient) => {
+                const client = getClient();
+                const region = await client.config.region();
+                return {MessageId: region.substring(0, 2)};
+            });
+
+        const outputs = await Promise.all([
+            snsEU.send(publishCmd1),
+            snsUS.send(publishCmd1),
+        ]);
+
+        expect(outputs).toStrictEqual([
+            {MessageId: 'eu'},
+            {MessageId: 'us'},
+        ]);
+    });
+
+    it('provides the Client to the default behavior', async () => {
+        const snsEU = new SNSClient({region: 'eu-west-1'});
+        const snsUS = new SNSClient({region: 'us-east-1'});
+
+        snsMock
+            .callsFake(async (input, getClient) => {
+                const client = getClient();
+                const region = await client.config.region();
+                return {MessageId: region.substring(0, 2)};
+            });
+
+        const outputs = await Promise.all([
+            snsEU.send(publishCmd1),
+            snsUS.send(publishCmd1),
+        ]);
+
+        expect(outputs).toStrictEqual([
+            {MessageId: 'eu'},
+            {MessageId: 'us'},
+        ]);
+    });
+
+    it('provides correct Client among multiple calls', async () => {
+        const snsEU = new SNSClient({region: 'eu-west-1'});
+        const snsUS = new SNSClient({region: 'us-east-1'});
+
+        snsMock
+            .on(PublishCommand, publishCmd1.input).resolves({MessageId: uuid1})
+            .on(PublishCommand, publishCmd2.input)
+            .callsFake(async (input, getClient) => {
+                const client = getClient();
+                const region = await client.config.region();
+                return {MessageId: region.substring(0, 2)};
+            });
+
+        const outputs = await Promise.all([
+            snsEU.send(publishCmd1),
+            snsEU.send(publishCmd2),
+            snsUS.send(publishCmd2),
+        ]);
+
+        expect(outputs).toStrictEqual([
+            {MessageId: uuid1},
+            {MessageId: 'eu'},
+            {MessageId: 'us'},
+        ]);
+    });
+});
+
 const resolveImmediately = <T>(x: T): Promise<T> => new Promise(resolve => {
     setTimeout(() => {
         resolve(x);
