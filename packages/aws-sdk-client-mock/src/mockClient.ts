@@ -9,9 +9,9 @@ import {AwsClientStub, AwsStub} from './awsClientStub';
  * @param client `Client` type or instance to replace the method
  * @return Stub allowing to configure Client's behavior
  */
-export const mockClient = <TInput extends object, TOutput extends MetadataBearer>(
-    client: InstanceOrClassType<Client<TInput, TOutput, any>>,
-): AwsClientStub<Client<TInput, TOutput, any>> => {
+export const mockClient = <TInput extends object, TOutput extends MetadataBearer, TConfiguration>(
+    client: InstanceOrClassType<Client<TInput, TOutput, TConfiguration>>,
+): AwsClientStub<Client<TInput, TOutput, TConfiguration>> => {
     const instance = isClientInstance(client) ? client : client.prototype;
 
     const send = instance.send;
@@ -22,7 +22,7 @@ export const mockClient = <TInput extends object, TOutput extends MetadataBearer
     const sendStub = stub(instance, 'send') as SinonStub<[Command<TInput, any, TOutput, any, any>], Promise<TOutput>>;
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-    return new AwsStub<TInput, TOutput>(instance, sendStub);
+    return new AwsStub<TInput, TOutput, TConfiguration>(instance, sendStub);
 };
 
 type ClassType<T> = {

@@ -57,16 +57,16 @@ interface AwsSdkJestMockBaseMatchers<R> extends Record<string, any> {
     /**
      * Asserts {@link AwsStub Aws Client Mock} received a {@link command} as defined specific {@link call}
      * number with matchin {@link input}
-     * 
+     *
      * @param call call number to assert
      * @param command aws-sdk command constructor
-     * @param input 
+     * @param input
      */
     toHaveReceivedNthSpecificCommandWith<TCmdInput extends object, TCmdOutput extends MetadataBearer>(
         call: number,
         command: new (input: TCmdInput) => AwsCommand<TCmdInput, TCmdOutput>,
-        input: Partial<TCmdInput>
-      ): R;
+        input: Partial<TCmdInput>,
+    ): R;
 }
 
 interface AwsSdkJestMockAliasMatchers<R> {
@@ -126,16 +126,16 @@ interface AwsSdkJestMockAliasMatchers<R> {
     /**
      * Asserts {@link AwsStub Aws Client Mock} received a {@link command} as defined specific {@link call}
      * number with matchin {@link input}
-     * 
+     *
      * @param call call number to assert
      * @param command aws-sdk command constructor
-     * @param input 
+     * @param input
      */
     toReceiveNthSpecificCommandWith<TCmdInput extends object, TCmdOutput extends MetadataBearer>(
         call: number,
         command: new (input: TCmdInput) => AwsCommand<TCmdInput, TCmdOutput>,
-        input: Partial<TCmdInput>
-      ): R;
+        input: Partial<TCmdInput>,
+    ): R;
 }
 
 /**
@@ -172,7 +172,7 @@ declare global {
     }
 }
 
-type ClientMock = AwsStub<any, any>;
+type ClientMock = AwsStub<any, any, any>;
 type AnyCommand = AwsCommand<any, any>;
 type AnySpyCall = SinonSpyCall<[AnyCommand]>;
 type MessageFunctionParams<CheckData> = {
