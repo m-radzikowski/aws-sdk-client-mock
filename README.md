@@ -78,19 +78,13 @@ and define returned results depending on the `Command` type and payload.
 ### Install
 
 ```bash
-yarn add -D aws-sdk-client-mock
-```
-
-or
-
-```bash
 npm install -D aws-sdk-client-mock
 ```
 
-With `npm`, peer dependencies will be installed, including `aws-crt`.
-**It requires `cmake` installed locally.**
-You can install it with `brew install cmake` or similar.
-See full explanation [here](https://github.com/m-radzikowski/aws-sdk-client-mock/issues/69#issuecomment-1035531094).
+> **Warning**  
+> Make sure all your installed `@aws-sdk/*` packages point to the same version.
+> Otherwise, you may end up with different `@aws-sdk/types` packages
+> which will cause type errors when mocking. Read more [here](#mixed-aws-sdktypes-versions).
 
 ### Import
 
