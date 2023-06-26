@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.2.0](https://github.com/m-radzikowski/aws-sdk-client-mock/compare/v2.2.0-beta.0...v2.2.0) (2023-06-26)
+
+
+### Features
+
+* allow throwing errors in callsFake() ([67c37e6](https://github.com/m-radzikowski/aws-sdk-client-mock/commit/67c37e6d812c704c4a15e50fd53505805f88fc6b)), closes [#8](https://github.com/m-radzikowski/aws-sdk-client-mock/issues/8)
+
 ## [2.2.0-beta.0](https://github.com/m-radzikowski/aws-sdk-client-mock/compare/v2.1.1...v2.2.0-beta.0) (2023-05-30)
 
 
