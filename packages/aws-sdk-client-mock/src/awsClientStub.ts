@@ -335,13 +335,22 @@ export class CommandBehavior<TInput extends object, TOutput extends MetadataBear
     }
 
     callsFake(fn: (input: any, getClient: () => Client<TInput, TOutput, TConfiguration>) => any): AwsStub<TInput, TOutput, TConfiguration> {
-        this.send.callsFake(cmd => fn(cmd.input, this.getClient));
+        this.send.callsFake(cmd => this.fakeFnWrapper(cmd, fn));
         return this.clientStub;
     }
 
     callsFakeOnce(fn: (input: any, getClient: () => Client<TInput, TOutput, TConfiguration>) => any): CommandBehavior<TInput, TOutput, TCommandOutput, TConfiguration> {
-        this.send.onCall(this.nextChainableCallNumber++).callsFake(cmd => fn(cmd.input, this.getClient));
+        this.send.onCall(this.nextChainableCallNumber++).callsFake(cmd => this.fakeFnWrapper(cmd, fn));
         return this;
+    }
+
+    private fakeFnWrapper(cmd: AwsCommand<TInput, TOutput>, fn: (input: any, getClient: () => Client<TInput, TOutput, TConfiguration>) => any) {
+        try {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+            return fn(cmd.input, this.getClient);
+        } catch (err) {
+            return Promise.reject(CommandBehavior.normalizeError(err as string | object));
+        }
     }
 }
 

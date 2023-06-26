@@ -315,6 +315,16 @@ describe('mocking behaviors in different ways', () => {
 
                 expect(publish1.MessageId).toBe(uuid1);
             });
+
+            it('throws an error', async () => {
+                behavior.callsFake(() => {
+                    throw new Error('Invalid parameter: TopicArn');
+                });
+
+                const sns = new SNSClient({});
+
+                await expect(sns.send(publishCmd1)).rejects.toThrow('Invalid parameter: TopicArn');
+            });
         });
 
         describe('supporting alternative send() calls', () => {

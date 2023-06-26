@@ -229,7 +229,7 @@ snsMock
         if (input.Message === 'My message') {
             return {MessageId: '12345678-1111-2222-3333-111122223333'};
         } else {
-            return {MessageId: '12345678-4444-5555-6666-111122223333'};
+            throw new Error('mocked rejection');
         }
     });
 ```
