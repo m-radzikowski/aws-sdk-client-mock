@@ -85,6 +85,13 @@ npm install -D aws-sdk-client-mock
 > If you are getting type errors `Argument of type 'typeof SomeClient' is not assignable to parameter of type...`
 > see instructions [here](#mixed-aws-sdktypes-versions).
 
+#### Versions compatibility
+
+| `@aws-sdk/*` | `aws-sdk-client-mock` |
+|--------------|-----------------------|
+| ≥ 3.363.0    | 3.x                   |
+| < 3.363.0    | 2.x                   |
+
 ### Import
 
 CommonJS:
@@ -583,6 +590,10 @@ For more examples, see the [unit tests](packages/aws-sdk-client-mock/test/mockCl
 ## Caveats
 
 ### Mixed @aws-sdk/types versions
+
+> **Note**  
+> Those instructions refer to `@aws-sdk/types` used by AWS SDK v3.362.0 and below.
+> For version 3.363.0 and above, perform the same steps for the `@smithy/types` package.
 
 If you have multiple versions of `@aws-sdk/types` installed in your project,
 you can get type errors similar to this:
