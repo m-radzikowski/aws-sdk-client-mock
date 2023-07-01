@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.0.0-beta.0](https://github.com/m-radzikowski/aws-sdk-client-mock/compare/v2.2.0...v3.0.0-beta.0) (2023-07-01)
+
+
+### ⚠ BREAKING CHANGES
+
+* support AWS SDK v3.363.0
+
+### Features
+
+* support AWS SDK v3.363.0 ([0865065](https://github.com/m-radzikowski/aws-sdk-client-mock/commit/0865065290b77fcfbfc6cf4a7db7c43448d1fcc1))
+
 ## [2.2.0](https://github.com/m-radzikowski/aws-sdk-client-mock/compare/v2.2.0-beta.0...v2.2.0) (2023-06-26)
 
 
