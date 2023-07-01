@@ -1,4 +1,4 @@
-import {Client, Command, MetadataBearer} from '@aws-sdk/types';
+import {Client, Command, MetadataBearer} from '@smithy/types';
 import {SinonStub, stub} from 'sinon';
 import {isSinonStub} from './sinon';
 import {AwsClientStub, AwsStub} from './awsClientStub';

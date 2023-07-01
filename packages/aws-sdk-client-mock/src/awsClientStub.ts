@@ -1,4 +1,4 @@
-import {Client, Command, MetadataBearer} from '@aws-sdk/types';
+import {Client, Command, MetadataBearer} from '@smithy/types';
 import {match, SinonSpyCall, SinonStub} from 'sinon';
 import {mockClient} from './mockClient';
 

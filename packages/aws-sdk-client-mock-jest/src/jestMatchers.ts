@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-empty-interface */
 import assert from 'assert';
-import type {MetadataBearer} from '@aws-sdk/types';
+import type {MetadataBearer} from '@smithy/types';
 import type {AwsCommand, AwsStub} from 'aws-sdk-client-mock';
 import type {SinonSpyCall} from 'sinon';
 
