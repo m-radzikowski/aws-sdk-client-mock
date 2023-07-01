@@ -1,8 +1,8 @@
-import {AwsClientStub, mockClient} from '../src';
+import {AwsStub, mockClient} from '../src';
 import {ListTopicsCommand, PublishCommand, PublishCommandOutput, SNSClient} from '@aws-sdk/client-sns';
 import {expectError, expectType} from 'tsd';
 
-expectType<AwsClientStub<SNSClient>>(mockClient(SNSClient));
+expectType<AwsStub<SNSClient>>(mockClient(SNSClient));
 
 // proper Command, input and output types
 mockClient(SNSClient).on(PublishCommand);

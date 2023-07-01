@@ -1,7 +1,7 @@
 import {Client, Command, MetadataBearer} from '@smithy/types';
 import {SinonStub, stub} from 'sinon';
 import {isSinonStub} from './sinon';
-import {AwsClientStub, AwsStub} from './awsClientStub';
+import {AwsStub} from './awsClientStub';
 
 /**
  * Creates and attaches a stub of the `Client#send()` method. Only this single method is mocked.
@@ -9,9 +9,14 @@ import {AwsClientStub, AwsStub} from './awsClientStub';
  * @param client `Client` type or instance to replace the method
  * @return Stub allowing to configure Client's behavior
  */
-export const mockClient = <TInput extends object, TOutput extends MetadataBearer, TConfiguration>(
+export function mockClient<
+    TClient extends Client<TInput, TOutput, TConfiguration>,
+    TInput extends object = TClient extends Client<infer TIn, any, any> ? TIn : never,
+    TOutput extends MetadataBearer = TClient extends Client<any, infer TOut, any> ? TOut : never,
+    TConfiguration = TClient extends Client<any, any, infer TConf> ? TConf : never,
+>(
     client: InstanceOrClassType<Client<TInput, TOutput, TConfiguration>>,
-): AwsClientStub<Client<TInput, TOutput, TConfiguration>> => {
+): AwsStub<TClient, TInput, TOutput, TConfiguration> {
     const instance = isClientInstance(client) ? client : client.prototype;
 
     const send = instance.send;
@@ -19,11 +24,10 @@ export const mockClient = <TInput extends object, TOutput extends MetadataBearer
         send.restore();
     }
 
-    const sendStub = stub(instance, 'send') as SinonStub<[Command<TInput, any, TOutput, any, any>], Promise<TOutput>>;
+    const sendStub = stub(instance, 'send') as SinonStub<[Command<TInput, TInput, TOutput, TOutput, TConfiguration>], Promise<TOutput>>;
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-    return new AwsStub<TInput, TOutput, TConfiguration>(instance, sendStub);
-};
+    return new AwsStub<TClient, TInput, TOutput, TConfiguration>(instance, sendStub);
+}
 
 type ClassType<T> = {
     prototype: T;

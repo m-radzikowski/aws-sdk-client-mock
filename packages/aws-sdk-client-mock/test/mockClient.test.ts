@@ -1,9 +1,9 @@
-import {AwsClientBehavior, AwsClientStub, mockClient} from '../src';
+import {AwsClientBehavior, AwsStub, mockClient} from '../src';
 import {ListTopicsCommand, PublishCommand, SNS, SNSClient} from '@aws-sdk/client-sns';
 import {MaybeSinonProxy} from '../src/sinon';
 import {publishCmd1, publishCmd2, topicArn, uuid1, uuid2, uuid3} from './fixtures';
 
-let snsMock: AwsClientStub<SNSClient>;
+let snsMock: AwsStub<SNSClient>;
 
 beforeEach(() => {
     snsMock = mockClient(SNSClient);
