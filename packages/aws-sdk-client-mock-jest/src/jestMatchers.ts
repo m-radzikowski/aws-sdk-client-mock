@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-empty-interface */
 import assert from 'assert';
 import type {MetadataBearer} from '@smithy/types';
-import type {AwsCommand, AwsStub} from 'aws-sdk-client-mock';
+import type {AwsCommand, AwsStub, AwsSpy} from 'aws-sdk-client-mock';
 import type {SinonSpyCall} from 'sinon';
 
 interface AwsSdkJestMockBaseMatchers<R> extends Record<string, any> {
@@ -147,7 +147,7 @@ interface AwsSdkJestMockAliasMatchers<R> {
  * import { mockClient } from "aws-sdk-client-mock";
  * import { ScanCommand } from "@aws-sdk/client-dynamodb";
  *
- * const awsMock = mockClient(DynamoDBClient);
+ * const awsMock = mockClient(DynamoDBClient); // or `spyClient(DynamoDBClient)`
  *
  * awsMock.on(ScanCommand).resolves({
  *   Items: [{ Info: { S: '{ "val": "info" }' }, LockID: { S: "fooId" } }],
@@ -172,7 +172,7 @@ declare global {
     }
 }
 
-type ClientMock = AwsStub<any, any, any>;
+type ClientMock = AwsStub<any, any, any> | AwsSpy<any, any, any>;
 type AnyCommand = AwsCommand<any, any>;
 type AnySpyCall = SinonSpyCall<[AnyCommand]>;
 type MessageFunctionParams<CheckData> = {
@@ -218,7 +218,7 @@ const processMatch = <CheckData = undefined>({ctx, mockClient, command, check, m
     );
 
     const calls = mockClient.calls();
-    const commandCalls = mockClient.commandCalls(command);
+    const commandCalls = (mockClient as AwsSpy<any, any, any>).commandCalls(command);
 
     const {pass, data} = check({calls, commandCalls});
 

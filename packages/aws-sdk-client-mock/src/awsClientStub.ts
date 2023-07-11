@@ -1,5 +1,6 @@
-import {Client, Command, MetadataBearer} from '@smithy/types';
+import {Client, MetadataBearer} from '@smithy/types';
 import {match, SinonSpyCall, SinonStub} from 'sinon';
+import { AwsCommand } from './commonTypes';
 import {mockClient} from './mockClient';
 
 export type AwsClientBehavior<TClient> =
@@ -354,7 +355,6 @@ export class CommandBehavior<TInput extends object, TOutput extends MetadataBear
     }
 }
 
-export type AwsCommand<Input extends ClientInput, Output extends ClientOutput, ClientInput extends object = any, ClientOutput extends MetadataBearer = any> = Command<ClientInput, Input, ClientOutput, Output, any>;
 type CommandResponse<TOutput> = Partial<TOutput> | PromiseLike<Partial<TOutput>>;
 
 export interface AwsError extends Partial<Error>, Partial<MetadataBearer> {
