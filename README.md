@@ -242,6 +242,20 @@ snsMock
     });
 ```
 
+Specify custom mock function for a specific command (chained behavior):
+
+```typescript
+snsMock
+    .on(PublishCommand)
+    .callsFake(input => {
+        if (input.Message === 'My message') {
+            return {MessageId: '12345678-1111-2222-3333-111122223333'};
+        } else {
+            throw new Error('mocked rejection');
+        }
+    });
+```
+
 Together with `resolvesOnce()`, you can also use `rejectsOnce()` and `callsFakeOnce()`
 to specify consecutive behaviors.
 
