@@ -5,12 +5,13 @@ import {spyClient} from './spyClient';
 
 /**
  * Type for {@link AwsSpy} class,
- * but with the AWS Client class type as an only generic parameter.
+ * but with the AWS Client class type as the only generic parameter.
  *
  * @example
  * ```ts
- * let snsMock: AwsClientSpy<SNSClient>;
- * snsMock = mockClient(SNSClient);
+ * const sns = new SNSCLient({});
+ * let snsSpy: AwsClientSpy<SNSClient>;
+ * snsSpy = spyClient(sns);
  * ```
  */
 export type AwsClientSpy<TClient> =
@@ -40,13 +41,13 @@ export class AwsSpy<TInput extends object, TOutput extends MetadataBearer, TConf
         this.send = send;
     }
 
-    /** Returns the class name of the underlying mocked client class */
+    /** Returns the class name of the underlying spied client class */
     clientName(): string {
         return this.client.constructor.name;
     }
 
     /**
-     * Resets spy. It will replace the spy with a new one, with clean history and behavior.
+     * Resets spy. It will replace the spy with a new one, with clean history.
      */
     reset(): AwsSpy<TInput, TOutput, TConfiguration> {
         /* sinon.spy.reset() does not remove the fakes which in some conditions can break subsequent spies,
