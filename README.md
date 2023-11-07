@@ -43,6 +43,7 @@ In action:
 - [AWS Lambda example](#aws-lambda-example)
 - [Caveats](#caveats)
   - [Mixed @aws-sdk/types versions](#mixed-aws-sdktypes-versions)
+  - [AwsClientStub and strictFunctionTypes](#awsclientstub-and-strictfunctiontypes)
   - [Order of mock behaviors](#order-of-mock-behaviors)
   - [Order of type and instance mocks](#order-of-type-and-instance-mocks)
 
@@ -232,6 +233,20 @@ Specify custom mock function:
 
 ```typescript
 snsMock
+    .callsFake(input => {
+        if (input.Message === 'My message') {
+            return {MessageId: '12345678-1111-2222-3333-111122223333'};
+        } else {
+            throw new Error('mocked rejection');
+        }
+    });
+```
+
+Specify custom mock function for a specific command (chained behavior):
+
+```typescript
+snsMock
+    .on(PublishCommand)
     .callsFake(input => {
         if (input.Message === 'My message') {
             return {MessageId: '12345678-1111-2222-3333-111122223333'};
@@ -616,6 +631,23 @@ To solve this, go through the steps until one works:
 - delete the lockfile (like `package-lock.json`) and re-install project dependencies
   (although make sure you are aware of the consequences - multiple other packages may be installed in newer versions than before),
 - if nothing else helped, open an issue including the output of `npm ls @aws-sdk/types` / `pnpm why @aws-sdk/types` / `yarn why @aws-sdk/types`.
+
+### AwsClientStub and strictFunctionTypes
+
+If you need to explicitly type the mock variable,
+you can use `AwsClientStub` type:
+
+```ts
+import {AwsClientStub, mockClient} from 'aws-sdk-client-mock'
+import {S3Client} from "@aws-sdk/client-s3";
+
+const mock: AwsClientStub<S3Client> = mockClient(S3Client);
+```
+
+The `AwsClientStub` type works only with `tsconfig` option
+`strictFunctionTypes=true` or (`strict=true`) in `tsconfig.json` file.
+
+See details in [#167](https://github.com/m-radzikowski/aws-sdk-client-mock/issues/167).
 
 ### Order of mock behaviors
 
