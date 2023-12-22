@@ -43,8 +43,8 @@
     "tslib": "^2.1.0"
   },
   "devDependencies": {
-    "@aws-sdk/client-sns": "3.363.0",
-    "@smithy/types": "1.1.0",
+    "@aws-sdk/client-sns": "3.478.0",
+    "@smithy/types": "2.7.0",
     "aws-sdk-client-mock": "workspace:*",
     "jest-serializer-ansi-escapes": "2.0.1"
   },

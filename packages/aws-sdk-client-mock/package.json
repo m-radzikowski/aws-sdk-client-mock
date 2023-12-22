@@ -43,12 +43,12 @@
     "tslib": "^2.1.0"
   },
   "devDependencies": {
-    "@aws-sdk/client-dynamodb": "3.363.0",
-    "@aws-sdk/client-s3": "3.363.0",
-    "@aws-sdk/client-sns": "3.363.0",
-    "@aws-sdk/client-sqs": "3.363.0",
-    "@aws-sdk/lib-dynamodb": "3.363.0",
-    "@smithy/types": "1.1.0",
+    "@aws-sdk/client-dynamodb": "3.478.0",
+    "@aws-sdk/client-s3": "3.478.0",
+    "@aws-sdk/client-sns": "3.478.0",
+    "@aws-sdk/client-sqs": "3.478.0",
+    "@aws-sdk/lib-dynamodb": "3.478.0",
+    "@smithy/types": "2.7.0",
     "typedoc": "0.23.26"
   },
   "jest": {
