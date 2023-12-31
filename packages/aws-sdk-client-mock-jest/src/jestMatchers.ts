@@ -1,10 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-empty-interface */
 import assert from 'assert';
 import type {MetadataBearer} from '@smithy/types';
-import type {AwsCommand, AwsStub} from 'aws-sdk-client-mock';
+import {AwsCommand, AwsStub} from 'aws-sdk-client-mock';
 import type {SinonSpyCall} from 'sinon';
+import {expect} from 'expect';
+import type {ExpectationResult, MatcherContext, MatcherFunction} from 'expect';
 
-interface AwsSdkJestMockBaseMatchers<R> extends Record<string, any> {
+interface AwsSdkJestMockBaseMatchers<R> extends Record<string, Function> {
     /**
      * Asserts {@link AwsStub Aws Client Mock} received a {@link command} exact number of {@link times}
      *
@@ -69,7 +71,7 @@ interface AwsSdkJestMockBaseMatchers<R> extends Record<string, any> {
     ): R;
 }
 
-interface AwsSdkJestMockAliasMatchers<R> {
+interface AwsSdkJestMockAliasMatchers<R> extends Record<string, Function> {
     /**
      * Asserts {@link AwsStub Aws Client Mock} received a {@link command} exact number of {@link times}
      *
@@ -162,9 +164,12 @@ interface AwsSdkJestMockAliasMatchers<R> {
  * });
  * ```
  */
-export interface AwsSdkJestMockMatchers<R> extends AwsSdkJestMockBaseMatchers<R>, AwsSdkJestMockAliasMatchers<R>, Record<string, any> {
+export interface AwsSdkJestMockMatchers<R> extends AwsSdkJestMockBaseMatchers<R>, AwsSdkJestMockAliasMatchers<R>, Record<string, Function> {
 }
 
+/**
+ * Types for @types/jest
+ */
 declare global {
     namespace jest {
         interface Matchers<R = void> extends AwsSdkJestMockMatchers<R> {
@@ -172,7 +177,14 @@ declare global {
     }
 }
 
-type ClientMock = AwsStub<any, any, any>;
+/**
+ * Types for @jest/globals
+ */
+declare module 'expect' {
+    interface Matchers<R = void> extends AwsSdkJestMockMatchers<R> {
+    }
+}
+
 type AnyCommand = AwsCommand<any, any>;
 type AnySpyCall = SinonSpyCall<[AnyCommand]>;
 type MessageFunctionParams<CheckData> = {
@@ -186,7 +198,7 @@ type MessageFunctionParams<CheckData> = {
 /**
  * Prettyprints command calls for message
  */
-const printCalls = (ctx: jest.MatcherContext, calls: AnySpyCall[]): string[] =>
+const printCalls = (ctx: MatcherContext, calls: AnySpyCall[]): string[] =>
     calls.length > 0
         ? [
             '',
@@ -200,15 +212,16 @@ const printCalls = (ctx: jest.MatcherContext, calls: AnySpyCall[]): string[] =>
         : [];
 
 const processMatch = <CheckData = undefined>({ctx, mockClient, command, check, message}: {
-    ctx: jest.MatcherContext;
-    mockClient: ClientMock;
+    ctx: MatcherContext;
+    mockClient: unknown;
     command: new () => AnyCommand;
     check: (params: { calls: AnySpyCall[]; commandCalls: AnySpyCall[] }) => {
         pass: boolean;
         data: CheckData;
     };
     message: (params: MessageFunctionParams<CheckData>) => string[];
-}): jest.CustomMatcherResult => {
+}): ExpectationResult => {
+    assert(mockClient instanceof AwsStub, 'The actual must be a client mock instance');
     assert(
         command &&
         typeof command === 'function' &&
@@ -241,13 +254,13 @@ const processMatch = <CheckData = undefined>({ctx, mockClient, command, check, m
     return {pass, message: msg};
 };
 
-const baseMatchers: { [P in keyof AwsSdkJestMockBaseMatchers<unknown>]: jest.CustomMatcher } = {
+const baseMatchers: { [P in keyof AwsSdkJestMockBaseMatchers<unknown>]: MatcherFunction<any[]> } = {
     /**
      * implementation of {@link AwsSdkJestMockMatchers.toHaveReceivedCommand} matcher
      */
     toHaveReceivedCommand(
-        this: jest.MatcherContext,
-        mockClient: ClientMock,
+        this: MatcherContext,
+        mockClient: unknown,
         command: new () => AnyCommand,
     ) {
         return processMatch({
@@ -265,8 +278,8 @@ const baseMatchers: { [P in keyof AwsSdkJestMockBaseMatchers<unknown>]: jest.Cus
      * implementation of {@link AwsSdkJestMockMatchers.toHaveReceivedCommandTimes} matcher
      */
     toHaveReceivedCommandTimes(
-        this: jest.MatcherContext,
-        mockClient: ClientMock,
+        this: MatcherContext,
+        mockClient: unknown,
         command: new () => AnyCommand,
         expectedCalls: number,
     ) {
@@ -285,8 +298,8 @@ const baseMatchers: { [P in keyof AwsSdkJestMockBaseMatchers<unknown>]: jest.Cus
      * implementation of {@link AwsSdkJestMockMatchers.toHaveReceivedCommandWith} matcher
      */
     toHaveReceivedCommandWith(
-        this: jest.MatcherContext,
-        mockClient: ClientMock,
+        this: MatcherContext,
+        mockClient: unknown,
         command: new () => AnyCommand,
         input: Record<string, unknown>,
     ) {
@@ -321,11 +334,11 @@ const baseMatchers: { [P in keyof AwsSdkJestMockBaseMatchers<unknown>]: jest.Cus
      * implementation of {@link AwsSdkJestMockMatchers.toHaveReceivedNthCommandWith} matcher
      */
     toHaveReceivedNthCommandWith(
-        this: jest.MatcherContext,
-        mockClient: ClientMock,
+        this: MatcherContext,
+        mockClient: unknown,
         call: number,
         command: new () => AnyCommand,
-        input?: Record<string, unknown>,
+        input: Record<string, unknown>,
     ) {
         assert(
             call && typeof call === 'number' && call > 0,
@@ -380,11 +393,11 @@ const baseMatchers: { [P in keyof AwsSdkJestMockBaseMatchers<unknown>]: jest.Cus
      * implementation of {@link AwsSdkJestMockMatchers.toHaveReceivedNthSpecificCommandWith} matcher
      */
     toHaveReceivedNthSpecificCommandWith(
-        this: jest.MatcherContext,
-        mockClient: ClientMock,
+        this: MatcherContext,
+        mockClient: unknown,
         call: number,
         command: new () => AnyCommand,
-        input?: Record<string, unknown>,
+        input: Record<string, unknown>,
     ) {
         assert(
             call && typeof call === 'number' && call > 0,
@@ -438,7 +451,7 @@ const baseMatchers: { [P in keyof AwsSdkJestMockBaseMatchers<unknown>]: jest.Cus
 };
 
 /* typing ensures keys matching */
-const aliasMatchers: { [P in keyof AwsSdkJestMockAliasMatchers<unknown>]: jest.CustomMatcher } = {
+const aliasMatchers: { [P in keyof AwsSdkJestMockAliasMatchers<unknown>]: MatcherFunction<any[]> } = {
     toReceiveCommandTimes: baseMatchers.toHaveReceivedCommandTimes,
     toReceiveCommand: baseMatchers.toHaveReceivedCommand,
     toReceiveCommandWith: baseMatchers.toHaveReceivedCommandWith,
