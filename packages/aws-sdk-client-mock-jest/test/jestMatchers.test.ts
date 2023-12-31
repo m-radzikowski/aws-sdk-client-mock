@@ -40,6 +40,15 @@ Calls:
   1. PublishCommand: <red>{"Message": "mock message", "TopicArn": "arn:aws:sns:us-east-1:111111111111:MyTopic"}</color>"
 `);
     });
+
+    it('fails on more arguments', async () => {
+        const sns = new SNSClient({});
+        await sns.send(publishCmd1);
+
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        expect(() => expect(snsMock).not.toHaveReceivedCommand(PublishCommand, {})).toThrowErrorMatchingInlineSnapshot('"Too many matcher arguments"');
+    });
 });
 
 describe('toHaveReceivedCommandTimes', () => {
