@@ -60,13 +60,15 @@ and use it to send `Commands`.
 For example, using SNS Client to publish a message to a topic looks like that:
 
 ```typescript
-import {PublishCommand, SNSClient} from '@aws-sdk/client-sns';
+import { PublishCommand, SNSClient } from "@aws-sdk/client-sns";
 
 const sns = new SNSClient({});
-const result = await sns.send(new PublishCommand({
-  TopicArn: 'arn:aws:sns:us-east-1:111111111111:MyTopic',
-  Message: 'My message',
-}));
+const result = await sns.send(
+  new PublishCommand({
+    TopicArn: "arn:aws:sns:us-east-1:111111111111:MyTopic",
+    Message: "My message",
+  }),
+);
 
 console.log(`Message published, id: ${result.MessageId}`);
 ```
@@ -89,7 +91,7 @@ npm install -D aws-sdk-client-mock
 #### Versions compatibility
 
 | `@aws-sdk/*` | `aws-sdk-client-mock` |
-|--------------|-----------------------|
+| ------------ | --------------------- |
 | ≥ 3.363.0    | 3.x                   |
 | < 3.363.0    | 2.x                   |
 
@@ -98,13 +100,13 @@ npm install -D aws-sdk-client-mock
 CommonJS:
 
 ```javascript
-const {mockClient} = require('aws-sdk-client-mock');
+const { mockClient } = require("aws-sdk-client-mock");
 ```
 
 TypeScript / ES6:
 
 ```typescript
-import {mockClient} from 'aws-sdk-client-mock';
+import { mockClient } from "aws-sdk-client-mock";
 ```
 
 ### Mock
@@ -139,24 +141,22 @@ snsMock.resolves({});
 Specify mock behavior on receiving given command only:
 
 ```typescript
-snsMock
-    .on(PublishCommand)
-    .resolves({
-        MessageId: '12345678-1111-2222-3333-111122223333',
-    });
+snsMock.on(PublishCommand).resolves({
+  MessageId: "12345678-1111-2222-3333-111122223333",
+});
 ```
 
 Specify mock behavior on receiving given command with given payload only:
 
 ```typescript
 snsMock
-    .on(PublishCommand, {
-        TopicArn: 'arn:aws:sns:us-east-1:111111111111:MyTopic',
-        Message: 'My message',
-    })
-    .resolves({
-        MessageId: '12345678-4444-5555-6666-111122223333',
-    });
+  .on(PublishCommand, {
+    TopicArn: "arn:aws:sns:us-east-1:111111111111:MyTopic",
+    Message: "My message",
+  })
+  .resolves({
+    MessageId: "12345678-4444-5555-6666-111122223333",
+  });
 ```
 
 Not all payload parameters must be defined to match
@@ -164,25 +164,25 @@ Not all payload parameters must be defined to match
 
 ```typescript
 snsMock
-    .on(PublishCommand, {
-        Message: 'My message',
-    })
-    .resolves({
-        MessageId: '12345678-4444-5555-6666-111122223333',
-    });
+  .on(PublishCommand, {
+    Message: "My message",
+  })
+  .resolves({
+    MessageId: "12345678-4444-5555-6666-111122223333",
+  });
 ```
 
 Specify mock behavior on receiving given payload only:
 
 ```typescript
 snsMock
-    .onAnyCommand({
-        TopicArn: 'arn:aws:sns:us-east-1:111111111111:MyTopic',
-        Message: 'My message',
-    })
-    .resolves({
-        MessageId: '12345678-4444-5555-6666-111122223333',
-    });
+  .onAnyCommand({
+    TopicArn: "arn:aws:sns:us-east-1:111111111111:MyTopic",
+    Message: "My message",
+  })
+  .resolves({
+    MessageId: "12345678-4444-5555-6666-111122223333",
+  });
 ```
 
 Multiple behaviors (for different commands and payloads) may be specified
@@ -190,70 +190,72 @@ for a single mock:
 
 ```typescript
 snsMock
-    .resolves({ // default for any command
-        MessageId: '12345678-1111-2222-3333-111122223333'
-    })
-    .on(PublishCommand)
-    .resolves({ // default for PublishCommand
-        MessageId: '12345678-4444-5555-6666-111122223333'
-    })
-    .on(PublishCommand, {
-        TopicArn: 'arn:aws:sns:us-east-1:111111111111:MyTopic',
-        Message: 'My message',
-    })
-    .resolves({ // for PublishCommand with given input
-        MessageId: '12345678-7777-8888-9999-111122223333',
-    });
+  .resolves({
+    // default for any command
+    MessageId: "12345678-1111-2222-3333-111122223333",
+  })
+  .on(PublishCommand)
+  .resolves({
+    // default for PublishCommand
+    MessageId: "12345678-4444-5555-6666-111122223333",
+  })
+  .on(PublishCommand, {
+    TopicArn: "arn:aws:sns:us-east-1:111111111111:MyTopic",
+    Message: "My message",
+  })
+  .resolves({
+    // for PublishCommand with given input
+    MessageId: "12345678-7777-8888-9999-111122223333",
+  });
 ```
 
 Specify chained behaviors - next behaviors for consecutive calls:
 
 ```typescript
 snsMock
-    .on(PublishCommand)
-    .resolvesOnce({ // for the first command call
-        MessageId: '12345678-1111-1111-1111-111122223333'
-    })
-    .resolvesOnce({ // for the second command call
-        MessageId: '12345678-2222-2222-2222-111122223333'
-    })
-    .resolves({ // for further calls
-        MessageId: '12345678-3333-3333-3333-111122223333'
-    });
+  .on(PublishCommand)
+  .resolvesOnce({
+    // for the first command call
+    MessageId: "12345678-1111-1111-1111-111122223333",
+  })
+  .resolvesOnce({
+    // for the second command call
+    MessageId: "12345678-2222-2222-2222-111122223333",
+  })
+  .resolves({
+    // for further calls
+    MessageId: "12345678-3333-3333-3333-111122223333",
+  });
 ```
 
 Specify mock throwing an error:
 
 ```typescript
-snsMock
-    .rejects('mocked rejection');
+snsMock.rejects("mocked rejection");
 ```
 
 Specify custom mock function:
 
 ```typescript
-snsMock
-    .callsFake(input => {
-        if (input.Message === 'My message') {
-            return {MessageId: '12345678-1111-2222-3333-111122223333'};
-        } else {
-            throw new Error('mocked rejection');
-        }
-    });
+snsMock.callsFake((input) => {
+  if (input.Message === "My message") {
+    return { MessageId: "12345678-1111-2222-3333-111122223333" };
+  } else {
+    throw new Error("mocked rejection");
+  }
+});
 ```
 
 Specify custom mock function for a specific command (chained behavior):
 
 ```typescript
-snsMock
-    .on(PublishCommand)
-    .callsFake(input => {
-        if (input.Message === 'My message') {
-            return {MessageId: '12345678-1111-2222-3333-111122223333'};
-        } else {
-            throw new Error('mocked rejection');
-        }
-    });
+snsMock.on(PublishCommand).callsFake((input) => {
+  if (input.Message === "My message") {
+    return { MessageId: "12345678-1111-2222-3333-111122223333" };
+  } else {
+    throw new Error("mocked rejection");
+  }
+});
 ```
 
 Together with `resolvesOnce()`, you can also use `rejectsOnce()` and `callsFakeOnce()`
@@ -264,20 +266,22 @@ to specify consecutive behaviors.
 You can mock the `DynamoDBDocumentClient` just like any other Client:
 
 ```typescript
-import {DynamoDBClient} from '@aws-sdk/client-dynamodb';
-import {DynamoDBDocumentClient, QueryCommand} from '@aws-sdk/lib-dynamodb';
+import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
+import { DynamoDBDocumentClient, QueryCommand } from "@aws-sdk/lib-dynamodb";
 
 const ddbMock = mockClient(DynamoDBDocumentClient);
 ddbMock.on(QueryCommand).resolves({
-    Items: [{pk: 'a', sk: 'b'}],
+  Items: [{ pk: "a", sk: "b" }],
 });
 
 const dynamodb = new DynamoDBClient({});
 const ddb = DynamoDBDocumentClient.from(dynamodb);
 
-const query = await ddb.send(new QueryCommand({
-  TableName: 'mock',
-}));
+const query = await ddb.send(
+  new QueryCommand({
+    TableName: "mock",
+  }),
+);
 ```
 
 #### Lib Storage Upload
@@ -287,30 +291,34 @@ at least two commands: `CreateMultipartUploadCommand` and `UploadPartCommand`
 used [under the hood](https://github.com/aws/aws-sdk-js-v3/blob/main/lib/lib-storage/src/Upload.ts):
 
 ```typescript
-import {S3Client, CreateMultipartUploadCommand, UploadPartCommand} from '@aws-sdk/client-s3';
-import {Upload} from "@aws-sdk/lib-storage";
+import {
+  S3Client,
+  CreateMultipartUploadCommand,
+  UploadPartCommand,
+} from "@aws-sdk/client-s3";
+import { Upload } from "@aws-sdk/lib-storage";
 
 const s3Mock = mockClient(S3Client);
-s3Mock.on(CreateMultipartUploadCommand).resolves({UploadId: '1'});
-s3Mock.on(UploadPartCommand).resolves({ETag: '1'});
+s3Mock.on(CreateMultipartUploadCommand).resolves({ UploadId: "1" });
+s3Mock.on(UploadPartCommand).resolves({ ETag: "1" });
 
 const s3Upload = new Upload({
-    client: new S3Client({}),
-    params: {
-        Bucket: 'mock',
-        Key: 'test',
-        Body: 'x'.repeat(6 * 1024 * 1024), // 6 MB
-    },
+  client: new S3Client({}),
+  params: {
+    Bucket: "mock",
+    Key: "test",
+    Body: "x".repeat(6 * 1024 * 1024), // 6 MB
+  },
 });
 
-s3Upload.on('httpUploadProgress', (progress) => {
-    console.log(progress);
+s3Upload.on("httpUploadProgress", (progress) => {
+  console.log(progress);
 });
 
 await s3Upload.done();
 ```
 
-This way, the  `Upload#done()` will complete successfuly.
+This way, the `Upload#done()` will complete successfuly.
 
 To cause a failure, you need to specify the `rejects()` behavior
 for one of the AWS SDK Commands used by the `@aws-sdk/lib-storage`.
@@ -335,35 +343,37 @@ AWS SDK wraps the stream in the S3 `GetObjectCommand` result to provide utility 
 To mock it, you need to call the wrapping function `sdkStreamMixin()` on the stream you provide as the command output:
 
 ```ts
-import {GetObjectCommand, S3Client} from '@aws-sdk/client-s3';
-import {sdkStreamMixin} from '@aws-sdk/util-stream-node';
-import {mockClient} from 'aws-sdk-client-mock';
-import {Readable} from 'stream';
-import {createReadStream} from 'fs';
+import { GetObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import { sdkStreamMixin } from "@aws-sdk/util-stream-node";
+import { mockClient } from "aws-sdk-client-mock";
+import { Readable } from "stream";
+import { createReadStream } from "fs";
 
 const s3Mock = mockClient(S3Client);
 
-it('mocks get object', async () => {
-    // create Stream from string
-    const stream = new Readable();
-    stream.push('hello world');
-    stream.push(null); // end of stream
+it("mocks get object", async () => {
+  // create Stream from string
+  const stream = new Readable();
+  stream.push("hello world");
+  stream.push(null); // end of stream
 
-    // alternatively: create Stream from file
-    // const stream = createReadStream('./test/data.txt');
+  // alternatively: create Stream from file
+  // const stream = createReadStream('./test/data.txt');
 
-    // wrap the Stream with SDK mixin
-    const sdkStream = sdkStreamMixin(stream);
+  // wrap the Stream with SDK mixin
+  const sdkStream = sdkStreamMixin(stream);
 
-    s3Mock.on(GetObjectCommand).resolves({Body: sdkStream});
+  s3Mock.on(GetObjectCommand).resolves({ Body: sdkStream });
 
-    const s3 = new S3Client({});
+  const s3 = new S3Client({});
 
-    const getObjectResult = await s3.send(new GetObjectCommand({Bucket: '', Key: ''}));
+  const getObjectResult = await s3.send(
+    new GetObjectCommand({ Bucket: "", Key: "" }),
+  );
 
-    const str = await getObjectResult.Body?.transformToString();
+  const str = await getObjectResult.Body?.transformToString();
 
-    expect(str).toBe('hello world');
+  expect(str).toBe("hello world");
 });
 ```
 
@@ -373,23 +383,24 @@ To mock a [paginated operation](https://aws.amazon.com/blogs/developer/paginatio
 results, simply mock the corresponding Command:
 
 ```typescript
-import {DynamoDBClient, paginateQuery, QueryCommand} from '@aws-sdk/client-dynamodb';
-import {marshall} from '@aws-sdk/util-dynamodb';
+import {
+  DynamoDBClient,
+  paginateQuery,
+  QueryCommand,
+} from "@aws-sdk/client-dynamodb";
+import { marshall } from "@aws-sdk/util-dynamodb";
 
 const dynamodbMock = mockClient(DynamoDBClient);
 dynamodbMock.on(QueryCommand).resolves({
-    Items: [
-        marshall({pk: 'a', sk: 'b'}),
-        marshall({pk: 'c', sk: 'd'}),
-    ],
+  Items: [marshall({ pk: "a", sk: "b" }), marshall({ pk: "c", sk: "d" })],
 });
 
 const dynamodb = new DynamoDBClient({});
-const paginator = paginateQuery({client: dynamodb}, {TableName: 'mock'});
+const paginator = paginateQuery({ client: dynamodb }, { TableName: "mock" });
 
 const items = [];
 for await (const page of paginator) {
-    items.push(...page.Items || []);
+  items.push(...(page.Items || []));
 }
 ```
 
@@ -399,12 +410,12 @@ The AWS SDK v3 gives an option to use it similarly to v2 SDK,
 with command method call instead of `send()`:
 
 ```typescript
-import {SNS} from '@aws-sdk/client-sns';
+import { SNS } from "@aws-sdk/client-sns";
 
 const sns = new SNS({});
 const result = await sns.publish({
-    TopicArn: 'arn:aws:sns:us-east-1:111111111111:MyTopic',
-    Message: 'My message',
+  TopicArn: "arn:aws:sns:us-east-1:111111111111:MyTopic",
+  Message: "My message",
 });
 ```
 
@@ -412,18 +423,51 @@ Although this approach is not recommended by AWS,
 those calls can be mocked in the standard way:
 
 ```typescript
-import {PublishCommand, SNSClient} from '@aws-sdk/client-sns';
+import { PublishCommand, SNSClient } from "@aws-sdk/client-sns";
 
 const snsMock = mockClient(SNSClient);
-snsMock
-    .on(PublishCommand)
-    .resolves({
-        MessageId: '12345678-1111-2222-3333-111122223333',
-    });
+snsMock.on(PublishCommand).resolves({
+  MessageId: "12345678-1111-2222-3333-111122223333",
+});
 ```
 
 Notice that in mocks you still need to use `SNSClient`, not `SNS`,
 as well as `Command` classes.
+
+### Spying
+
+You can also spy on calls to an AWS SDK Client, without
+replacing their behavior. This is useful for integration tests
+where you want to verify that the AWS SDK was invoked correctly.
+
+Use the `spyClient` helper to create a spy:
+
+```typescript
+import { PublishCommand, SNSClient } from "@aws-sdk/client-sns";
+
+const sns = new SNSClient({});
+const snsSpy = spyClient(sns);
+
+// The real SNS client will be called but the
+// calls will still be recorded.
+const result = await sns.send(
+  new PublishCommand({
+    TopicArn: "arn:aws:sns:us-east-1:111111111111:MyTopic",
+    Message: "My message",
+  }),
+);
+```
+
+You can then inspect the received calls on the spy in the same
+way as mocks (see the next section for details and more examples).
+
+```typescript
+// details of the first received call
+snsSpy.call(0);
+
+// jest matcher
+expect(snsSpy).toHaveReceivedCommandTimes(PublishCommand, 1);
+```
 
 ### Inspect
 
@@ -437,14 +481,14 @@ snsMock.call(0); // first received call
 Get calls of a specified command:
 
 ```typescript
-snsMock.commandCalls(PublishCommand)
+snsMock.commandCalls(PublishCommand);
 ```
 
 Get calls of a specified command with given payload
 (you can force strict matching by passing third param `strict: true`):
 
 ```typescript
-snsMock.commandCalls(PublishCommand, {Message: 'My message'})
+snsMock.commandCalls(PublishCommand, { Message: "My message" });
 ```
 
 Under the hood, the library uses [Sinon.js](https://sinonjs.org/) `stub`.
@@ -456,12 +500,15 @@ const snsSendStub = snsMock.send;
 
 ### Reset and restore
 
-The Client mock exposes three [Sinon.js](https://sinonjs.org/) `stub` methods:
+The Client mock or spy exposes three [Sinon.js](https://sinonjs.org/) `stub` methods:
 `reset()`, `resetHistory()`, and `restore()`.
 
 The `reset()` method resets the mock state and behavior.
 The Client will continue to be mocked, only now with a clean mock instance,
 without any behavior (set with methods like `on(...).resolves(...)`) and calls history.
+
+For spies, `reset()` just resets the state (as the behavior is
+unmodified).
 
 **You should call `clientMock.reset()` before or after every test
 (using `beforeEach()` / `beforeAll()` from your test framework)
@@ -477,7 +524,7 @@ restoring the normal behavior of `client.send()`.
 ### Jest matchers
 
 Custom [Jest](https://jestjs.io/) matchers simplify verification
-that the mocked Client was called with given Commands.
+that the mocked or spied Client was called with given Commands.
 
 Matchers are published as a separate package. Install it:
 
@@ -490,7 +537,7 @@ npm install -D aws-sdk-client-mock-jest
 Usage (notice the `import`):
 
 ```ts
-import 'aws-sdk-client-mock-jest';
+import "aws-sdk-client-mock-jest";
 
 // a PublishCommand was sent to SNS
 expect(snsMock).toHaveReceivedCommand(PublishCommand);
@@ -499,16 +546,22 @@ expect(snsMock).toHaveReceivedCommand(PublishCommand);
 expect(snsMock).toHaveReceivedCommandTimes(PublishCommand, 2);
 
 // a PublishCommand with Message "My message" was sent to SNS
-expect(snsMock).toHaveReceivedCommandWith(PublishCommand, {Message: 'My message'});
+expect(snsMock).toHaveReceivedCommandWith(PublishCommand, {
+  Message: "My message",
+});
 
 // the second command sent to SNS is a PublishCommand with Message "My message"
-expect(snsMock).toHaveReceivedNthCommandWith(2, PublishCommand, {Message: 'My message'});
+expect(snsMock).toHaveReceivedNthCommandWith(2, PublishCommand, {
+  Message: "My message",
+});
 
 // the second PublishCommand sent to SNS has Message "My message"
-expect(snsMock).toHaveReceivedNthSpecificCommandWith(2, PublishCommand, {Message: 'My message'});
+expect(snsMock).toHaveReceivedNthSpecificCommandWith(2, PublishCommand, {
+  Message: "My message",
+});
 ```
 
-Shorter aliases exist, like `toReceiveCommandTimes()`. 
+Shorter aliases exist, like `toReceiveCommandTimes()`.
 
 To use those matchers with [Vitest](https://vitest.dev/), set `test.globals` to `true` in `vite.config.js`
 (see [#139](https://github.com/m-radzikowski/aws-sdk-client-mock/issues/139)).
@@ -517,7 +570,7 @@ To use the matchers outside of Jest, you can pull in the [expect](https://www.np
 and add it to the global scope directly, e.g.:
 
 ```ts
-const {expect} = require("expect");
+const { expect } = require("expect");
 (globalThis as any).expect = expect;
 require("aws-sdk-client-mock-jest");
 ```
@@ -534,18 +587,20 @@ Let's take a simple Lambda function that takes a list of messages,
 sends them to SNS topic and returns message IDs:
 
 ```typescript
-import {PublishCommand, SNSClient} from '@aws-sdk/client-sns';
+import { PublishCommand, SNSClient } from "@aws-sdk/client-sns";
 
-const snsTopicArn = process.env.SNS_TOPIC_ARN || '';
+const snsTopicArn = process.env.SNS_TOPIC_ARN || "";
 
 const sns = new SNSClient({});
 
 export const handler = async (event: Event): Promise<string[]> => {
   const promises = event.messages.map(async (msg, idx) => {
-    const publish = await sns.send(new PublishCommand({
-      TopicArn: snsTopicArn,
-      Message: msg,
-    }));
+    const publish = await sns.send(
+      new PublishCommand({
+        TopicArn: snsTopicArn,
+        Message: msg,
+      }),
+    );
     return publish.MessageId!;
   });
 
@@ -560,9 +615,9 @@ interface Event {
 Then the tests could look like this:
 
 ```typescript
-import {mockClient} from 'aws-sdk-client-mock';
-import {PublishCommand, SNSClient} from '@aws-sdk/client-sns';
-import {handler} from '../src';
+import { mockClient } from "aws-sdk-client-mock";
+import { PublishCommand, SNSClient } from "@aws-sdk/client-sns";
+import { handler } from "../src";
 
 const snsMock = mockClient(SNSClient);
 
@@ -574,26 +629,26 @@ beforeEach(() => {
   snsMock.reset();
 });
 
-it('message IDs are returned', async () => {
+it("message IDs are returned", async () => {
   snsMock.on(PublishCommand).resolves({
-    MessageId: '12345678-1111-2222-3333-111122223333',
+    MessageId: "12345678-1111-2222-3333-111122223333",
   });
 
   const result = await handler({
-    messages: ['one', 'two', 'three']
+    messages: ["one", "two", "three"],
   });
 
   expect(result).toHaveLength(3);
-  expect(result[0]).toBe('12345678-1111-2222-3333-111122223333');
+  expect(result[0]).toBe("12345678-1111-2222-3333-111122223333");
 });
 
-it('SNS Client is called with PublishCommand', async () => {
+it("SNS Client is called with PublishCommand", async () => {
   snsMock.on(PublishCommand).resolves({
-    MessageId: '111-222-333',
+    MessageId: "111-222-333",
   });
 
   await handler({
-    messages: ['qq', 'xx']
+    messages: ["qq", "xx"],
   });
 
   expect(snsMock).toHaveReceivedCommandTimes(PublishCommand, 2);
@@ -632,14 +687,14 @@ To solve this, go through the steps until one works:
   (although make sure you are aware of the consequences - multiple other packages may be installed in newer versions than before),
 - if nothing else helped, open an issue including the output of `npm ls @aws-sdk/types` / `pnpm why @aws-sdk/types` / `yarn why @aws-sdk/types`.
 
-### AwsClientStub and strictFunctionTypes
+### AwsClientStub, AwsClientSpy and strictFunctionTypes
 
 If you need to explicitly type the mock variable,
 you can use `AwsClientStub` type:
 
 ```ts
-import {AwsClientStub, mockClient} from 'aws-sdk-client-mock'
-import {S3Client} from "@aws-sdk/client-s3";
+import { AwsClientStub, mockClient } from "aws-sdk-client-mock";
+import { S3Client } from "@aws-sdk/client-s3";
 
 const mock: AwsClientStub<S3Client> = mockClient(S3Client);
 ```
@@ -648,6 +703,17 @@ The `AwsClientStub` type works only with `tsconfig` option
 `strictFunctionTypes=true` or (`strict=true`) in `tsconfig.json` file.
 
 See details in [#167](https://github.com/m-radzikowski/aws-sdk-client-mock/issues/167).
+
+For spies, you can import `AwsClientSpy` to explicitly type
+the spy variable.
+
+```ts
+import { AwsClientSpy, spyClient } from "aws-sdk-client-mock";
+import { S3Client } from "@aws-sdk/client-s3";
+
+const s3 = new S3Client({});
+const spy: AwsClientSpy<S3Client> = spyClient(s3);
+```
 
 ### Order of mock behaviors
 
@@ -658,8 +724,10 @@ In this case, all `PublishCommand` sends will return message ID `222`:
 
 ```typescript
 snsMock
-  .on(PublishCommand, myInput).resolves({MessageId: '111'})
-  .on(PublishCommand).resolves({MessageId: '222'});
+  .on(PublishCommand, myInput)
+  .resolves({ MessageId: "111" })
+  .on(PublishCommand)
+  .resolves({ MessageId: "222" });
 ```
 
 If the order of the declarations is switched, sends with input matching `myInput`
@@ -681,10 +749,10 @@ with the order of mocking as here:
 ```typescript
 const sns1 = new SNSClient({}); // not mocked
 
-mockClient(SNSClient).resolves({MessageId: '123'});
+mockClient(SNSClient).resolves({ MessageId: "123" });
 
 const sns2 = new SNSClient({}); // mocked
-mockClient(sns2).resolves({MessageId: '456'});
+mockClient(sns2).resolves({ MessageId: "456" });
 
 const sns3 = new SNSClient({}); // not mocked
 ```
@@ -695,9 +763,9 @@ Declaring mocks in this order will fix it:
 const sns1 = new SNSClient({}); // mocked - default
 
 const sns2 = new SNSClient({}); // mocked
-mockClient(sns2).resolves({MessageId: '456'});
+mockClient(sns2).resolves({ MessageId: "456" });
 
-mockClient(SNSClient).resolves({MessageId: '123'});
+mockClient(SNSClient).resolves({ MessageId: "123" });
 
 const sns3 = new SNSClient({}); // mocked - default
 ```
