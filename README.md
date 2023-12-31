@@ -42,7 +42,7 @@ In action:
 - [API Reference](#api-reference)
 - [AWS Lambda example](#aws-lambda-example)
 - [Caveats](#caveats)
-  - [Mixed @aws-sdk/types versions](#mixed-aws-sdktypes-versions)
+  - [Mixed @smithy/types versions](#mixed-smithytypes-versions)
   - [AwsClientStub and strictFunctionTypes](#awsclientstub-and-strictfunctiontypes)
   - [Order of mock behaviors](#order-of-mock-behaviors)
   - [Order of type and instance mocks](#order-of-type-and-instance-mocks)
@@ -84,7 +84,7 @@ npm install -D aws-sdk-client-mock
 
 > **Warning**  
 > If you are getting type errors `Argument of type 'typeof SomeClient' is not assignable to parameter of type...`
-> see instructions [here](#mixed-aws-sdktypes-versions).
+> see instructions [here](#mixed-smithytypes-versions).
 
 #### Versions compatibility
 
@@ -605,13 +605,13 @@ For more examples, see the [unit tests](packages/aws-sdk-client-mock/test/mockCl
 
 ## Caveats
 
-### Mixed @aws-sdk/types versions
+### Mixed @smithy/types versions
 
 > **Note**  
-> Those instructions refer to `@aws-sdk/types` used by AWS SDK v3.362.0 and below.
-> For version 3.363.0 and above, perform the same steps for the `@smithy/types` package.
+> Those instructions refer to `@smithy/types` used by AWS SDK v3.363.0 and above.
+> For version below 3.363.0, perform the same steps for the `@aws-sdk/types` package.
 
-If you have multiple versions of `@aws-sdk/types` installed in your project,
+If you have multiple versions of `@smithy/types` installed in your project,
 you can get type errors similar to this:
 
 ```
@@ -623,15 +623,18 @@ TS2345: Argument of type 'typeof DynamoDBDocumentClient' is not assignable to pa
           Property 'identify' is missing in type 'MiddlewareStack<InputType, OutputType>' but required in type 'MiddlewareStack<InputType, ServiceOutputTypes>'.
 ```
 
+Run `npm ls @smithy/types` / `pnpm why @smithy/types` / `yarn why @smithy/types`
+and check if you have more than one version of the package installed.
+
 To solve this, go through the steps until one works:
 
 - make sure all your `@aws-sdk/*` packages point to the same version,
-- add `@aws-sdk/types` to your dev dependencies in the same version as other `@aws-sdk/*` packages,
-- force using single `@aws-sdk/types` version with npm [overrides](https://docs.npmjs.com/cli/v9/configuring-npm/package-json#overrides),
-  pnpm [overrides](https://pnpm.io/package_json#pnpmoverrides), or yarn [resolutions](https://yarnpkg.com/configuration/manifest#resolutions),
-- delete the lockfile (like `package-lock.json`) and re-install project dependencies
-  (although make sure you are aware of the consequences - multiple other packages may be installed in newer versions than before),
-- if nothing else helped, open an issue including the output of `npm ls @aws-sdk/types` / `pnpm why @aws-sdk/types` / `yarn why @aws-sdk/types`.
+- remove all `@aws-sdk/*` packages from `package.json`, run `npm install` / `pnpm install` / `yarn install`,
+  restore `@aws-sdk/*` packages in `package.json`, and run install again,
+- add `@smithy/types` to your dev dependencies in the latest version,
+- force using single `@smithy/types` version with [npm overrides](https://docs.npmjs.com/cli/v9/configuring-npm/package-json#overrides),
+  [pnpm overrides](https://pnpm.io/package_json#pnpmoverrides), or [yarn resolutions](https://yarnpkg.com/configuration/manifest#resolutions),
+- if nothing else helped, open an issue including the output of `npm ls @smithy/types` / `pnpm why @smithy/types` / `yarn why @smithy/types`.
 
 ### AwsClientStub and strictFunctionTypes
 
