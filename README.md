@@ -332,11 +332,12 @@ s3Mock.on(UploadPartCommand).rejects();
 #### S3 GetObjectCommand
 
 AWS SDK wraps the stream in the S3 `GetObjectCommand` result to provide utility methods to parse it.
-To mock it, you need to call the wrapping function `sdkStreamMixin()` on the stream you provide as the command output:
+To mock it, you need to install the [`@smithy/util-stream`](https://www.npmjs.com/package/@smithy/util-stream) package 
+and call the wrapping function `sdkStreamMixin()` on the stream you provide as the command output:
 
 ```ts
 import {GetObjectCommand, S3Client} from '@aws-sdk/client-s3';
-import {sdkStreamMixin} from '@aws-sdk/util-stream-node';
+import {sdkStreamMixin} from '@smithy/util-stream';
 import {mockClient} from 'aws-sdk-client-mock';
 import {Readable} from 'stream';
 import {createReadStream} from 'fs';
