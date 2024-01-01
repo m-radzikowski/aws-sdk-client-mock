@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.1.0-beta.0](https://github.com/m-radzikowski/aws-sdk-client-mock/compare/v3.0.1...v3.1.0-beta.0) (2024-01-01)
+
+
+### Features
+
+* **core:** ability to use custom Sinon Sandbox ([#200](https://github.com/m-radzikowski/aws-sdk-client-mock/issues/200)) ([31ff180](https://github.com/m-radzikowski/aws-sdk-client-mock/commit/31ff180f58a16d61a38d65fc97d35d1af5d9ff5b))
+* **jest:** fail if more than expected matcher arguments are passed ([#199](https://github.com/m-radzikowski/aws-sdk-client-mock/issues/199)) ([6f7bb59](https://github.com/m-radzikowski/aws-sdk-client-mock/commit/6f7bb5940ed3f568f54e7d8800520ea1be9641a3)), closes [#191](https://github.com/m-radzikowski/aws-sdk-client-mock/issues/191)
+* migrate Jest matchers to @jest/globals types ([#198](https://github.com/m-radzikowski/aws-sdk-client-mock/issues/198)) ([8f14cbb](https://github.com/m-radzikowski/aws-sdk-client-mock/commit/8f14cbbde2dae020500444b9cf9f315d6476ef5a)), closes [#180](https://github.com/m-radzikowski/aws-sdk-client-mock/issues/180)
+
 ### [3.0.1](https://github.com/m-radzikowski/aws-sdk-client-mock/compare/v3.0.0...v3.0.1) (2024-01-01)
 
 ### Fixes
