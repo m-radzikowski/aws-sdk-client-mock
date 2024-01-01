@@ -487,6 +487,10 @@ The behavior is preserved.
 The `restore()` removes the mock altogether,
 restoring the normal behavior of `client.send()`.
 
+You can also pass custom [Sinon Sandbox](https://sinonjs.org/releases/latest/sandbox/)
+with `mockClient(client, { sandbox: mySandbox })`
+to manage all mocks lifecycle at once.
+
 ### Jest matchers
 
 Custom [Jest](https://jestjs.io/) matchers simplify verification
