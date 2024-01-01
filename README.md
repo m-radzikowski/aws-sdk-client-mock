@@ -256,6 +256,18 @@ snsMock
     });
 ```
 
+Specify result based on Client configuration, i.e. region:
+
+```typescript
+snsMock
+    .on(PublishCommand)
+    .callsFake(async (input, getClient) => {
+        const client = getClient();
+        const region = await client.config.region();
+        return {MessageId: region.substring(0, 2)};
+    });
+```
+
 Together with `resolvesOnce()`, you can also use `rejectsOnce()` and `callsFakeOnce()`
 to specify consecutive behaviors.
 
