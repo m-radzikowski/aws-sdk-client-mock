@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### [3.0.1](https://github.com/m-radzikowski/aws-sdk-client-mock/compare/v3.0.0...v3.0.1) (2024-01-01)
 
+### Fixes
+
+* bump sinon version ([7ccfdca](https://github.com/m-radzikowski/aws-sdk-client-mock/commit/7ccfdcaada4916df4c530179d19e1f05b4cc75e9))
+
 ## [3.0.0](https://github.com/m-radzikowski/aws-sdk-client-mock/compare/v3.0.0-beta.0...v3.0.0) (2023-07-01)
 
 ## [3.0.0-beta.0](https://github.com/m-radzikowski/aws-sdk-client-mock/compare/v2.2.0...v3.0.0-beta.0) (2023-07-01)
