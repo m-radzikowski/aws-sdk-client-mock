@@ -3,8 +3,8 @@ import assert from 'assert';
 import type {MetadataBearer} from '@smithy/types';
 import {AwsCommand, AwsStub} from 'aws-sdk-client-mock';
 import type {SinonSpyCall} from 'sinon';
-import {expect} from 'expect';
 import type {ExpectationResult, MatcherContext, MatcherFunction} from 'expect';
+import {expect} from 'expect';
 
 interface AwsSdkJestMockBaseMatchers<R> extends Record<string, Function> {
     /**
@@ -254,6 +254,10 @@ const processMatch = <CheckData = undefined>({ctx, mockClient, command, check, m
     return {pass, message: msg};
 };
 
+const ensureNoOtherArgs = (args: unknown[]): void => {
+    assert(args.length === 0, 'Too many matcher arguments');
+};
+
 const baseMatchers: { [P in keyof AwsSdkJestMockBaseMatchers<unknown>]: MatcherFunction<any[]> } = {
     /**
      * implementation of {@link AwsSdkJestMockMatchers.toHaveReceivedCommand} matcher
@@ -262,7 +266,9 @@ const baseMatchers: { [P in keyof AwsSdkJestMockBaseMatchers<unknown>]: MatcherF
         this: MatcherContext,
         mockClient: unknown,
         command: new () => AnyCommand,
+        ...other: unknown[]
     ) {
+        ensureNoOtherArgs(other);
         return processMatch({
             ctx: this,
             mockClient,
@@ -282,7 +288,9 @@ const baseMatchers: { [P in keyof AwsSdkJestMockBaseMatchers<unknown>]: MatcherF
         mockClient: unknown,
         command: new () => AnyCommand,
         expectedCalls: number,
+        ...other: unknown[]
     ) {
+        ensureNoOtherArgs(other);
         return processMatch({
             ctx: this,
             mockClient,
@@ -302,7 +310,9 @@ const baseMatchers: { [P in keyof AwsSdkJestMockBaseMatchers<unknown>]: MatcherF
         mockClient: unknown,
         command: new () => AnyCommand,
         input: Record<string, unknown>,
+        ...other: unknown[]
     ) {
+        ensureNoOtherArgs(other);
         return processMatch<{ matchCount: number }>({
             ctx: this,
             mockClient,
@@ -339,7 +349,9 @@ const baseMatchers: { [P in keyof AwsSdkJestMockBaseMatchers<unknown>]: MatcherF
         call: number,
         command: new () => AnyCommand,
         input: Record<string, unknown>,
+        ...other: unknown[]
     ) {
+        ensureNoOtherArgs(other);
         assert(
             call && typeof call === 'number' && call > 0,
             'Call number must be a number greater than 0',
@@ -398,7 +410,9 @@ const baseMatchers: { [P in keyof AwsSdkJestMockBaseMatchers<unknown>]: MatcherF
         call: number,
         command: new () => AnyCommand,
         input: Record<string, unknown>,
+        ...other: unknown[]
     ) {
+        ensureNoOtherArgs(other);
         assert(
             call && typeof call === 'number' && call > 0,
             'Call number must be a number greater than 0',
