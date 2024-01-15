@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.1.0-beta.1](https://github.com/m-radzikowski/aws-sdk-client-mock/compare/v3.1.0-beta.0...v3.1.0-beta.1) (2024-01-15)
+
+
+### Features
+
+* support toHaveReceivedAnyCommand matcher ([#202](https://github.com/m-radzikowski/aws-sdk-client-mock/issues/202)) ([ba5eedb](https://github.com/m-radzikowski/aws-sdk-client-mock/commit/ba5eedb167968c0e3d6968aded0287c8493ed460))
+
 ## [3.1.0-beta.0](https://github.com/m-radzikowski/aws-sdk-client-mock/compare/v3.0.1...v3.1.0-beta.0) (2024-01-01)
 
 
