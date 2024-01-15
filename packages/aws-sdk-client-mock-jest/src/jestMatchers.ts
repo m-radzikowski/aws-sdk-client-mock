@@ -69,6 +69,11 @@ interface AwsSdkJestMockBaseMatchers<R> extends Record<string, Function> {
         command: new (input: TCmdInput) => AwsCommand<TCmdInput, TCmdOutput>,
         input: Partial<TCmdInput>,
     ): R;
+
+    /**
+     * Asserts {@link AwsStub Aws Client Mock} received any command
+     */
+    toHaveReceivedAnyCommand(): R;
 }
 
 interface AwsSdkJestMockAliasMatchers<R> extends Record<string, Function> {
@@ -138,6 +143,11 @@ interface AwsSdkJestMockAliasMatchers<R> extends Record<string, Function> {
         command: new (input: TCmdInput) => AwsCommand<TCmdInput, TCmdOutput>,
         input: Partial<TCmdInput>,
     ): R;
+
+    /**
+     * Asserts {@link AwsStub Aws Client Mock} received any command
+     */
+    toReceiveAnyCommand(): R;
 }
 
 /**
@@ -191,6 +201,7 @@ type MessageFunctionParams<CheckData> = {
     cmd: string;
     client: string;
     commandCalls: AnySpyCall[];
+    calls: AnySpyCall[];
     data: CheckData;
     notPrefix: string;
 };
@@ -214,7 +225,7 @@ const printCalls = (ctx: MatcherContext, calls: AnySpyCall[]): string[] =>
 const processMatch = <CheckData = undefined>({ctx, mockClient, command, check, message}: {
     ctx: MatcherContext;
     mockClient: unknown;
-    command: new () => AnyCommand;
+    command?: new () => AnyCommand;
     check: (params: { calls: AnySpyCall[]; commandCalls: AnySpyCall[] }) => {
         pass: boolean;
         data: CheckData;
@@ -222,7 +233,7 @@ const processMatch = <CheckData = undefined>({ctx, mockClient, command, check, m
     message: (params: MessageFunctionParams<CheckData>) => string[];
 }): ExpectationResult => {
     assert(mockClient instanceof AwsStub, 'The actual must be a client mock instance');
-    assert(
+    command && assert(
         command &&
         typeof command === 'function' &&
         typeof command.name === 'string' &&
@@ -231,12 +242,12 @@ const processMatch = <CheckData = undefined>({ctx, mockClient, command, check, m
     );
 
     const calls = mockClient.calls();
-    const commandCalls = mockClient.commandCalls(command);
+    const commandCalls = command ? mockClient.commandCalls(command) : [];
 
     const {pass, data} = check({calls, commandCalls});
 
     const msg = (): string => {
-        const cmd = ctx.utils.printExpected(command.name);
+        const cmd = ctx.utils.printExpected(command?.name || 'Any Command');
         const client = mockClient.clientName();
 
         return [
@@ -244,6 +255,7 @@ const processMatch = <CheckData = undefined>({ctx, mockClient, command, check, m
                 client,
                 cmd,
                 data,
+                calls,
                 commandCalls,
                 notPrefix: ctx.isNot ? 'not ' : '',
             }),
@@ -462,6 +474,25 @@ const baseMatchers: { [P in keyof AwsSdkJestMockBaseMatchers<unknown>]: MatcherF
             ],
         });
     },
+    /**
+     * implementation of {@link AwsSdkJestMockMatchers.toHaveReceivedAnyCommand} matcher
+     */
+    toHaveReceivedAnyCommand(
+        this: MatcherContext,
+        mockClient: unknown,
+        ...other: unknown[]
+    ) {
+        ensureNoOtherArgs(other);
+        return processMatch({
+            ctx: this,
+            mockClient,
+            check: ({calls}) => ({pass: calls.length > 0, data: undefined}),
+            message: ({client, notPrefix, calls}) => [
+                `Expected ${client} to ${notPrefix}receive any command`,
+                `${client} received any command ${this.utils.printReceived(calls.length)} times`,
+            ],
+        });
+    },
 };
 
 /* typing ensures keys matching */
@@ -471,6 +502,7 @@ const aliasMatchers: { [P in keyof AwsSdkJestMockAliasMatchers<unknown>]: Matche
     toReceiveCommandWith: baseMatchers.toHaveReceivedCommandWith,
     toReceiveNthCommandWith: baseMatchers.toHaveReceivedNthCommandWith,
     toReceiveNthSpecificCommandWith: baseMatchers.toHaveReceivedNthSpecificCommandWith,
+    toReceiveAnyCommand: baseMatchers.toHaveReceivedAnyCommand,
 };
 
 // Skip registration if jest expect does not exist

@@ -1,4 +1,4 @@
-import {AwsClientStub, mockClient} from 'aws-sdk-client-mock';
+import {AwsClientStub, AwsCommand, mockClient} from 'aws-sdk-client-mock';
 import {PublishCommand, SNSClient} from '@aws-sdk/client-sns';
 import {publishCmd1, publishCmd2, subscribeCmd1} from 'aws-sdk-client-mock/test/fixtures';
 import '../src';
@@ -270,6 +270,26 @@ describe('toHaveReceivedNthSpecificCommandWith', () => {
 
 Calls:
   1. PublishCommand: <red>{"Message": "mock message", "TopicArn": "arn:aws:sns:us-east-1:111111111111:MyTopic"}</color>"
+`);
+    });
+});
+
+describe('toHaveReceivedAnyCommand', () => {
+    it.each`
+    command
+    ${publishCmd1}
+    ${subscribeCmd1}
+    `('passes on receiving any command', async ({ command }: { command: AwsCommand<any, any> }) => {
+        const sns = new SNSClient({});
+        await sns.send(command); // eslint-disable-line @typescript-eslint/no-unsafe-argument
+
+        expect(() => expect(snsMock).toHaveReceivedAnyCommand()).not.toThrow();
+    });
+
+    it('fails on not receiving any command', () => {
+        expect(() => expect(snsMock).toHaveReceivedAnyCommand()).toThrowErrorMatchingInlineSnapshot(`
+"Expected SNSClient to receive any command
+SNSClient received any command <red>0</color> times"
 `);
     });
 });

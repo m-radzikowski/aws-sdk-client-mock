@@ -512,6 +512,9 @@ import 'aws-sdk-client-mock-jest';
 // a PublishCommand was sent to SNS
 expect(snsMock).toHaveReceivedCommand(PublishCommand);
 
+// Any command was sent to SNS
+expect(snsMock).toHaveReceivedAnyCommand();
+
 // two PublishCommands were sent to SNS
 expect(snsMock).toHaveReceivedCommandTimes(PublishCommand, 2);
 

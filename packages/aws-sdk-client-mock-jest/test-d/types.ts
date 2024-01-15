@@ -9,6 +9,8 @@ expect(1).toHaveReceivedCommand(PublishCommand);
 expect(mockClient(SNSClient)).toHaveReceivedCommand(PublishCommand);
 expectError(expect(mockClient(SNSClient)).toHaveReceivedCommand(String));
 
+expect(mockClient(SNSClient)).toHaveReceivedAnyCommand();
+
 expect(mockClient(SNSClient)).toHaveReceivedCommandTimes(PublishCommand, 1);
 expectError(expect(mockClient(SNSClient)).toHaveReceivedCommandTimes(PublishCommand));
 
