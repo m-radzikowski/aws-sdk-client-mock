@@ -332,16 +332,7 @@ const baseMatchers: { [P in keyof AwsSdkJestMockBaseMatchers<unknown>]: MatcherF
             check: ({commandCalls}) => {
                 const matchCount = commandCalls
                     .map(call => call.args[0].input) // eslint-disable-line @typescript-eslint/no-unsafe-return
-                    .map(received => {
-                        try {
-                            expect(received).toEqual(
-                                expect.objectContaining(input),
-                            );
-                            return true;
-                        } catch (e) {
-                            return false;
-                        }
-                    })
+                    .map(received => this.equals(received, expect.objectContaining(input)))
                     .reduce((acc, val) => acc + Number(val), 0);
 
                 return {pass: matchCount > 0, data: {matchCount}};
@@ -382,13 +373,7 @@ const baseMatchers: { [P in keyof AwsSdkJestMockBaseMatchers<unknown>]: MatcherF
 
                 let pass = false;
                 if (received instanceof command) {
-                    try {
-                        expect(received.input).toEqual(
-                            expect.objectContaining(input),
-                        );
-                        pass = true;
-                    } catch (e) { // eslint-disable-line no-empty
-                    }
+                    pass = this.equals(received.input, expect.objectContaining(input));
                 }
 
                 return {
@@ -443,13 +428,7 @@ const baseMatchers: { [P in keyof AwsSdkJestMockBaseMatchers<unknown>]: MatcherF
 
                 let pass = false;
                 if (received instanceof command) {
-                    try {
-                        expect(received.input).toEqual(
-                            expect.objectContaining(input),
-                        );
-                        pass = true;
-                    } catch (e) { // eslint-disable-line no-empty
-                    }
+                    pass = this.equals(received.input, expect.objectContaining(input));
                 }
 
                 return {
