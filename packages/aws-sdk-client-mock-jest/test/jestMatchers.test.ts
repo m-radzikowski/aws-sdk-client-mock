@@ -15,6 +15,8 @@ afterEach(() => {
 
 describe('toHaveReceivedCommand', () => {
     it('passes on receiving Command', async () => {
+        expect.assertions(2);
+
         const sns = new SNSClient({});
         await sns.send(publishCmd1);
 
@@ -29,6 +31,8 @@ SNSClient received <green>"PublishCommand"</color> <red>0</color> times"
     });
 
     it('fails on receiving Command with not', async () => {
+        expect.assertions(2);
+
         const sns = new SNSClient({});
         await sns.send(publishCmd1);
 
@@ -42,6 +46,9 @@ Calls:
     });
 
     it('fails on more arguments', async () => {
+        // We only expect 1 assertion here due to expected "internal error" in toHaveReceivedCommand
+        expect.assertions(1);
+
         const sns = new SNSClient({});
         await sns.send(publishCmd1);
 
@@ -53,6 +60,8 @@ Calls:
 
 describe('toHaveReceivedCommandTimes', () => {
     it('passes on receiving Command twice', async () => {
+        expect.assertions(2);
+
         const sns = new SNSClient({});
         await sns.send(publishCmd1);
         await sns.send(publishCmd2);
@@ -74,6 +83,8 @@ Calls:
     });
 
     it('fails on receiving Command twice with not', async () => {
+        expect.assertions(2);
+
         const sns = new SNSClient({});
         await sns.send(publishCmd1);
         await sns.send(publishCmd1);
@@ -91,6 +102,8 @@ Calls:
 
 describe('toHaveReceivedCommandWith', () => {
     it('passes on receiving Command with partial match', async () => {
+        expect.assertions(2);
+
         const sns = new SNSClient({});
         await sns.send(publishCmd1);
         await sns.send(publishCmd2);
@@ -99,6 +112,8 @@ describe('toHaveReceivedCommandWith', () => {
     });
 
     it('fails on not receiving Command', async () => {
+        expect.assertions(2);
+
         const sns = new SNSClient({});
         await sns.send(publishCmd1);
 
@@ -112,6 +127,8 @@ Calls:
     });
 
     it('fails on receiving Command with partial match with not', async () => {
+        expect.assertions(2);
+
         const sns = new SNSClient({});
         await sns.send(publishCmd1);
 
@@ -125,6 +142,8 @@ Calls:
     });
 
     it('passes on match with asymmetric matcher', async () => {
+        expect.assertions(2);
+
         const sns = new SNSClient({});
         await sns.send(publishCmd1);
 
@@ -134,6 +153,8 @@ Calls:
     });
 
     it('fails on unmatch with asymmetric matcher', async () => {
+        expect.assertions(2);
+
         const sns = new SNSClient({});
         await sns.send(publishCmd1);
 
@@ -151,6 +172,8 @@ Calls:
 
 describe('toHaveReceivedNthCommandWith', () => {
     it('passes on receiving second Command with partial match', async () => {
+        expect.assertions(2);
+
         const sns = new SNSClient({});
         await sns.send(publishCmd1);
         await sns.send(publishCmd2);
@@ -159,6 +182,8 @@ describe('toHaveReceivedNthCommandWith', () => {
     });
 
     it('fails on not receiving second Command', async () => {
+        expect.assertions(2);
+
         const sns = new SNSClient({});
         await sns.send(publishCmd1);
         await sns.send(publishCmd1);
@@ -182,6 +207,8 @@ Calls:
     });
 
     it('fails on receiving second Command with not', async () => {
+        expect.assertions(2);
+
         const sns = new SNSClient({});
         await sns.send(publishCmd1);
         await sns.send(publishCmd2);
@@ -204,6 +231,8 @@ Calls:
     });
 
     it('fails on receiving less Commands than the nth requested', async () => {
+        expect.assertions(2);
+
         const sns = new SNSClient({});
         await sns.send(publishCmd1);
 
@@ -216,6 +245,8 @@ Calls:
     });
 
     it('passes on match with asymmetric matcher', async () => {
+        expect.assertions(2);
+
         const sns = new SNSClient({});
         await sns.send(publishCmd1);
         await sns.send(publishCmd2);
@@ -226,6 +257,8 @@ Calls:
     });
 
     it('fails on unmatch with asymmetric matcher', async () => {
+        expect.assertions(2);
+
         const sns = new SNSClient({});
         await sns.send(publishCmd1);
         await sns.send(publishCmd2);
@@ -253,6 +286,8 @@ Calls:
 
 describe('toHaveReceivedNthSpecificCommandWith', () => {
     it('passes on receiving second Command with partial match', async () => {
+        expect.assertions(2);
+
         const sns = new SNSClient({});
         await sns.send(publishCmd1);
         await sns.send(subscribeCmd1);
@@ -262,6 +297,8 @@ describe('toHaveReceivedNthSpecificCommandWith', () => {
     });
 
     it('fails on receiving less Commands than the nth expected', async () => {
+        expect.assertions(2);
+
         const sns = new SNSClient({});
         await sns.send(publishCmd1);
 
@@ -280,6 +317,8 @@ describe('toHaveReceivedAnyCommand', () => {
     ${publishCmd1}
     ${subscribeCmd1}
     `('passes on receiving any command', async ({ command }: { command: AwsCommand<any, any> }) => {
+        expect.assertions(2);
+
         const sns = new SNSClient({});
         await sns.send(command); // eslint-disable-line @typescript-eslint/no-unsafe-argument
 
@@ -287,6 +326,7 @@ describe('toHaveReceivedAnyCommand', () => {
     });
 
     it('fails on not receiving any command', () => {
+        expect.assertions(2);
         expect(() => expect(snsMock).toHaveReceivedAnyCommand()).toThrowErrorMatchingInlineSnapshot(`
 "Expected SNSClient to receive any command
 SNSClient received any command <red>0</color> times"
