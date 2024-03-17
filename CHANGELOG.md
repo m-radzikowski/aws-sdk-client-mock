@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.0.0-beta.0](https://github.com/m-radzikowski/aws-sdk-client-mock/compare/v3.1.0...v4.0.0-beta.0) (2024-03-17)
+
+
+### ⚠ BREAKING CHANGES
+
+* Correct expect.assertions() count on CommandWith commands (#209)
+
+### Bug Fixes
+
+* Correct expect.assertions() count on CommandWith commands ([#209](https://github.com/m-radzikowski/aws-sdk-client-mock/issues/209)) ([65d53a7](https://github.com/m-radzikowski/aws-sdk-client-mock/commit/65d53a724f36910d0b7cb75169e3f0121369bd41))
+
 ## [3.1.0](https://github.com/m-radzikowski/aws-sdk-client-mock/compare/v3.1.0-beta.1...v3.1.0) (2024-03-17)
 
 ## [3.1.0-beta.1](https://github.com/m-radzikowski/aws-sdk-client-mock/compare/v3.1.0-beta.0...v3.1.0-beta.1) (2024-01-15)
