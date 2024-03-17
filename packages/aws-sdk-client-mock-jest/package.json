@@ -8,6 +8,7 @@
     "email": "maciej@radzikowski.com.pl",
     "url": "https://radzikowski.com.pl"
   },
+  "homepage": "https://github.com/m-radzikowski/aws-sdk-client-mock",
   "repository": {
     "type": "git",
     "url": "https://github.com/m-radzikowski/aws-sdk-client-mock.git",
