@@ -98,6 +98,34 @@ export interface Behavior<TInput extends object, TOutput extends MetadataBearer,
 
     /**
      * Sets a function that will be called on any `Client#send()` invocation.
+     * Generally this is because you want to reference data from the parameters when defining the behavior.
+     *
+     * @example
+     * ```ts
+     * const ssmClientMock = mockClient(SSMClient);
+     * const pathsCalled: string[] = [];
+     *
+     * ssmClientMock
+     *   .on(GetParametersByPathCommand)
+     *   .callsFake((params: GetParametersByPathCommandInput) => {
+     *     pathsCalled.push(params.Path);
+     *     if (params.Path === '/does/not/exist') {
+     *       return Promise.reject({ code: 'NotFound' });
+     *     }
+     *     // Note this is implicitly a Promise.resolve()
+     *     return {
+     *         Parameters: {
+     *             Name: `${params.Path}/foo`,
+     *             Value: 'bar',
+     *         },
+     *         NextToken: undefined,
+     *     };
+     *   });
+     *
+     * // ...
+     *
+     * expect(pathsCalled).to.deep.equal(['/foo', '/bar']);
+     * ```
      *
      * @param fn Function taking Command input and returning result
      */
