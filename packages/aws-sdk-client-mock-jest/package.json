@@ -44,9 +44,9 @@
     "tslib": "^2.1.0"
   },
   "devDependencies": {
-    "@aws-sdk/client-sns": "3.363.0",
+    "@aws-sdk/client-sns": "3.577.0",
     "@jest/globals": "29.7.0",
-    "@smithy/types": "1.1.0",
+    "@smithy/types": "3.0.0",
     "@types/jest": "29.5.11",
     "aws-sdk-client-mock": "workspace:*",
     "expect": "29.7.0",
