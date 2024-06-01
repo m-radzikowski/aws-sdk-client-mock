@@ -229,6 +229,18 @@ snsMock
     .rejects('mocked rejection');
 ```
 
+```typescript
+const throttlingError = new Error('mocked rejection');
+throttlingError.name = 'ThrottlingException';
+
+snsMock
+    .rejects(throttlingError);
+```
+
+In `rejects()`, you can pass a string, an `Error` instance,
+or an object with properties.
+In each case, it will be converted to an `Error` instance.
+
 Specify custom mock function:
 
 ```typescript
