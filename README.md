@@ -524,20 +524,31 @@ import 'aws-sdk-client-mock-jest';
 // a PublishCommand was sent to SNS
 expect(snsMock).toHaveReceivedCommand(PublishCommand);
 
-// Any command was sent to SNS
+// at least one command was sent to SNS
 expect(snsMock).toHaveReceivedAnyCommand();
 
 // two PublishCommands were sent to SNS
 expect(snsMock).toHaveReceivedCommandTimes(PublishCommand, 2);
 
-// a PublishCommand with Message "My message" was sent to SNS
-expect(snsMock).toHaveReceivedCommandWith(PublishCommand, {Message: 'My message'});
+// a PublishCommand with Message "hello world" was sent to SNS
+expect(snsMock).toHaveReceivedCommandWith(
+    PublishCommand, {Message: 'hello world'}
+);
 
-// the second command sent to SNS is a PublishCommand with Message "My message"
-expect(snsMock).toHaveReceivedNthCommandWith(2, PublishCommand, {Message: 'My message'});
+// a PublishCommand with Message containing "hello" was sent to SNS
+expect(snsMock).toHaveReceivedCommandWith(
+    PublishCommand, {Message: expect.stringContaining('hello')}
+);
 
-// the second PublishCommand sent to SNS has Message "My message"
-expect(snsMock).toHaveReceivedNthSpecificCommandWith(2, PublishCommand, {Message: 'My message'});
+// the second command sent to SNS was a PublishCommand with Message "hello world"
+expect(snsMock).toHaveReceivedNthCommandWith(
+    2, PublishCommand, {Message: 'hello world'}
+);
+
+// the second PublishCommand sent to SNS had Message "hello world"
+expect(snsMock).toHaveReceivedNthSpecificCommandWith(
+    2, PublishCommand, {Message: 'hello world'}
+);
 ```
 
 Shorter aliases exist, like `toReceiveCommandTimes()`. 

@@ -8,10 +8,15 @@ import {expect} from 'expect';
 
 interface AwsSdkJestMockBaseMatchers<R> extends Record<string, Function> {
     /**
-     * Asserts {@link AwsStub Aws Client Mock} received a {@link command} exact number of {@link times}
+     * Asserts the {@link AwsStub Client Mock} received given `Command` exact number of times.
      *
-     * @param command aws-sdk command constructor
-     * @param times
+     * @example
+     * ```js
+     * expect(snsMock).toHaveReceivedCommandTimes(PublishCommand, 2);
+     * ```
+     *
+     * @param command AWS SDK Command type
+     * @param times Number of expected calls
      */
     toHaveReceivedCommandTimes<TCmdInput extends object,
         TCmdOutput extends MetadataBearer>(
@@ -20,9 +25,14 @@ interface AwsSdkJestMockBaseMatchers<R> extends Record<string, Function> {
     ): R;
 
     /**
-     * Asserts {@link AwsStub Aws Client Mock} received a {@link command} at least one time
+     * Asserts the {@link AwsStub Client Mock} received given `Command` at least one time.
      *
-     * @param command aws-sdk command constructor
+     * @example
+     * ```js
+     * expect(snsMock).toHaveReceivedCommandTimes(PublishCommand);
+     * ```
+     *
+     * @param command AWS SDK Command type
      */
     toHaveReceivedCommand<TCmdInput extends object,
         TCmdOutput extends MetadataBearer>(
@@ -30,10 +40,31 @@ interface AwsSdkJestMockBaseMatchers<R> extends Record<string, Function> {
     ): R;
 
     /**
-     * Asserts {@link AwsStub Aws Client Mock} received a {@link command} at least one time with matching {@link input}
+     * Asserts the {@link AwsStub Client Mock} received given `Command` at least one time with matching input.
      *
-     * @param command aws-sdk command constructor
-     * @param input
+     * @example
+     * ```js
+     * expect(snsMock).toHaveReceivedCommandWith(
+     *   PublishCommand,
+     *   {
+     *     Message: 'hello world',
+     *   },
+     * );
+     * ```
+     *
+     * @example
+     * With asymmetric matcher:
+     * ```js
+     * expect(snsMock).toHaveReceivedCommandWith(
+     *   PublishCommand,
+     *   {
+     *     Message: expect.stringContaining('hello'),
+     *   },
+     * );
+     * ```
+     *
+     * @param command AWS SDK Command type
+     * @param input Partial input to match
      */
     toHaveReceivedCommandWith<TCmdInput extends object,
         TCmdOutput extends MetadataBearer>(
@@ -42,12 +73,23 @@ interface AwsSdkJestMockBaseMatchers<R> extends Record<string, Function> {
     ): R;
 
     /**
-     * Asserts {@link AwsStub Aws Client Mock} received a {@link command} as defined {@link call} number
-     * with matching {@link input}
+     * Asserts the nth call to the {@link AwsStub Client Mock} was a given `Command` with matching input.
      *
-     * @param call call number to assert
-     * @param command aws-sdk command constructor
-     * @param input
+     * @example
+     * The second call to `SNSClient` was a `PublishCommand` with Message 'hello world':
+     * ```js
+     * expect(snsMock).toHaveReceivedNthCommandWith(
+     *   2,
+     *   PublishCommand,
+     *   {
+     *     Message: 'hello world',
+     *   },
+     * );
+     * ```
+     *
+     * @param call Call number
+     * @param command AWS SDK Command type
+     * @param input Partial input to match
      */
     toHaveReceivedNthCommandWith<TCmdInput extends object,
         TCmdOutput extends MetadataBearer>(
@@ -57,12 +99,23 @@ interface AwsSdkJestMockBaseMatchers<R> extends Record<string, Function> {
     ): R;
 
     /**
-     * Asserts {@link AwsStub Aws Client Mock} received a {@link command} as defined specific {@link call}
-     * number with matchin {@link input}
+     * Asserts the nth `Command` of given type sent to the {@link AwsStub Client Mock} had matching input.
      *
-     * @param call call number to assert
-     * @param command aws-sdk command constructor
-     * @param input
+     * @example
+     * The second `PublishCommand` sent to `SNSClient` had Message 'hello world':
+     * ```js
+     * expect(snsMock).toHaveReceivedNthSpecificCommandWith(
+     *   2,
+     *   PublishCommand,
+     *   {
+     *     Message: 'hello world',
+     *   },
+     * );
+     * ```
+     *
+     * @param call Call number
+     * @param command AWS SDK Command type
+     * @param input Partial input to match
      */
     toHaveReceivedNthSpecificCommandWith<TCmdInput extends object, TCmdOutput extends MetadataBearer>(
         call: number,
@@ -71,18 +124,14 @@ interface AwsSdkJestMockBaseMatchers<R> extends Record<string, Function> {
     ): R;
 
     /**
-     * Asserts {@link AwsStub Aws Client Mock} received any command
+     * Asserts {@link AwsStub Client Mock} was called at least once with any `Command`.
      */
     toHaveReceivedAnyCommand(): R;
 }
 
 interface AwsSdkJestMockAliasMatchers<R> extends Record<string, Function> {
     /**
-     * Asserts {@link AwsStub Aws Client Mock} received a {@link command} exact number of {@link times}
-     *
-     * @alias {@link AwsSdkJestMockBaseMatchers.toHaveReceivedCommandTimes}
-     * @param command aws-sdk command constructor
-     * @param times
+     * @see toHaveReceivedCommandTimes
      */
     toReceiveCommandTimes<TCmdInput extends object,
         TCmdOutput extends MetadataBearer>(
@@ -91,10 +140,7 @@ interface AwsSdkJestMockAliasMatchers<R> extends Record<string, Function> {
     ): R;
 
     /**
-     * Asserts {@link AwsStub Aws Client Mock} received a {@link command} at least one time
-     *
-     * @alias {@link AwsSdkJestMockBaseMatchers.toHaveReceivedCommand}
-     * @param command aws-sdk command constructor
+     * @see toHaveReceivedCommand
      */
     toReceiveCommand<TCmdInput extends object,
         TCmdOutput extends MetadataBearer>(
@@ -102,11 +148,7 @@ interface AwsSdkJestMockAliasMatchers<R> extends Record<string, Function> {
     ): R;
 
     /**
-     * Asserts {@link AwsStub Aws Client Mock} received a {@link command} at least one time with matching {@link input}
-     *
-     * @alias {@link AwsSdkJestMockBaseMatchers.toHaveReceivedCommandWith}
-     * @param command aws-sdk command constructor
-     * @param input
+     * @see toHaveReceivedCommandWith
      */
     toReceiveCommandWith<TCmdInput extends object,
         TCmdOutput extends MetadataBearer>(
@@ -115,13 +157,7 @@ interface AwsSdkJestMockAliasMatchers<R> extends Record<string, Function> {
     ): R;
 
     /**
-     * Asserts {@link AwsStub Aws Client Mock} received a {@link command} as defined {@link call} number
-     * with matching {@link input}
-     *
-     * @alias {@link AwsSdkJestMockBaseMatchers.toHaveReceivedNthCommandWith}
-     * @param call call number to assert
-     * @param command aws-sdk command constructor
-     * @param input
+     * @see toHaveReceivedNthCommandWith
      */
     toReceiveNthCommandWith<TCmdInput extends object,
         TCmdOutput extends MetadataBearer>(
@@ -131,12 +167,7 @@ interface AwsSdkJestMockAliasMatchers<R> extends Record<string, Function> {
     ): R;
 
     /**
-     * Asserts {@link AwsStub Aws Client Mock} received a {@link command} as defined specific {@link call}
-     * number with matchin {@link input}
-     *
-     * @param call call number to assert
-     * @param command aws-sdk command constructor
-     * @param input
+     * @see toHaveReceivedNthSpecificCommandWith
      */
     toReceiveNthSpecificCommandWith<TCmdInput extends object, TCmdOutput extends MetadataBearer>(
         call: number,
@@ -145,7 +176,7 @@ interface AwsSdkJestMockAliasMatchers<R> extends Record<string, Function> {
     ): R;
 
     /**
-     * Asserts {@link AwsStub Aws Client Mock} received any command
+     * @see toHaveReceivedAnyCommand
      */
     toReceiveAnyCommand(): R;
 }

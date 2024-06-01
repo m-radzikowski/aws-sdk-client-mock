@@ -147,6 +147,7 @@ Calls:
         const sns = new SNSClient({});
         await sns.send(publishCmd1);
 
+
         expect(() => expect(snsMock).toHaveReceivedCommandWith(PublishCommand, {
             Message: expect.stringMatching(/message/), // eslint-disable-line @typescript-eslint/no-unsafe-assignment
         })).not.toThrow();
