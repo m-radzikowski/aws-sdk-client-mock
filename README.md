@@ -90,7 +90,7 @@ npm install -D aws-sdk-client-mock
 
 | `@aws-sdk/*` | `aws-sdk-client-mock` |
 |--------------|-----------------------|
-| ≥ 3.363.0    | 3.x                   |
+| ≥ 3.363.0    | ≥ 3.x                 |
 | < 3.363.0    | 2.x                   |
 
 ### Import
