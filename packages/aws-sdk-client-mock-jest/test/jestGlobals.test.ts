@@ -12,3 +12,12 @@ it('passes using @jest/globals', async () => {
 
     expect(() => expect(snsMock).toHaveReceivedCommand(PublishCommand)).not.toThrow();
 });
+
+it('accepts asymmetric matchers with @jest/globals', async () => {
+    const sns = new SNSClient({});
+    await sns.send(publishCmd1);
+
+    expect(() => expect(snsMock).toHaveReceivedCommandWith(PublishCommand, {
+        Message: expect.stringContaining('mock'),
+    })).not.toThrow();
+});
