@@ -2,27 +2,28 @@
   "name": "aws-sdk-client-mock-monorepo",
   "private": true,
   "version": "4.0.1",
-  "packageManager": "yarn@3.2.2",
+  "packageManager": "pnpm@9.1.4+sha256.30a1801ac4e723779efed13a21f4c39f9eb6c9fbb4ced101bce06b422593d7c9",
   "workspaces": [
     "packages/*"
   ],
   "scripts": {
     "prepare": "husky install",
     "pretest": "rimraf coverage/",
-    "test": "yarn workspaces foreach -pv run test",
-    "test-types": "yarn workspaces foreach -pv run test-types",
+    "test": "pnpm -r run test",
+    "test-types": "pnpm -r run test-types",
     "test-e2e": "ts-node test-e2e/simple/run.ts",
     "lint": "eslint .",
-    "build": "yarn workspaces foreach -pv --topological-dev run build",
-    "docs": "yarn workspace aws-sdk-client-mock run typedoc",
+    "build": "pnpm -r run build",
+    "docs": "pnpm -r run typedoc",
     "release": "standard-version",
     "verdaccio": "rimraf verdaccio-storage && verdaccio -c verdaccio.yml",
-    "local-publish": "yarn workspaces foreach -pv run local-publish",
-    "publish": "yarn workspaces foreach -pv --no-private npm publish"
+    "local-publish": "pnpm -r run local-publish",
+    "publish": "pnpm -r publish"
   },
   "devDependencies": {
     "@commitlint/cli": "17.4.4",
     "@commitlint/config-conventional": "17.4.4",
+    "@types/jest": "29.5.12",
     "@types/node": "18.15.0",
     "@typescript-eslint/eslint-plugin": "5.54.1",
     "@typescript-eslint/parser": "5.54.1",
@@ -39,8 +40,13 @@
     "typescript": "4.9.5",
     "verdaccio": "5.5.2"
   },
+  "pnpm": {
+    "overrides": {
+      "@smithy/types": "1.1.0"
+    }
+  },
   "lint-staged": {
-    "*.ts": "yarn lint"
+    "*.ts": "pnpm lint"
   },
   "commitlint": {
     "extends": [

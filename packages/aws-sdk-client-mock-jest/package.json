@@ -30,8 +30,8 @@
     "build:cjs": "tsc -p tsconfig.json",
     "build:es": "tsc -p tsconfig.es.json",
     "prebuild": "rimraf dist/",
-    "build": "yarn run build:cjs && yarn run build:es",
-    "local-publish": "npm publish --registry http://localhost:4873/"
+    "build": "pnpm run build:cjs && pnpm run build:es",
+    "local-publish": "pnpm publish --registry http://localhost:4873/ --no-git-checks"
   },
   "module": "dist/es/index.js",
   "main": "dist/cjs/index.js",
@@ -48,6 +48,7 @@
     "@jest/globals": "29.7.0",
     "@smithy/types": "1.1.0",
     "@types/jest": "29.5.11",
+    "@types/sinon": "^10.0.10",
     "aws-sdk-client-mock": "workspace:*",
     "expect": "29.7.0",
     "jest-serializer-ansi-escapes": "2.0.1"

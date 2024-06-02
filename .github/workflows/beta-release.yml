@@ -8,47 +8,74 @@ jobs:
     name: Build and release
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Clone repository
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0 # fetch full history, so changelog can be generated
-      - uses: actions/setup-node@v2
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
-          node-version: '14'
+          node-version: '20'
 
-      - run: yarn install --immutable
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+      - name: Setup pnpm cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
 
-      - run: yarn run build
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
-      - run: yarn run lint
-      - run: yarn run test
-      - run: yarn run test-types
+      - name: Build
+        run: pnpm build
 
-      - name: git config
+      - name: Lint
+        run: pnpm lint
+
+      - name: Unit tests
+        run: pnpm test
+
+      - name: Types tests
+        run: pnpm test-types
+
+      - name: Configure Git user
         run: |
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
 
-      - name: Create release
+      - name: Create beta release
         id: create_release
         run: |
-          yarn run release --prerelease beta
+          pnpm release --prerelease beta
           echo ::set-output name=tag_name::$(git describe HEAD --abbrev=0)
 
-      - name: copy README and LICENSE to packages
+      - name: Copy README and LICENSE to packages
         run: |
           cp README.md packages/aws-sdk-client-mock/README.md
           cp LICENSE packages/aws-sdk-client-mock/
           cp LICENSE packages/aws-sdk-client-mock-jest/
 
-      - name: run e2e tests
+      - name: E2E tests
         run: |
-          yarn run verdaccio &
-          yarn run local-publish
-          yarn run test-e2e
+          pnpm verdaccio &
+          pnpm local-publish
+          pnpm test-e2e
 
-      - run: yarn run publish --tag beta
+      - name: Set publishing config
+        run: pnpm config set '//registry.npmjs.org/:_authToken' "${NODE_AUTH_TOKEN}"
         env:
-          YARN_NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+      - name: Publish beta to npm
+        run: pnpm publish --tag beta
 
       - uses: ad-m/github-push-action@master
         with:
@@ -56,10 +83,10 @@ jobs:
           tags: true
 
       - name: Generate Release body
-        run: npx extract-changelog-release > RELEASE_BODY.md
+        run: pnpm extract-changelog-release > RELEASE_BODY.md
 
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           tag_name: ${{ steps.create_release.outputs.tag_name }}

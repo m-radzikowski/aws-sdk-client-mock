@@ -6,8 +6,6 @@ const exec = (cmd: string) => execSync(cmd, {
     stdio: 'inherit',
 });
 
-// use npm because when running this script from yarn and using yarn
-// it did not accept private registry parameter set in other way than in a project-level .yarnrc file
 exec('npm init -y');
 exec('npm install --registry=http://localhost:4873' +
     ` aws-sdk-client-mock@${libVersion}` +

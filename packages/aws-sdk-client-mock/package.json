@@ -29,8 +29,8 @@
     "build:cjs": "tsc -p tsconfig.json",
     "build:es": "tsc -p tsconfig.es.json",
     "prebuild": "rimraf dist/",
-    "build": "yarn run build:cjs && yarn run build:es",
-    "local-publish": "npm publish --registry http://localhost:4873/"
+    "build": "pnpm run build:cjs && pnpm run build:es",
+    "local-publish": "pnpm publish --registry http://localhost:4873/ --no-git-checks"
   },
   "module": "dist/es/index.js",
   "main": "dist/cjs/index.js",
@@ -49,6 +49,7 @@
     "@aws-sdk/client-sns": "3.363.0",
     "@aws-sdk/client-sqs": "3.363.0",
     "@aws-sdk/lib-dynamodb": "3.363.0",
+    "@aws-sdk/util-dynamodb": "3.363.0",
     "@smithy/types": "1.1.0",
     "typedoc": "0.23.26"
   },
