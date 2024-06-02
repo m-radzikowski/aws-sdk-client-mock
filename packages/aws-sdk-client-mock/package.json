@@ -51,7 +51,7 @@
     "@aws-sdk/lib-dynamodb": "3.363.0",
     "@aws-sdk/util-dynamodb": "3.363.0",
     "@smithy/types": "1.1.0",
-    "typedoc": "0.23.26"
+    "typedoc": "0.25.13"
   },
   "jest": {
     "preset": "ts-jest",
