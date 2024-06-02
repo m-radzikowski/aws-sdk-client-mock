@@ -67,6 +67,7 @@ jobs:
       - name: E2E tests
         run: |
           pnpm verdaccio &
+          pnpm config set '//localhost:4873/:_authToken' "fake"
           pnpm local-publish
           pnpm test-e2e
 

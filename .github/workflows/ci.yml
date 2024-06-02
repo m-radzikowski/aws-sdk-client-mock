@@ -51,10 +51,9 @@ jobs:
       - name: Bump version
         run: pnpm release --skip.commit --skip.tag
 
-      - name: Set local publishing config
-        run: pnpm config set '//localhost:4873/:_authToken' "fake"
       - name: E2E tests
         run: |
           pnpm verdaccio &
+          pnpm config set '//localhost:4873/:_authToken' "fake"
           pnpm local-publish
           pnpm test-e2e
