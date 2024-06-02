@@ -511,8 +511,6 @@ that the mocked Client was called with given Commands.
 Matchers are published as a separate package. Install it:
 
 ```bash
-yarn add -D aws-sdk-client-mock-jest
-# or:
 npm install -D aws-sdk-client-mock-jest
 ```
 
