@@ -31,7 +31,6 @@
     "extract-changelog-release": "1.0.2",
     "husky": "8.0.3",
     "jest": "29.5.0",
-    "lint-staged": "13.2.0",
     "rimraf": "4.4.0",
     "standard-version": "9.5.0",
     "ts-jest": "29.0.5",
@@ -44,9 +43,6 @@
     "overrides": {
       "@smithy/types": "1.1.0"
     }
-  },
-  "lint-staged": {
-    "*.ts": "pnpm lint"
   },
   "commitlint": {
     "extends": [
