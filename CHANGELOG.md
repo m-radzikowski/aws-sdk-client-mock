@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.0.2-beta.0](https://github.com/m-radzikowski/aws-sdk-client-mock/compare/v4.0.1...v4.0.2-beta.0) (2024-06-20)
+
+
+### Bug Fixes
+
+* **jest:** allow "toHaveReceivedCommandWith" partial match without required Command fields ([79929ae](https://github.com/m-radzikowski/aws-sdk-client-mock/commit/79929ae03339be734f04012dc8faa86a1a0f3eb7))
+
 ### [4.0.1](https://github.com/m-radzikowski/aws-sdk-client-mock/compare/v4.0.1-beta.0...v4.0.1) (2024-06-01)
 
 ### [4.0.1-beta.0](https://github.com/m-radzikowski/aws-sdk-client-mock/compare/v4.0.0...v4.0.1-beta.0) (2024-06-01)
