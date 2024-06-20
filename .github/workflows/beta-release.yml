@@ -76,7 +76,7 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
       - name: Publish beta to npm
-        run: pnpm publish --no-git-checks --tag beta
+        run: pnpm do-publish --no-git-checks --tag beta
 
       - uses: ad-m/github-push-action@master
         with:

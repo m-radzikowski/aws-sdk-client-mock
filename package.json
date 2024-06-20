@@ -18,7 +18,7 @@
     "release": "standard-version",
     "verdaccio": "rimraf verdaccio-storage && verdaccio -c verdaccio.yml",
     "local-publish": "pnpm -r run local-publish",
-    "publish": "pnpm -r publish"
+    "do-publish": "pnpm -r publish"
   },
   "devDependencies": {
     "@commitlint/cli": "19.3.0",
