@@ -69,9 +69,9 @@ interface AwsSdkJestMockBaseMatchers<R> extends Record<string, Function> {
     toHaveReceivedCommandWith<TCmdInput extends object,
         TCmdOutput extends MetadataBearer>(
         command: new (input: TCmdInput) => AwsCommand<TCmdInput, TCmdOutput>,
-        input: {
+        input: Partial<{
             [Property in keyof TCmdInput]: unknown;
-        },
+        }>,
     ): R;
 
     /**
@@ -97,9 +97,9 @@ interface AwsSdkJestMockBaseMatchers<R> extends Record<string, Function> {
         TCmdOutput extends MetadataBearer>(
         call: number,
         command: new (input: TCmdInput) => AwsCommand<TCmdInput, TCmdOutput>,
-        input: {
+        input: Partial<{
             [Property in keyof TCmdInput]: unknown;
-        },
+        }>,
     ): R;
 
     /**
@@ -124,9 +124,9 @@ interface AwsSdkJestMockBaseMatchers<R> extends Record<string, Function> {
     toHaveReceivedNthSpecificCommandWith<TCmdInput extends object, TCmdOutput extends MetadataBearer>(
         call: number,
         command: new (input: TCmdInput) => AwsCommand<TCmdInput, TCmdOutput>,
-        input: {
+        input: Partial<{
             [Property in keyof TCmdInput]: unknown;
-        },
+        }>,
     ): R;
 
     /**
@@ -159,9 +159,9 @@ interface AwsSdkJestMockAliasMatchers<R> extends Record<string, Function> {
     toReceiveCommandWith<TCmdInput extends object,
         TCmdOutput extends MetadataBearer>(
         command: new (input: TCmdInput) => AwsCommand<TCmdInput, TCmdOutput>,
-        input: {
+        input: Partial<{
             [Property in keyof TCmdInput]: unknown;
-        },
+        }>,
     ): R;
 
     /**
@@ -171,9 +171,9 @@ interface AwsSdkJestMockAliasMatchers<R> extends Record<string, Function> {
         TCmdOutput extends MetadataBearer>(
         call: number,
         command: new (input: TCmdInput) => AwsCommand<TCmdInput, TCmdOutput>,
-        input: {
+        input: Partial<{
             [Property in keyof TCmdInput]: unknown;
-        },
+        }>,
     ): R;
 
     /**
@@ -182,9 +182,9 @@ interface AwsSdkJestMockAliasMatchers<R> extends Record<string, Function> {
     toReceiveNthSpecificCommandWith<TCmdInput extends object, TCmdOutput extends MetadataBearer>(
         call: number,
         command: new (input: TCmdInput) => AwsCommand<TCmdInput, TCmdOutput>,
-        input: {
+        input: Partial<{
             [Property in keyof TCmdInput]: unknown;
-        },
+        }>,
     ): R;
 
     /**
