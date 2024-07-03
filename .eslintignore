@@ -3,3 +3,6 @@
 **/test-d/**
 test-e2e/**
 **/dist/**
+
+**/vitest.config.ts
+**/vitest.serializer.ts

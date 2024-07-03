@@ -11,6 +11,6 @@ export default defineConfig({
         100: true
       }
     },
-    snapshotSerializers: ['./custom-serializer.ts'],
+    snapshotSerializers: ['./vitest.serializer.ts'],
   }
 })
