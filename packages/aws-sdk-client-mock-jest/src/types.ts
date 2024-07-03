@@ -29,7 +29,6 @@ interface CommonMatcherUtils {
 interface CommonMatcherContext<T extends CommonMatcherUtils> {
   isNot?: boolean;
   equals: EqualsFunction;
-  // utils: JestMatcherUtils | VitestMatcherUtils;
   utils: T;
 }
 
