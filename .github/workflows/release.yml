@@ -59,7 +59,7 @@ jobs:
           echo ::set-output name=tag_name::$(git describe HEAD --abbrev=0)
 
       - name: Generate docs website
-        run: pnpm docs
+        run: pnpm generate-docs
       - name: Commit docs website
         run: |
           git add docs

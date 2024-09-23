@@ -14,7 +14,7 @@
     "test-e2e": "ts-node test-e2e/simple/run.ts",
     "lint": "eslint .",
     "build": "pnpm -r run build",
-    "docs": "pnpm -r run typedoc",
+    "generate-docs": "pnpm -r run typedoc",
     "release": "standard-version",
     "verdaccio": "rimraf verdaccio-storage && verdaccio -c verdaccio.yml",
     "local-publish": "pnpm -r run local-publish",
