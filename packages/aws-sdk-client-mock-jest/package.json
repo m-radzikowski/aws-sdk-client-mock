@@ -48,7 +48,7 @@
     "@jest/globals": "29.7.0",
     "@smithy/types": "1.1.0",
     "@types/jest": "29.5.12",
-    "@types/sinon": "^10.0.10",
+    "@types/sinon": "^17.0.3",
     "aws-sdk-client-mock": "workspace:*",
     "expect": "29.7.0",
     "jest-serializer-ansi-escapes": "3.0.0"
