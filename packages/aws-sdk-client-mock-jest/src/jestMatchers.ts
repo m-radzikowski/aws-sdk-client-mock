@@ -275,8 +275,8 @@ const processMatch = <CheckData = undefined>({ctx, mockClient, command, check, m
     };
     message: (params: MessageFunctionParams<CheckData>) => string[];
 }): ExpectationResult => {
-    assert(mockClient instanceof AwsStub, 'The actual must be a client mock instance');
-    command && assert(
+    assert.ok(mockClient instanceof AwsStub, 'The actual must be a client mock instance');
+    command && assert.ok(
         command &&
         typeof command === 'function' &&
         typeof command.name === 'string' &&
@@ -310,7 +310,7 @@ const processMatch = <CheckData = undefined>({ctx, mockClient, command, check, m
 };
 
 const ensureNoOtherArgs = (args: unknown[]): void => {
-    assert(args.length === 0, 'Too many matcher arguments');
+    assert.ok(args.length === 0, 'Too many matcher arguments');
 };
 
 const baseMatchers: { [P in keyof AwsSdkJestMockBaseMatchers<unknown>]: MatcherFunction<any[]> } = {
@@ -398,7 +398,7 @@ const baseMatchers: { [P in keyof AwsSdkJestMockBaseMatchers<unknown>]: MatcherF
         ...other: unknown[]
     ) {
         ensureNoOtherArgs(other);
-        assert(
+        assert.ok(
             call && typeof call === 'number' && call > 0,
             'Call number must be a number greater than 0',
         );
@@ -453,7 +453,7 @@ const baseMatchers: { [P in keyof AwsSdkJestMockBaseMatchers<unknown>]: MatcherF
         ...other: unknown[]
     ) {
         ensureNoOtherArgs(other);
-        assert(
+        assert.ok(
             call && typeof call === 'number' && call > 0,
             'Call number must be a number greater than 0',
         );
