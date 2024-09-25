@@ -1,5 +1,5 @@
 import {Client, Command, MetadataBearer} from '@smithy/types';
-import sinon, {SinonSandbox, SinonStub} from 'sinon';
+import * as sinon from 'sinon';
 import {isSinonStub} from './sinon';
 import {AwsClientStub, AwsStub} from './awsClientStub';
 
@@ -12,7 +12,7 @@ import {AwsClientStub, AwsStub} from './awsClientStub';
  */
 export const mockClient = <TInput extends object, TOutput extends MetadataBearer, TConfiguration>(
     client: InstanceOrClassType<Client<TInput, TOutput, TConfiguration>>,
-    {sandbox}: { sandbox?: SinonSandbox } = {},
+    {sandbox}: { sandbox?: sinon.SinonSandbox } = {},
 ): AwsClientStub<Client<TInput, TOutput, TConfiguration>> => {
     const instance = isClientInstance(client) ? client : client.prototype;
 
@@ -22,7 +22,7 @@ export const mockClient = <TInput extends object, TOutput extends MetadataBearer
     }
 
     const sinonSandbox = sandbox || sinon;
-    const sendStub = sinonSandbox.stub(instance, 'send') as SinonStub<[Command<TInput, any, TOutput, any, any>], Promise<TOutput>>;
+    const sendStub = sinonSandbox.stub(instance, 'send') as sinon.SinonStub<[Command<TInput, any, TOutput, any, any>], Promise<TOutput>>;
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     return new AwsStub<TInput, TOutput, TConfiguration>(instance, sendStub);

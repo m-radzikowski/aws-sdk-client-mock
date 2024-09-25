@@ -9,7 +9,6 @@
     "strict": true,
     "sourceMap": true,
     "declaration": true,
-    "esModuleInterop": true,
     "importHelpers": true,
     "noImplicitAny": true,
     "noImplicitReturns": true,
