@@ -64,7 +64,7 @@
     "dist"
   ],
   "dependencies": {
-    "@vitest/expect": "1.6.0",
+    "@vitest/expect": ">1.6.0",
     "expect": ">28.1.3",
     "tslib": "^2.1.0"
   },
