@@ -1,7 +1,7 @@
 {
   "name": "aws-sdk-client-mock-jest",
   "description": "Custom Jest matchers for AWS SDK v3 Client mock",
-  "version": "4.0.2-beta.0",
+  "version": "4.0.2",
   "license": "MIT",
   "author": {
     "name": "Maciej Radzikowski",
@@ -73,7 +73,7 @@
     "@jest/globals": "29.7.0",
     "@smithy/types": "1.1.0",
     "@types/jest": "29.5.12",
-    "@types/sinon": "^10.0.10",
+    "@types/sinon": "^17.0.3",
     "@vitest/coverage-v8": "^1.6.0",
     "aws-sdk-client-mock": "workspace:*",
     "chalk": "^5.3.0",

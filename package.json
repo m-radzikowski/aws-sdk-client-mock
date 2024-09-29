@@ -1,7 +1,7 @@
 {
   "name": "aws-sdk-client-mock-monorepo",
   "private": true,
-  "version": "4.0.2-beta.0",
+  "version": "4.0.2",
   "packageManager": "pnpm@9.1.4+sha256.30a1801ac4e723779efed13a21f4c39f9eb6c9fbb4ced101bce06b422593d7c9",
   "workspaces": [
     "packages/*"
@@ -14,7 +14,7 @@
     "test-e2e": "ts-node test-e2e/simple/run.ts",
     "lint": "eslint .",
     "build": "pnpm -r run build",
-    "docs": "pnpm -r run typedoc",
+    "generate-docs": "pnpm -r run typedoc",
     "release": "standard-version",
     "verdaccio": "rimraf verdaccio-storage && verdaccio -c verdaccio.yml",
     "local-publish": "pnpm -r run local-publish",

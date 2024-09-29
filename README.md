@@ -306,8 +306,7 @@ const query = await ddb.send(new QueryCommand({
 
 #### Lib Storage Upload
 
-To mock `@aws-sdk/lib-storage` `Upload` you need to mock
-at least two commands: `CreateMultipartUploadCommand` and `UploadPartCommand`
+To mock `@aws-sdk/lib-storage` `Upload` you need to mock all commands
 used [under the hood](https://github.com/aws/aws-sdk-js-v3/blob/main/lib/lib-storage/src/Upload.ts):
 
 ```typescript
@@ -315,8 +314,16 @@ import {S3Client, CreateMultipartUploadCommand, UploadPartCommand} from '@aws-sd
 import {Upload} from "@aws-sdk/lib-storage";
 
 const s3Mock = mockClient(S3Client);
+
+// for big files upload:
 s3Mock.on(CreateMultipartUploadCommand).resolves({UploadId: '1'});
 s3Mock.on(UploadPartCommand).resolves({ETag: '1'});
+
+// for small files upload:
+s3ClientMock.on(PutObjectCommand).callsFake(async (input, getClient) => {
+  getClient().config.endpoint = () => ({hostname: ""}) as any;
+  return {};
+});
 
 const s3Upload = new Upload({
     client: new S3Client({}),

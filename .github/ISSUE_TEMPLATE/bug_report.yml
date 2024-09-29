@@ -17,19 +17,19 @@ body:
   - type: textarea
     attributes:
       label: Reproduction
-      description: Minimal code snippet to reproduce the bug.
-      value: |
-        <!--
-        Put a minimal reproducible example here.
+      description: |
+        Minimal code snippet to reproduce the bug.
         
-        It should include all code needed to reproduce the issue
-        and be self-contained - without references to any code outside,
-        so it can be copy-pasted and run as-is.
+        **IMPORTANT!** It should:
+        - include all code needed to reproduce the issue
+        - include all required imports
+        - be self-contained - without references to any code outside
+        - be as small as possible, without unrelated code from your project
         
-        See the StackOverflow guide on how to create
-        a Minimal, Complete, and Reproducible example:
+        It should be possible to copy-paste the code and run it as-is.
+        
+        See the StackOverflow guide on how to create a Minimal, Complete, and Reproducible example:
         https://stackoverflow.com/help/minimal-reproducible-example
-        -->
     validations:
       required: true
   - type: textarea
