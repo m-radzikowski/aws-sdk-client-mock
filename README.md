@@ -29,6 +29,7 @@ In action:
 - [About AWS SDK v3](#about-aws-sdk-v3)
 - [Usage](#usage)
   - [Install](#install)
+    - [Versions compatibility](#versions-compatibility)
   - [Import](#import)
   - [Mock](#mock)
     - [DynamoDB DocumentClient](#dynamodb-documentclient)
@@ -38,7 +39,9 @@ In action:
     - [SDK v2-style mocks](#sdk-v2-style-mocks)
   - [Inspect](#inspect)
   - [Reset and restore](#reset-and-restore)
-  - [Jest matchers](#jest-matchers)
+  - [Custom matchers](#custom-matchers)
+    - [Jest](#jest)
+    - [Vitest](#vitest)
 - [API Reference](#api-reference)
 - [AWS Lambda example](#aws-lambda-example)
 - [Caveats](#caveats)
@@ -46,6 +49,7 @@ In action:
   - [AwsClientStub and strictFunctionTypes](#awsclientstub-and-strictfunctiontypes)
   - [Order of mock behaviors](#order-of-mock-behaviors)
   - [Order of type and instance mocks](#order-of-type-and-instance-mocks)
+  - [Using with Mocha](#using-with-mocha)
 
 ## About AWS SDK v3
 
@@ -510,7 +514,9 @@ You can also pass custom [Sinon Sandbox](https://sinonjs.org/releases/latest/san
 with `mockClient(client, { sandbox: mySandbox })`
 to manage all mocks lifecycle at once.
 
-### Jest matchers
+### Custom matchers
+
+#### Jest
 
 Custom [Jest](https://jestjs.io/) matchers simplify verification
 that the mocked Client was called with given Commands.
@@ -524,9 +530,7 @@ npm install -D aws-sdk-client-mock-jest
 Usage (notice the `import`):
 
 ```ts
-import 'aws-sdk-client-mock-jest'; // default for jest
-import 'aws-sdk-client-mock-jest/jest-globals'; // for @jest/globals
-
+import 'aws-sdk-client-mock-jest';
 
 // a PublishCommand was sent to SNS
 expect(snsMock).toHaveReceivedCommand(PublishCommand);
@@ -559,6 +563,8 @@ expect(snsMock).toHaveReceivedNthSpecificCommandWith(
 ```
 
 Shorter aliases exist, like `toReceiveCommandTimes()`.
+
+#### Vitest
 
 Use those matchers with [Vitest](https://vitest.dev/):
 
