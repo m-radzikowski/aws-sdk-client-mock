@@ -121,11 +121,7 @@ export function createBaseMatchers<T extends CommonMatcherUtils = CommonMatcherU
     errorMsg: MessageImpl<T>,
     objectContaining: AsymmetricMatchers['objectContaining']
 ): { [P in keyof AwsSdkMockBaseMatchers<unknown>]: MatcherFunction<T> } {
-    errorMsg.toHaveReceivedCommand;
     return {
-        /**
-         * implementation of {@link AwsSdkJestMockMatchers.toHaveReceivedCommand} matcher
-         */
         toHaveReceivedCommand(
             this: CommonMatcherContext<T>,
             mockClient: unknown,
@@ -147,9 +143,6 @@ export function createBaseMatchers<T extends CommonMatcherUtils = CommonMatcherU
                 
             );
         },
-        /**
-         * implementation of {@link AwsSdkJestMockMatchers.toHaveReceivedCommandTimes} matcher
-         */
         toHaveReceivedCommandTimes(
             this: CommonMatcherContext<T>,
             mockClient: unknown,
@@ -171,9 +164,6 @@ export function createBaseMatchers<T extends CommonMatcherUtils = CommonMatcherU
                 },
             );
         },
-        /**
-         * implementation of {@link AwsSdkJestMockMatchers.toHaveReceivedCommandWith} matcher
-         */
         toHaveReceivedCommandWith(
             this: CommonMatcherContext<T>,
             mockClient: unknown,
@@ -200,9 +190,6 @@ export function createBaseMatchers<T extends CommonMatcherUtils = CommonMatcherU
                 
             );
         },
-        /**
-         * implementation of {@link AwsSdkJestMockMatchers.toHaveReceivedNthCommandWith} matcher
-         */
         toHaveReceivedNthCommandWith(
             this: CommonMatcherContext<T>,
             mockClient: unknown,
@@ -243,10 +230,6 @@ export function createBaseMatchers<T extends CommonMatcherUtils = CommonMatcherU
                 },
             );
         },
-
-        /**
-         * implementation of {@link AwsSdkJestMockMatchers.toHaveReceivedNthSpecificCommandWith} matcher
-         */
         toHaveReceivedNthSpecificCommandWith(
             this: CommonMatcherContext<T>,
             mockClient: unknown,
@@ -287,9 +270,6 @@ export function createBaseMatchers<T extends CommonMatcherUtils = CommonMatcherU
                 }
             );
         },
-        /**
-         * implementation of {@link AwsSdkJestMockMatchers.toHaveReceivedAnyCommand} matcher
-         */
         toHaveReceivedAnyCommand(
             this: CommonMatcherContext<T>,
             mockClient: unknown,
