@@ -1,5 +1,4 @@
 import { AwsStub } from 'aws-sdk-client-mock';
-import type { AsymmetricMatchers } from 'expect';
 import assert from 'node:assert';
 import type {
     AnyCommand,
@@ -119,7 +118,12 @@ interface MessageImpl<T extends CommonMatcherUtils> {
 
 export function createBaseMatchers<T extends CommonMatcherUtils = CommonMatcherUtils>(
     errorMsg: MessageImpl<T>,
-    objectContaining: AsymmetricMatchers['objectContaining']
+    objectContaining: (sample: Record<string, unknown>) => {
+        asymmetricMatch(other: unknown): boolean;
+        toString(): string;
+        getExpectedType?(): string;
+        toAsymmetricMatcher?(): string;
+    }
 ): { [P in keyof AwsSdkMockBaseMatchers<unknown>]: MatcherFunction<T> } {
     return {
         toHaveReceivedCommand(
