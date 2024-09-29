@@ -132,3 +132,6 @@ declare global {
         interface Matchers<R = void> extends AwsSdkMockMatchers<R> {}
     }
 }
+declare module 'expect' {
+    interface Matchers<R = void> extends AwsSdkMockMatchers<R> {}
+}

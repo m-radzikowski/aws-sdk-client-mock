@@ -49,16 +49,6 @@
         "default": "./dist/es/jest.js"
       }
     },
-    "./jest-globals": {
-      "require": {
-        "types": "./dist/types/jestGlobals.d.ts",
-        "default": "./dist/cjs/jestGlobals.js"
-      },
-      "import": {
-        "types": "./dist/types/jestGlobals.d.ts",
-        "default": "./dist/es/jestGlobals.js"
-      }
-    },
     "./vitest": {
       "require": {
         "types": "./dist/types/vitest.d.ts",

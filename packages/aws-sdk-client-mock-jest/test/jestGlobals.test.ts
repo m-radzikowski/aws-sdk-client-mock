@@ -2,7 +2,7 @@ import { PublishCommand, SNSClient } from '@aws-sdk/client-sns';
 import { expect, it } from '@jest/globals';
 import { mockClient } from 'aws-sdk-client-mock';
 import { publishCmd1 } from 'aws-sdk-client-mock/test/fixtures';
-import '../src/jestGlobals';
+import '../src/jest';
 
 const snsMock = mockClient(SNSClient);
 
