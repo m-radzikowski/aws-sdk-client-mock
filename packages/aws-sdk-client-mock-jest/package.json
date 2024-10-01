@@ -25,7 +25,9 @@
     "jest-matchers"
   ],
   "scripts": {
-    "test": "jest --coverage --colors",
+    "test": "pnpm run jest && pnpm run vitest",
+    "jest": "jest --coverage --colors ",
+    "vitest": "vitest run",
     "test-types": "tsd",
     "build:cjs": "tsc -p tsconfig.json",
     "build:es": "tsc -p tsconfig.es.json",
@@ -33,13 +35,36 @@
     "build": "pnpm run build:cjs && pnpm run build:es",
     "local-publish": "pnpm publish --registry http://localhost:4873/ --no-git-checks"
   },
-  "module": "dist/es/index.js",
-  "main": "dist/cjs/index.js",
-  "types": "dist/types/index.d.ts",
+  "module": "dist/es/jest.js",
+  "main": "dist/cjs/jest.js",
+  "types": "dist/types/jest.d.ts",
+  "exports": {
+    ".": {
+      "require": {
+        "types": "./dist/types/jest.d.ts",
+        "default": "./dist/cjs/jest.js"
+      },
+      "import": {
+        "types": "./dist/types/jest.d.ts",
+        "default": "./dist/es/jest.js"
+      }
+    },
+    "./vitest": {
+      "require": {
+        "types": "./dist/types/vitest.d.ts",
+        "default": "./dist/cjs/vitest.js"
+      },
+      "import": {
+        "types": "./dist/types/vitest.d.ts",
+        "default": "./dist/es/vitest.js"
+      }
+    }
+  },
   "files": [
     "dist"
   ],
   "dependencies": {
+    "@vitest/expect": ">1.6.0",
     "expect": ">28.1.3",
     "tslib": "^2.1.0"
   },
@@ -49,12 +74,22 @@
     "@smithy/types": "1.1.0",
     "@types/jest": "29.5.12",
     "@types/sinon": "^17.0.3",
+    "@vitest/coverage-v8": "^2.1.1",
     "aws-sdk-client-mock": "workspace:*",
+    "chalk": "^5.3.0",
     "expect": "29.7.0",
-    "jest-serializer-ansi-escapes": "3.0.0"
+    "jest-serializer-ansi-escapes": "3.0.0",
+    "pretty-ansi": "^2.0.0",
+    "vitest": "^2.1.1"
   },
   "peerDependencies": {
-    "aws-sdk-client-mock": "workspace:*"
+    "aws-sdk-client-mock": "workspace:*",
+    "vitest": ">1.6.0"
+  },
+  "peerDependenciesMeta": {
+    "vitest": {
+      "optional": true
+    }
   },
   "jest": {
     "preset": "ts-jest",

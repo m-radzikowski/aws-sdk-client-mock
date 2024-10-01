@@ -29,6 +29,7 @@ In action:
 - [About AWS SDK v3](#about-aws-sdk-v3)
 - [Usage](#usage)
   - [Install](#install)
+    - [Versions compatibility](#versions-compatibility)
   - [Import](#import)
   - [Mock](#mock)
     - [DynamoDB DocumentClient](#dynamodb-documentclient)
@@ -38,7 +39,9 @@ In action:
     - [SDK v2-style mocks](#sdk-v2-style-mocks)
   - [Inspect](#inspect)
   - [Reset and restore](#reset-and-restore)
-  - [Jest matchers](#jest-matchers)
+  - [Custom matchers](#custom-matchers)
+    - [Jest](#jest)
+    - [Vitest](#vitest)
 - [API Reference](#api-reference)
 - [AWS Lambda example](#aws-lambda-example)
 - [Caveats](#caveats)
@@ -46,6 +49,7 @@ In action:
   - [AwsClientStub and strictFunctionTypes](#awsclientstub-and-strictfunctiontypes)
   - [Order of mock behaviors](#order-of-mock-behaviors)
   - [Order of type and instance mocks](#order-of-type-and-instance-mocks)
+  - [Using with Mocha](#using-with-mocha)
 
 ## About AWS SDK v3
 
@@ -363,7 +367,7 @@ s3Mock.on(UploadPartCommand).rejects();
 #### S3 GetObjectCommand
 
 AWS SDK wraps the stream in the S3 `GetObjectCommand` result to provide utility methods to parse it.
-To mock it, you need to install the [`@smithy/util-stream`](https://www.npmjs.com/package/@smithy/util-stream) package 
+To mock it, you need to install the [`@smithy/util-stream`](https://www.npmjs.com/package/@smithy/util-stream) package
 and call the wrapping function `sdkStreamMixin()` on the stream you provide as the command output:
 
 ```ts
@@ -510,7 +514,9 @@ You can also pass custom [Sinon Sandbox](https://sinonjs.org/releases/latest/san
 with `mockClient(client, { sandbox: mySandbox })`
 to manage all mocks lifecycle at once.
 
-### Jest matchers
+### Custom matchers
+
+#### Jest
 
 Custom [Jest](https://jestjs.io/) matchers simplify verification
 that the mocked Client was called with given Commands.
@@ -556,10 +562,19 @@ expect(snsMock).toHaveReceivedNthSpecificCommandWith(
 );
 ```
 
-Shorter aliases exist, like `toReceiveCommandTimes()`. 
+Shorter aliases exist, like `toReceiveCommandTimes()`.
 
-To use those matchers with [Vitest](https://vitest.dev/), set `test.globals` to `true` in `vite.config.js`
-(see [#139](https://github.com/m-radzikowski/aws-sdk-client-mock/issues/139)).
+#### Vitest
+
+Use those matchers with [Vitest](https://vitest.dev/):
+
+```ts
+import 'aws-sdk-client-mock-jest/vitest';
+import { expect } from 'vitest';
+
+// a PublishCommand was sent to SNS
+expect(snsMock).toHaveReceivedCommand(PublishCommand);
+```
 
 To use the matchers outside of Jest, you can pull in the [expect](https://www.npmjs.com/package/expect) library separately
 and add it to the global scope directly, e.g.:

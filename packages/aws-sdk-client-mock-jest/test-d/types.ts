@@ -1,7 +1,7 @@
-import {mockClient} from 'aws-sdk-client-mock';
-import {PublishCommand, SNSClient} from '@aws-sdk/client-sns';
-import {expect as globalsExpect} from '@jest/globals';
-import {expectError} from 'tsd';
+import { PublishCommand, SNSClient } from '@aws-sdk/client-sns';
+import { expect as globalsExpect } from '@jest/globals';
+import { mockClient } from 'aws-sdk-client-mock';
+import { expectError } from 'tsd';
 import '../src';
 
 expect(1).toHaveReceivedCommand(PublishCommand);
