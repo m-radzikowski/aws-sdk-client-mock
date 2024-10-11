@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.1.0-beta.0](https://github.com/m-radzikowski/aws-sdk-client-mock/compare/v4.0.2...v4.1.0-beta.0) (2024-10-11)
+
+
+### Features
+
+* **jest:** add support for vitest ([#231](https://github.com/m-radzikowski/aws-sdk-client-mock/issues/231)) ([3ed37a9](https://github.com/m-radzikowski/aws-sdk-client-mock/commit/3ed37a9404f5385e50dcd157f8fa6962e22452ab))
+
+
+### Bug Fixes
+
+* **jest:** import path in types test ([750605b](https://github.com/m-radzikowski/aws-sdk-client-mock/commit/750605b68a2b11057e1977cbdd6e219030144550))
+
 ### [4.0.2](https://github.com/m-radzikowski/aws-sdk-client-mock/compare/v4.0.2-beta.0...v4.0.2) (2024-09-23)
 
 ### [4.0.2-beta.0](https://github.com/m-radzikowski/aws-sdk-client-mock/compare/v4.0.1...v4.0.2-beta.0) (2024-06-20)
