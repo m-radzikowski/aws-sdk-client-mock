@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.1.0](https://github.com/m-radzikowski/aws-sdk-client-mock/compare/v4.1.0-beta.0...v4.1.0) (2024-10-15)
+
+
+### Features
+
+* add commandCall method to AwsStub ([#241](https://github.com/m-radzikowski/aws-sdk-client-mock/issues/241)) ([4f11d4c](https://github.com/m-radzikowski/aws-sdk-client-mock/commit/4f11d4ce587ba989aa53e70d13f2cbc0a1ef3d96))
+
 ## [4.1.0-beta.0](https://github.com/m-radzikowski/aws-sdk-client-mock/compare/v4.0.2...v4.1.0-beta.0) (2024-10-11)
 
 
