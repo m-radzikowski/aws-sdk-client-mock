@@ -127,6 +127,17 @@ describe('spying on the mock', () => {
         expect(snsMock.commandCalls(PublishCommand, {...publishCmd1.input}, true)).toHaveLength(1);
     });
 
+    it('finds nth call of given command type', async () => {
+        const sns = new SNSClient({});
+        await sns.send(publishCmd1);
+        await sns.send(publishCmd2);
+
+        expect(snsMock.commandCall(0, PublishCommand).args[0].input).toStrictEqual(publishCmd1.input);
+        expect(snsMock.commandCall(1, PublishCommand).args[0].input).toStrictEqual(publishCmd2.input);
+        expect(snsMock.commandCall(-1, PublishCommand).args[0].input).toStrictEqual(publishCmd2.input);
+        expect(snsMock.commandCall(2, PublishCommand)).toBeNull();
+    });
+
     it('resets calls history', async () => {
         const sns = new SNSClient({});
         await sns.send(publishCmd1);
