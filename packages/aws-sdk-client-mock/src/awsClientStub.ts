@@ -132,6 +132,33 @@ export class AwsStub<TInput extends object, TOutput extends MetadataBearer, TCon
     }
 
     /**
+     * Returns n-th call of given Command only.
+     * @param n Index of the call
+     * @param commandType Command type to match
+     * @param input Command payload to match
+     * @param strict Should the payload match strictly (default false, will match if all defined payload properties match)
+     */
+    commandCall<TCmd extends AwsCommand<any, any>,
+        TCmdInput extends TCmd extends AwsCommand<infer TIn, any> ? TIn : never,
+        TCmdOutput extends TCmd extends AwsCommand<any, infer TOut> ? TOut : never,
+    >(
+        n: number,
+        commandType: new (input: TCmdInput) => TCmd,
+        input?: Partial<TCmdInput>,
+        strict?: boolean,
+    ): SinonSpyCall<[TCmd], Promise<TCmdOutput>> {
+        const calls = this.commandCalls(commandType, input, strict);
+        if (n < 0) {
+            n += calls.length;
+        }
+        if (n >= calls.length) {
+            // @ts-expect-error this matches the behaviour of the call method.
+            return null;
+        }
+        return calls[n];
+    }
+
+    /**
      * Allows specifying the behavior for any Command with given input (parameters).
      *
      * If the input is not specified, the given behavior will be used for any Command with any input.
