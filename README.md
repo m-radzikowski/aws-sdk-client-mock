@@ -170,7 +170,7 @@ Not all payload parameters must be defined to match
 snsMock
     .on(PublishCommand, {
         Message: 'My message',
-    })
+    }, true)
     .resolves({
         MessageId: '12345678-4444-5555-6666-111122223333',
     });
