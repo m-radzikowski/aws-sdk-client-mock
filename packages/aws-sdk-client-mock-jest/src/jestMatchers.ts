@@ -1,4 +1,4 @@
-import { AwsStub } from 'aws-sdk-client-mock';
+import { AwsSpy, AwsStub } from 'aws-sdk-client-mock';
 import assert from 'node:assert';
 import type {
     AnyCommand,
@@ -38,7 +38,7 @@ function processMatch<T extends CommonMatcherUtils, CheckData = undefined>(
     const { ctx, mockClient, command, check, message } = args;
 
     assert(
-        mockClient instanceof AwsStub,
+        mockClient instanceof AwsStub || mockClient instanceof AwsSpy,
         'The actual must be a client mock instance'
     );
 
@@ -52,7 +52,7 @@ function processMatch<T extends CommonMatcherUtils, CheckData = undefined>(
     }
 
     const calls = mockClient.calls();
-    const commandCalls = command ? mockClient.commandCalls(command) : [];
+    const commandCalls = command ? (mockClient instanceof AwsStub ? mockClient.commandCalls(command) : mockClient.commandCalls(command)) : [];
     
     const { pass, data } = check({ calls, commandCalls });
 

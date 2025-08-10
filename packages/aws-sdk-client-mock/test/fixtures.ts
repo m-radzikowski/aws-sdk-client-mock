@@ -1,7 +1,12 @@
 import {PublishCommand, SubscribeCommand} from '@aws-sdk/client-sns';
+import {ListQueuesCommand, SendMessageCommand} from '@aws-sdk/client-sqs';
+
+export const fakeCredentials = {accessKeyId: 'fake', secretAccessKey: 'fake'};
 
 export const topicArn = 'arn:aws:sns:us-east-1:111111111111:MyTopic';
 export const topicArn2 = 'arn:aws:sns:us-east-1:111111111111:MyOtherTopic';
+
+export const queueUrl = 'https://queue.amazonaws.com/queue1';
 
 export const publishCmd1 = new PublishCommand({
     TopicArn: topicArn,
@@ -23,3 +28,14 @@ export const subscribeCmd1 = new SubscribeCommand({
 export const uuid1 = '12345678-1111-1111-1111-111122223333';
 export const uuid2 = '12345678-2222-2222-2222-111122223333';
 export const uuid3 = '12345678-3333-3333-3333-111122223333';
+
+export const sendMessageCmd1 = new SendMessageCommand({
+    QueueUrl: queueUrl,
+    MessageBody: 'mock message',
+});
+export const sendMessageCmd2 = new SendMessageCommand({
+    QueueUrl: queueUrl,
+    MessageBody: 'second mock message',
+});
+
+export const listQueuesCmd1 = new ListQueuesCommand({QueueNamePrefix: 'a'});

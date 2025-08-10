@@ -115,6 +115,9 @@ importers:
       '@aws-sdk/client-sns':
         specifier: 3.363.0
         version: 3.363.0
+      '@aws-sdk/client-sqs':
+        specifier: 3.363.0
+        version: 3.363.0
       '@jest/globals':
         specifier: 29.7.0
         version: 29.7.0

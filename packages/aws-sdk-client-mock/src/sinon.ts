@@ -1,9 +1,9 @@
-import {SinonStub} from 'sinon';
+import {SinonSpy} from 'sinon';
 
 export interface MaybeSinonProxy {
     isSinonProxy?: boolean;
 }
 
-export const isSinonStub = (obj: unknown): obj is SinonStub =>
+export const isSinonProxy = (obj: unknown): obj is SinonSpy =>
     ((obj as MaybeSinonProxy).isSinonProxy || false)
-    && (obj as SinonStub).restore !== undefined;
+    && (obj as SinonSpy).restore !== undefined;

@@ -1,12 +1,13 @@
-import {Client, Command, MetadataBearer} from '@smithy/types';
-import {match, SinonSpyCall, SinonStub} from 'sinon';
+import {Client, MetadataBearer} from '@smithy/types';
+import {match, SinonStub} from 'sinon';
 import {mockClient} from './mockClient';
+import {AwsSpy} from './awsClientSpy';
+import {type AwsCommand, type CommandResponse, type AwsError} from './types';
 
 export type AwsClientBehavior<TClient> =
     TClient extends Client<infer TInput, infer TOutput, infer TConfiguration> ? Behavior<TInput, TOutput, TOutput, TConfiguration> : never;
 
 export interface Behavior<TInput extends object, TOutput extends MetadataBearer, TCommandOutput extends TOutput, TConfiguration> {
-
     onAnyCommand<TCmdInput extends TInput>(input?: Partial<TCmdInput>, strict?: boolean): Behavior<TInput, TOutput, TOutput, TConfiguration>;
 
     on<TCmdInput extends TInput, TCmdOutput extends TOutput>(
@@ -48,25 +49,22 @@ export type AwsClientStub<TClient> =
  *
  * To define resulting variable type easily, use {@link AwsClientStub}.
  */
-export class AwsStub<TInput extends object, TOutput extends MetadataBearer, TConfiguration> implements Behavior<TInput, TOutput, TOutput, TConfiguration> {
-
+export class AwsStub<TInput extends object, TOutput extends MetadataBearer, TConfiguration> 
+    extends AwsSpy<TInput, TOutput, TConfiguration>
+    implements Behavior<TInput, TOutput, TOutput, TConfiguration> {
     /**
-     * Underlying `Client#send()` method Sinon stub.
+     * Underlying `Client#send()` method Sinon spy.
      *
      * Install `@types/sinon` for TypeScript typings.
      */
     public send: SinonStub<[AwsCommand<TInput, TOutput>], Promise<TOutput>>;
 
     constructor(
-        private client: Client<TInput, TOutput, TConfiguration>,
+        protected client: Client<TInput, TOutput, TConfiguration>,
         send: SinonStub<[AwsCommand<TInput, TOutput>], Promise<TOutput>>,
     ) {
+        super(client, send);
         this.send = send;
-    }
-
-    /** Returns the class name of the underlying mocked client class */
-    clientName(): string {
-        return this.client.constructor.name;
     }
 
     /**
@@ -87,75 +85,6 @@ export class AwsStub<TInput extends object, TOutput extends MetadataBearer, TCon
     resetHistory(): AwsStub<TInput, TOutput, TConfiguration> {
         this.send.resetHistory();
         return this;
-    }
-
-    /** Replaces stub with original `Client#send()` method. */
-    restore(): void {
-        this.send.restore();
-    }
-
-    /**
-     * Returns recorded calls to the stub.
-     * Clear history with {@link resetHistory} or {@link reset}.
-     */
-    calls(): SinonSpyCall<[AwsCommand<TInput, TOutput>], Promise<TOutput>>[] {
-        return this.send.getCalls();
-    }
-
-    /**
-     * Returns n-th recorded call to the stub.
-     */
-    call(n: number): SinonSpyCall<[AwsCommand<TInput, TOutput>], Promise<TOutput>> {
-        return this.send.getCall(n);
-    }
-
-    /**
-     * Returns recorded calls of given Command only.
-     * @param commandType Command type to match
-     * @param input Command payload to match
-     * @param strict Should the payload match strictly (default false, will match if all defined payload properties match)
-     */
-    commandCalls<TCmd extends AwsCommand<any, any>,
-        TCmdInput extends TCmd extends AwsCommand<infer TIn, any> ? TIn : never,
-        TCmdOutput extends TCmd extends AwsCommand<any, infer TOut> ? TOut : never,
-    >(
-        commandType: new (input: TCmdInput) => TCmd,
-        input?: Partial<TCmdInput>,
-        strict?: boolean,
-    ): SinonSpyCall<[TCmd], Promise<TCmdOutput>>[] {
-        return this.send.getCalls()
-            .filter((call): call is SinonSpyCall<[TCmd], Promise<TCmdOutput>> => {
-                const isProperType = call.args[0] instanceof commandType;
-                const inputMatches = this.createInputMatcher(input, strict).test(call.args[0]);
-                return isProperType && inputMatches;
-            });
-    }
-
-    /**
-     * Returns n-th call of given Command only.
-     * @param n Index of the call
-     * @param commandType Command type to match
-     * @param input Command payload to match
-     * @param strict Should the payload match strictly (default false, will match if all defined payload properties match)
-     */
-    commandCall<TCmd extends AwsCommand<any, any>,
-        TCmdInput extends TCmd extends AwsCommand<infer TIn, any> ? TIn : never,
-        TCmdOutput extends TCmd extends AwsCommand<any, infer TOut> ? TOut : never,
-    >(
-        n: number,
-        commandType: new (input: TCmdInput) => TCmd,
-        input?: Partial<TCmdInput>,
-        strict?: boolean,
-    ): SinonSpyCall<[TCmd], Promise<TCmdOutput>> {
-        const calls = this.commandCalls(commandType, input, strict);
-        if (n < 0) {
-            n += calls.length;
-        }
-        if (n >= calls.length) {
-            // @ts-expect-error this matches the behaviour of the call method.
-            return null;
-        }
-        return calls[n];
     }
 
     /**
@@ -201,12 +130,6 @@ export class AwsStub<TInput extends object, TOutput extends MetadataBearer, TCon
         const matcher = match.instanceOf(command).and(this.createInputMatcher(input, strict));
         const cmdStub = this.send.withArgs(matcher);
         return new CommandBehavior<TInput, TOutput, TCmdOutput, TConfiguration>(this, cmdStub);
-    }
-
-    private createInputMatcher<TCmdInput extends TInput>(input?: Partial<TCmdInput>, strict = false) {
-        return input !== undefined ?
-            match.has('input', strict ? input : match(input))
-            : match.any;
     }
 
     /**
@@ -549,12 +472,3 @@ export class CommandBehavior<TInput extends object, TOutput extends MetadataBear
     }
 }
 
-export type AwsCommand<Input extends ClientInput, Output extends ClientOutput, ClientInput extends object = any, ClientOutput extends MetadataBearer = any> = Command<ClientInput, Input, ClientOutput, Output, any>;
-type CommandResponse<TOutput> = Partial<TOutput> | PromiseLike<Partial<TOutput>>;
-
-export interface AwsError extends Partial<Error>, Partial<MetadataBearer> {
-    Type?: string;
-    Code?: string;
-    $fault?: 'client' | 'server';
-    $service?: string;
-}

@@ -1,6 +1,6 @@
 import {Client, Command, MetadataBearer} from '@smithy/types';
 import sinon, {SinonSandbox, SinonStub} from 'sinon';
-import {isSinonStub} from './sinon';
+import {isSinonProxy} from './sinon';
 import {AwsClientStub, AwsStub} from './awsClientStub';
 
 /**
@@ -17,7 +17,7 @@ export const mockClient = <TInput extends object, TOutput extends MetadataBearer
     const instance = isClientInstance(client) ? client : client.prototype;
 
     const send = instance.send;
-    if (isSinonStub(send)) {
+    if (isSinonProxy(send)) {
         send.restore();
     }
 
