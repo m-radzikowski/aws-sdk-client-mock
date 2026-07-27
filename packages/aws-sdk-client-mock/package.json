@@ -39,8 +39,8 @@
     "dist"
   ],
   "dependencies": {
-    "@types/sinon": "^17.0.3",
-    "sinon": "^18.0.1",
+    "@types/sinon": "^22.0.0",
+    "sinon": "^22.1.0",
     "tslib": "^2.1.0"
   },
   "devDependencies": {
