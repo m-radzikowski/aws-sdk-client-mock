@@ -73,7 +73,7 @@
     "@jest/globals": "29.7.0",
     "@smithy/types": "1.1.0",
     "@types/jest": "29.5.12",
-    "@types/sinon": "^17.0.3",
+    "@types/sinon": "^22.0.0",
     "@vitest/coverage-v8": "^2.1.1",
     "aws-sdk-client-mock": "workspace:*",
     "chalk": "^5.3.0",
